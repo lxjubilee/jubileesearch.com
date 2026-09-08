@@ -1,0 +1,11 @@
+/* .zone-chip was written for a <button>. These are links now, because the
+   scope belongs in the URL -- shareable, reloadable, and it works without
+   JavaScript. Links carry an underline and the inherited link colour, so both
+   are reset here rather than in the ported globals.css. */
+.chip {
+  text-decoration: none;
+  display: inline-block;
+}
+.chip:hover {
+  text-decoration: none;
+}

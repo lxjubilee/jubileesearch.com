@@ -1,0 +1,18 @@
+/* .footer-action was written for an <a>. This is a <button> now, because it
+   performs an action rather than navigating -- so the browser's button
+   chrome has to be cleared to match the rest of the footer. */
+.action {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+.action:hover:not(:disabled) {
+  text-decoration: underline;
+}
+.action:disabled {
+  cursor: default;
+  opacity: 0.7;
+}

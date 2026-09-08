@@ -1,0 +1,25 @@
+/* Lifted from the <style> block in bot.html. A standalone prose page with no
+   rail and no search box, on purpose: whoever arrives here is reading a server
+   log, not looking for an article. */
+
+/* Standalone prose page. It has no rail and no search box on purpose: the
+   people who arrive here are looking at a server log, not for an article. */
+.page { max-width: 720px; margin: 0 auto; padding: 56px 24px 96px; }
+.page h1 { font-family: 'Agency FB', 'Open Sans', sans-serif; font-size: 34px;
+               letter-spacing: 1px; color: #f2f2f2; margin-bottom: 6px; }
+.page h1 span { color: var(--accent); }
+.page .lede { color: #9aa0a6; font-size: 15px; margin-bottom: 40px; }
+.page h2 { font-size: 17px; color: #f2f2f2; margin: 36px 0 10px; }
+.page p, .page li { font-size: 14px; line-height: 1.75; color: #bdc1c6; }
+.page ul { margin: 10px 0 0 20px; }
+.page li { margin-bottom: 6px; }
+.page a { color: var(--accent); }
+.page pre { background: #101010; border: 1px solid #2a2a2a; border-radius: 8px;
+                padding: 14px 16px; overflow-x: auto; font-size: 13px; color: #e8eaed;
+                margin-top: 10px; }
+.page code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.page .ua { color: #e8eaed; }
+.page footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid #222;
+                   font-size: 12px; color: #5f6368; }
+.page .todo { border-left: 3px solid #ffbd59; background: #141210; padding: 12px 16px;
+                  border-radius: 6px; font-size: 13px; }

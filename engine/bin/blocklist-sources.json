@@ -1,0 +1,89 @@
+{
+  "_readme": [
+    "Sources for bin/load-blocklists.mjs (spec 11.1, gate 1).",
+    "",
+    "EVERY SOURCE HERE IS DISABLED AND MUST STAY DISABLED UNTIL SOMEONE HAS",
+    "CHECKED IT. The specification is explicit: 'Verification required: confirm",
+    "current availability, license terms, and update cadence for each list before",
+    "the build... Do not architect around a dead feed.'",
+    "",
+    "Shallalist is the cautionary example the specification names, and the v0",
+    "engine did architect around it. It is not listed here at any status.",
+    "",
+    "Before setting enabled=true on a row, confirm three things and write them",
+    "into `verified`:",
+    "  1. The URL still serves the list, and serves it in the declared format.",
+    "  2. The licence permits this use. UT1 is a research artefact with its own",
+    "     terms; StevenBlack aggregates upstream lists under theirs.",
+    "  3. How often it updates, so the timer that runs the loader matches.",
+    "",
+    "Run `npm run blocklists -- --dry-run` first. It parses without writing and",
+    "reports the entry count, which is the quickest way to catch a URL that now",
+    "redirects to a landing page.",
+    "",
+    "severity 100 blocks pre-fetch without review. Anything lower routes to the",
+    "human queue instead (gate 4). Category lists that are broad rather than",
+    "unambiguous should carry a lower severity, not a hard block -- see the",
+    "scripture problem in migration 024."
+  ],
+
+  "sources": [
+    {
+      "name": "stevenblack:adult",
+      "enabled": false,
+      "verified": null,
+      "url": "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn/hosts",
+      "format": "hosts",
+      "category": "adult",
+      "severity": 100,
+      "note": "Consolidated hosts file, porn variant. Large (hundreds of thousands of rows); expect the load to take a minute."
+    },
+    {
+      "name": "stevenblack:gambling",
+      "enabled": false,
+      "verified": null,
+      "url": "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling/hosts",
+      "format": "hosts",
+      "category": "gambling",
+      "severity": 100
+    },
+    {
+      "name": "ut1:adult",
+      "enabled": false,
+      "verified": null,
+      "url": "",
+      "format": "domains",
+      "category": "adult",
+      "severity": 100,
+      "note": "University of Toulouse categorised lists. Published as compressed archives rather than plain text, so the URL here must point at an extracted `domains` file that operations unpacks on a schedule. Fill in the URL as part of verifying the source."
+    },
+    {
+      "name": "ut1:malware",
+      "enabled": false,
+      "verified": null,
+      "url": "",
+      "format": "domains",
+      "category": "malware",
+      "severity": 100
+    },
+    {
+      "name": "ut1:gambling",
+      "enabled": false,
+      "verified": null,
+      "url": "",
+      "format": "domains",
+      "category": "gambling",
+      "severity": 100
+    },
+    {
+      "name": "ut1:drugs",
+      "enabled": false,
+      "verified": null,
+      "url": "",
+      "format": "domains",
+      "category": "drugs",
+      "severity": 60,
+      "note": "Deliberately not a hard block. A recovery ministry, an addiction counselling resource and a sermon on Proverbs 23 all land in this category, and all three belong in the index. Severity 60 sends them to the review queue instead."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+# ---------------------------------------------------------------------------
+# SearXNG — JubileeSearch's web-wide result source.
+#
+# SearXNG is an open-source metasearch engine: it queries the upstream engines
+# server-side and hands back normalised results, which is the licence-clean way
+# to get Google-grade breadth without scraping Google ourselves.
+#
+# Two settings matter here and are NOT defaults:
+#   * search.formats includes 'json' — SearXNG ships JSON off, and without it
+#     the API returns 403 and the crawler has nothing to talk to.
+#   * search.safe_search: 2 is STRICT, forced server-side for every query, so a
+#     caller cannot turn it off by passing its own parameter. This is the first
+#     of the family-safety layers; our own blocklist and media gate come after.
+# ---------------------------------------------------------------------------
+use_default_settings: true
+
+server:
+  secret_key: "2cf79e62e198f6f2de47518c324f4530cf928978197b16fbf5ddc233701fa00e"
+  # No rate limiter: the only client is our own crawler on the loopback.
+  limiter: false
+  image_proxy: true
+
+search:
+  safe_search: 2          # 0=off 1=moderate 2=strict — strict, always
+  autocomplete: ""
+  formats:
+    - html
+    - json

@@ -1,0 +1,1001 @@
+/**
+ * JubileeSearch.com — matched to the JubileeInspire.com AI Bible Chat welcome state
+ * (140px avatar, 88px Agency FB wordmark, 760px composer) with the JubileeInspire
+ * rail from kjubilee.com. The wordmark accent is kJubilee azure (#3DA5FF), not gold.
+ */
+
+/* Agency FB Font */
+@font-face {
+  font-family: 'Agency FB';
+  font-weight: bold;
+  font-display: swap;
+  src: url('/fonts/AGENCYB.TTF');
+}
+
+@font-face {
+  font-family: 'Agency FB';
+  font-display: swap;
+  src: url('/fonts/AGENCYR.TTF');
+}
+
+:root {
+  --accent: #3DA5FF; /* Jubilee azure — kjubilee.com's --accent; the rail reads it too */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #000;
+  color: #f2f2f2;
+}
+
+/* ========== Homepage Layout ==========
+   The vertical rhythm below is JubileeInspire.com's chat welcome state,
+   reproduced box for box from chat.module.css so the avatar, wordmark and
+   composer sit at exactly the same height on both sites:
+
+     .messagesContainer  flex column, justify-content: center, full viewport
+       .messagesWrapper  max-width 800, padding 40px 24px
+         .welcomeState   padding 40px 20px 0, min-height 300, translateY(-80px)
+           img 140  ·  title 88/1  ·  inputWrapper margin-top 10
+
+   .home-container is the container; .welcome-state collapses the wrapper and
+   the state into one box (the state is the wrapper's only child), so its
+   padding is 40+40 top and 40+0 bottom, and its sides are 24+20. */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.welcome-state {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 80px 44px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 300px;
+  /* Inspire's own upward shift. It cancels the 80px of padding above the
+     avatar, so the stack centres on its CONTENT, not on the padded box. */
+  transform: translateY(-80px);
+  overflow: visible;
+}
+
+/* ========== Avatar ========== */
+/* display:flex, not block: .avatar-wrapper is an inline-block, so in a block
+   container it sits on a LINE BOX and the font's descender adds ~5px of dead
+   space under the circle — which is exactly what was pushing the wordmark and
+   composer down relative to Inspire. As a flex item the wrapper is blockified
+   and no line box is created. */
+.avatar-container {
+  position: relative;
+  display: flex;
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  background-color: #000;
+  border-radius: 50%;
+}
+
+.avatar-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: none;
+  box-shadow: none;
+  background-color: #000;
+  /* Inspire's avatar is a flex child, so it is block-level. Left inline, the
+     wrapper's line box adds a few px of descender space under the circle —
+     which is what put the wordmark lower here than on the chat page. */
+  display: block;
+}
+
+/* ========== Logo ========== */
+/* No margins: Inspire's .welcomeTitle sits flush under the avatar (margin-bottom
+   0), and the 10px before the composer comes from .search-wrapper below. */
+.logo-container {
+  text-align: center;
+}
+
+.main-logo {
+  font-family: 'Agency FB', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 88px;
+  color: #fff;
+  font-weight: bold;
+  line-height: 1.0;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.main-logo .highlight {
+  color: var(--accent, #3DA5FF);
+  font-style: normal;
+  font-weight: bold;
+}
+
+.main-logo .dotcom {
+  color: #fff;
+}
+
+/* ========== Search Box ========== */
+.search-wrapper {
+  width: 100%;
+  max-width: 760px;
+  margin-top: 10px;   /* .welcomeInputWrapper */
+}
+
+/* The disclaimer under the composer — chat.module.css .copyright verbatim. It
+   is INSIDE .search-wrapper, like Inspire's, so it counts toward the centred
+   block's height; that is what keeps the stack at Inspire's exact position. */
+.search-copyright {
+  text-align: center;
+  padding: 4px 0 0;
+  margin: 0 auto;
+  color: #8e8e8e;
+  font-size: 11px;
+  line-height: 1.4;
+  width: 100%;
+  max-width: 760px;
+  white-space: normal;
+  overflow: visible;
+}
+
+.search-copyright a {
+  color: #8e8e8e;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.search-copyright a:hover {
+  color: #afafaf;
+}
+
+.search-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  background-color: #3f3f3f;
+  border-radius: 30px;
+  padding: 8px 16px;
+  gap: 8px 10px;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+  border: 1px solid #3f3f3f;
+}
+
+/* Gold ring, and NO lightening of the fill — JubileeInspire's :focus-within
+   sets background to --surface-hover, which is #3f3f3f in the dark theme,
+   i.e. the same shade the box already is. */
+.search-box:focus-within {
+  border-color: #ffbd59;
+  box-shadow: 0 0 0 1px #ffbd59;
+  background-color: #3f3f3f;
+}
+
+.search-input {
+  /* Fixed basis + min-width:0 so the input shares the row with the button
+     rather than pushing it onto a line of its own. */
+  flex: 1 1 200px;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #f0f0f0;
+  font-size: 16px;
+  font-family: inherit;
+  line-height: 22px;
+  min-height: 30px;   /* centres against the 32px button, like the composer */
+  padding: 4px 0;
+  margin: 0;
+}
+
+.search-input::placeholder {
+  color: #8e8e8e;     /* --text-secondary, not the old pure white */
+}
+
+/* ========== Search Actions ========== */
+.search-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s;
+  background-color: #6b6b6b;
+  border: 1px solid #7b7b7b;
+}
+
+.action-icon:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.action-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: #9a9a9a;
+  transition: fill 0.15s;
+}
+
+.action-icon:hover svg {
+  fill: #cfcfcf;
+}
+
+/* Voice Button */
+.voice-button {
+  width: 32px;
+  height: 32px;
+  /* Pinned against any coarse-pointer rule that inflates buttons to 44px, and
+     nudged left the way the composer's send button is — both from
+     JubileeInspire's .voiceButton. */
+  min-width: 32px;
+  min-height: 32px;
+  flex-shrink: 0;
+  margin-left: 4px;
+  background-color: var(--accent, #3DA5FF);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 0 1px 4px rgba(61, 165, 255, 0.35);
+  border: none;
+}
+
+.voice-button:hover {
+  background-color: #5FB6FF;   /* --accent lightened, the way #ffc970 lightened the gold */
+  transform: scale(1.05);
+}
+
+.voice-button svg {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+}
+
+/* The Verse of the Day / Daily Devotional / Daily Prayer row was removed on
+   2026-08-29 — the composer is the only thing under the wordmark now. Its
+   .button-container / .search-button rules went with it. */
+
+/* The home page's fixed footer (the old global nav bar: JubileeEnterprise /
+   JubileeInspire / JubileeVerse) was removed on 2026-08-29 — the rail carries
+   that navigation now. Its .footer / .footer-links rules went with it. The
+   results page keeps its own .results-footer, below. */
+
+/* ========== Search Results Page - Google Style ========== */
+.results-container {
+  min-height: 100vh;
+  background-color: #202124;
+}
+
+/* Results Header */
+.results-header {
+  background-color: #202124;
+  border-bottom: 1px solid #3c4043;
+  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.results-header-inner {
+  display: flex;
+  align-items: center;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 24px;
+}
+
+.results-logo {
+  font-family: 'Agency FB', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 26px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.results-logo .highlight {
+  color: var(--accent, #3DA5FF);
+}
+
+.results-search-box {
+  flex: 1;
+  max-width: none;
+}
+
+.results-search-box .search-box {
+  padding: 12px 14px;
+  background-color: #5a5a5a;
+  border: 1px solid #6a6a6a;
+  border-radius: 8px;
+}
+
+.results-search-box .search-box:focus-within {
+  background-color: #616161;
+  border-color: #ffbd59;
+  box-shadow: 0 0 0 1px #ffbd59;
+}
+
+/* Results Stats - Google style */
+.results-stats {
+  padding: 8px 0 0 0;
+  color: #9aa0a6;
+  font-size: 14px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Search Results - Google style layout */
+.results-list {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px 0 40px;
+}
+
+/* Individual Result Item - Google style */
+.result-item {
+  margin-bottom: 28px;
+  max-width: 100%;
+}
+
+/* The favicon rules that lived here are gone, and their removal is the point.
+   Acceptance criterion 15 is that no image appears in a result card at any
+   tier, and a remotely-loaded favicon is an image in a result card -- one that
+   also announces the reader to every host in the result list. .result-favicon-img
+   is not commented out or left unused; it is deleted, so that re-adding it is a
+   decision somebody has to make on purpose. The replacement,
+   .result-favicon-placeholder, is a letter on a disc and is defined at the end
+   of this file with the rest of the two-zone styles. */
+
+.result-url-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.result-site-name {
+  font-size: 14px;
+  color: #bdc1c6;
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.result-url {
+  font-size: 12px;
+  color: #9aa0a6;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Title row - Favicon + Title inline */
+.result-title-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.result-title-row .result-favicon {
+  margin-right: 12px;
+}
+
+/* Title - Gold link style */
+.result-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #ffbd59;
+  text-decoration: none;
+  line-height: 1.3;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+
+.result-title:hover {
+  text-decoration: underline;
+  color: #ffc970;
+}
+
+.result-title:visited {
+  color: #d9a04a;
+}
+
+/* Snippet - Description style */
+.result-snippet {
+  font-size: 14px;
+  color: #bdc1c6;
+  line-height: 1.58;
+  word-wrap: break-word;
+  margin-bottom: 8px;
+}
+
+/* Snippet as link - no special effects */
+.result-snippet-link {
+  font-size: 14px;
+  color: #bdc1c6;
+  line-height: 1.58;
+  word-wrap: break-word;
+  margin-bottom: 8px;
+  text-decoration: none;
+  display: block;
+  text-align: justify;
+}
+
+/* Site name as link - no special effects */
+.result-site-name-link {
+  font-size: 14px;
+  color: #bdc1c6;
+  line-height: 1.3;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+/* URL as link - gold on hover */
+.result-url-link {
+  font-size: 12px;
+  color: #9aa0a6;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.result-url-link:hover {
+  color: #ffbd59;
+}
+
+/* Site info row - now below description */
+.result-url-line {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.result-url-separator {
+  color: #9aa0a6;
+  margin: 0 6px;
+  font-size: 12px;
+}
+
+/* Hide the source badges for cleaner Google look */
+.result-meta {
+  display: none;
+}
+
+/* Legacy type badges - kept for internal search */
+.result-type-badge {
+  display: inline-block;
+  background-color: #303134;
+  border: 1px solid #3c4043;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: #9aa0a6;
+  margin-right: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.result-type-bible {
+  border-color: #ffbd59;
+  color: #ffbd59;
+}
+
+.result-type-content {
+  border-color: #8ab4f8;
+  color: #8ab4f8;
+}
+
+.result-type-ministry {
+  border-color: #81c995;
+  color: #81c995;
+}
+
+/* Hidden source badges */
+.result-source-badge {
+  display: none;
+}
+
+.source-google,
+.source-yahoo,
+.source-bing {
+  display: none;
+}
+
+/* No Results */
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: #777;
+}
+
+.no-results h2 {
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 16px;
+  color: #f2f2f2;
+}
+
+.no-results p {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #3a3a3a;
+  border-top-color: #ffbd59;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========== Results Footer ========== */
+.results-footer {
+  background-color: #171717;
+  border-top: 1px solid #3c4043;
+  padding: 16px 24px;
+  text-align: center;
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+.footer-location {
+  color: #9aa0a6;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.location-separator {
+  margin: 0 8px;
+  color: #5f6368;
+}
+
+.location-source {
+  color: #9aa0a6;
+}
+
+.footer-action {
+  color: #8ab4f8;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.footer-action:hover {
+  text-decoration: underline;
+}
+
+.footer-links-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.footer-link {
+  color: #9aa0a6;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.15s;
+}
+
+.footer-link:hover {
+  color: #ffbd59;
+}
+
+.footer-separator {
+  color: #5f6368;
+  margin: 0 12px;
+  font-size: 14px;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 900px) {
+  .main-logo {
+    font-size: 64px;
+  }
+
+  .avatar-image {
+    width: 112px;
+    height: 112px;
+  }
+
+  .search-wrapper {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Inspire's own mobile welcome rules: no upward shift, top-aligned, the
+     composer pinned to the bottom of the column, and — the important one — a
+     wordmark that scales with the viewport. At a fixed 48px "JubileeSearch.com"
+     is wider than a phone, and an over-wide item in a centre-aligned flex
+     column drags the whole stack off-screen. */
+  .welcome-state {
+    justify-content: flex-start;
+    padding: 20px 16px 10px;
+    transform: none;
+    gap: 14px;
+    flex: 1 0 auto;
+  }
+
+  .main-logo {
+    font-size: clamp(28px, 10vw, 44px);
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+    max-width: 100%;
+  }
+
+  .avatar-image {
+    width: 96px;
+    height: 96px;
+  }
+
+  .search-wrapper {
+    margin-top: auto;
+    max-width: 100%;
+  }
+
+  .results-stats,
+  .results-list {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .results-header {
+    padding: 12px 16px;
+  }
+
+  .results-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .results-search-box {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  /* .main-logo is handled by the clamp in the 768px block above. */
+  .search-box {
+    padding: 8px 12px;
+  }
+
+  .results-logo {
+    font-size: 22px;
+  }
+
+  .result-title {
+    font-size: 18px;
+  }
+
+  .result-snippet {
+    font-size: 13px;
+  }
+}
+
+/* ========== Scrollbar ========== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5a5a5a;
+}
+
+/* ==========================================================================
+   Two-zone results (R1, specification 13.5)
+
+   Zone A is "From Jubilee", Zone B is "From the wider web".
+
+   Acceptance criterion 12: "Zone A never renders below Zone B, in any client,
+   at any viewport." Nothing in this file may reorder them. Deliberately absent,
+   and not to be added later: `flex-direction: row-reverse`, `order`, a grid with
+   named areas that place Zone B first, or a media query that stacks them the
+   other way. The blocks are appended to the DOM in order and rendered in that
+   order at every width. If a future layout needs them side by side on a wide
+   screen, Zone A must still be the first column in reading order.
+
+   Acceptance criterion 15: no image appears in a result card at any tier. There
+   is no rule below that loads one -- no `background-image`, no favicon `<img>`.
+   .result-favicon-placeholder is a letter on a disc.
+   ========================================================================== */
+
+.zone {
+  margin-bottom: 40px;
+}
+
+.zone-heading-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.zone-heading {
+  font-family: 'Agency FB', 'Open Sans', sans-serif;
+  font-size: 15px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #9aa0a6;
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+/* Zone A carries the accent. Zone B does not: the visual weight is part of how
+   the reader learns which block is the network's own. */
+.zone-a .zone-heading {
+  color: var(--accent);
+  border-bottom-color: rgba(61, 165, 255, 0.35);
+}
+
+.zone-note {
+  font-size: 12px;
+  color: #80868b;
+  margin: 8px 0 18px;
+}
+
+.zone-a .zone-results { margin-top: 18px; }
+
+/* The honest empty state (13.5). Warm, brief, and it does not pretend the
+   network answered when it did not. */
+.zone-a-empty .zone-empty-copy {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #bdc1c6;
+  background: #131313;
+  border: 1px solid #2a2a2a;
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-top: 14px;
+}
+
+.zone-empty-copy { color: #9aa0a6; font-size: 14px; }
+.zone-empty-link { color: var(--accent); }
+
+.zone-toggle {
+  background: none;
+  border: 1px solid #3a3a3a;
+  border-radius: 999px;
+  color: #bdc1c6;
+  font-size: 12px;
+  padding: 3px 12px;
+  cursor: pointer;
+}
+.zone-toggle:hover { border-color: #5a5a5a; color: #f2f2f2; }
+
+/* ---- Scope chips (13.5, "User controls") ---- */
+.zone-chips {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 26px;
+}
+
+.zone-chip {
+  background: none;
+  border: 1px solid #3a3a3a;
+  border-radius: 999px;
+  color: #bdc1c6;
+  font-size: 13px;
+  padding: 5px 14px;
+  cursor: pointer;
+}
+.zone-chip:hover { border-color: #5a5a5a; }
+.zone-chip.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(61, 165, 255, 0.08);
+}
+
+/* ---- Result card additions ---- */
+.result-favicon-placeholder {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #303134;
+  color: #bdc1c6;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.result-snippet {
+  font-size: 14px;
+  line-height: 1.58;
+  color: #bdc1c6;
+  margin-top: 4px;
+  max-width: 640px;
+}
+.result-snippet mark {
+  background: none;
+  color: #f2f2f2;
+  font-weight: 600;
+}
+
+/* Zone B tier label (acceptance criterion 14: Zone B is always labelled). */
+.result-tier {
+  margin-left: 8px;
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #80868b;
+  border: 1px solid #333;
+  border-radius: 3px;
+  padding: 0 5px;
+}
+
+/* Thread continuation (R10, 13.9). */
+.result-thread {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  padding-left: 40px;
+}
+.result-thread-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #80868b;
+}
+.result-thread-link { font-size: 13px; color: var(--accent); }
+
+/* Reporting is present on every result (11.3) and quiet until wanted. */
+.result-report {
+  margin-top: 6px;
+  margin-left: 40px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  color: #5f6368;
+  cursor: pointer;
+}
+.result-report:hover { color: #9aa0a6; text-decoration: underline; }
+.result-report:disabled { cursor: default; text-decoration: none; }
+
+/* ---- Best bets (R4, 13.4) ----
+   Visually distinct and above Zone A. The blurb is the one piece of editorial
+   prose in the results, hand-written by a person (P7). */
+.best-bets { margin-bottom: 32px; }
+
+.best-bet {
+  border: 1px solid #2f2f2f;
+  border-left: 3px solid #ffbd59;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  background: #121212;
+}
+.best-bet-title { font-size: 17px; color: var(--accent); text-decoration: none; }
+.best-bet-title:hover { text-decoration: underline; }
+.best-bet-blurb { font-size: 13px; line-height: 1.6; color: #bdc1c6; margin-top: 5px; }
+
+/* ---- Scripture card (R3, 13.2) ----
+   Quoted verbatim from the JSV. Cited simply as JSV, with no edition label. */
+.scripture-card {
+  border: 1px solid #2f2f2f;
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin-bottom: 32px;
+  background: #101010;
+}
+.scripture-reference {
+  font-family: 'Agency FB', 'Open Sans', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.scripture-verse {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #e8eaed;
+  margin-bottom: 6px;
+}
+.scripture-verse sup { color: #80868b; font-size: 11px; margin-right: 4px; }
+.scripture-citation { margin-top: 12px; font-size: 12px; color: #80868b; }
+
+/* ---- Entity panel (R10, 7.8). Text only, verbatim from JubileePedia. ---- */
+.entity-panel {
+  border: 1px solid #2f2f2f;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 32px;
+  background: #101010;
+}
+.entity-name { font-size: 18px; color: #f2f2f2; margin-bottom: 8px; }
+.entity-summary { font-size: 14px; line-height: 1.7; color: #bdc1c6; }
+.entity-facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin-top: 12px;
+  font-size: 13px;
+}
+.entity-facts dt { color: #80868b; }
+.entity-facts dd { color: #e8eaed; }
+.entity-source { margin-top: 12px; font-size: 12px; color: #80868b; }
+.entity-source a { color: var(--accent); }
+
+/* ---- Navigational result (13.2) ---- */
+.navigational {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #222;
+}
+.navigational-title { font-size: 20px; color: var(--accent); text-decoration: none; }
+.navigational-host { display: block; font-size: 13px; color: #80868b; margin-top: 2px; }
+.navigational-links { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 10px; }
+.navigational-links a { font-size: 13px; color: #bdc1c6; }
+
+@media (max-width: 640px) {
+  .result-thread, .result-report { padding-left: 0; margin-left: 0; }
+  .zone-heading { font-size: 14px; }
+}

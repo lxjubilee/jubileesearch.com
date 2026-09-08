@@ -1,0 +1,284 @@
+/* ---------------------------------------------------------------------------
+   THE JUBILEEINSPIRE RAIL, ON JUBILEESEARCH.
+
+   Ported from kjubilee.com/css/inspire-rail.css (itself a port of
+   JubileeInspire.com's public sidebar). Same 52px collapsed rail, same
+   expand-to-280px drawer, same vertical wordmark and avatar pinned to the
+   bottom corner, same azure accent. Class names are prefixed `jir-`.
+
+   Differences from the kjubilee copy:
+   - no row is marked active (the Jubilee Search row was removed — this site
+     is the page behind the rail, not an entry in it);
+   - no fixed chrome to offset: the home footer was removed, and the results
+     header/footer are sticky, so body padding alone clears the rail;
+   - the results header gets a little padding on mobile so the rail's
+     hamburger does not sit on top of the wordmark.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --jir-w: 52px;              /* the collapsed rail */
+  /* Defers to the page's own --accent (styles.css sets #3DA5FF). */
+  --jir-azure: var(--accent, #3DA5FF);
+}
+
+.jir {
+  --jir-bg: #1b1b1b;
+  --jir-surface-hover: #3f3f3f;
+  --jir-border: #3f3f3f;
+  --jir-text: #ececec;
+  --jir-text-secondary: #8e8e8e;
+  --jir-head: #6f6f6f;        /* the NAVIGATION hamburger — darker grey */
+  --jir-w-open: 280px;
+}
+
+/* ---------- the rail itself --------------------------------------------- */
+
+.jir-rail {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--jir-w);
+  background: var(--jir-bg);
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+  z-index: 200;
+  transition: width 0.3s ease;
+  overflow: visible;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.jir-rail.is-open { width: var(--jir-w-open); }
+
+.jir-rail, .jir-rail *, .jir-burger { box-sizing: border-box; }
+.jir [hidden], .jir-backdrop[hidden] { display: none !important; }
+
+/* ---------- menu items --------------------------------------------------- */
+
+.jir-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 10px;
+  margin: 1px 8px;
+  min-height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  position: relative;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  justify-content: flex-start;
+  transition: background-color 0.15s ease;
+}
+
+/* Collapsed: inset so the hover highlight is a box around the icon, not a
+   band across the full 52px. margin + padding still sum to 15px, so the icon
+   itself does not move. */
+.jir-rail:not(.is-open) .jir-item {
+  margin-left: 3px;
+  margin-right: 3px;
+  padding-left: 12px;
+  padding-right: 12px;
+  gap: 0;
+}
+
+/* One accent for hover, focus and the current row — the azure. rgba first,
+   color-mix second, so older browsers keep an identical tint. */
+.jir-item:hover { background-color: rgba(61, 165, 255, .10); }
+.jir-item:hover { background-color: color-mix(in srgb, var(--jir-azure) 10%, transparent); }
+.jir-item:focus-visible { outline: 2px solid var(--jir-azure); outline-offset: -2px; }
+
+.jir-item svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--jir-text-secondary);
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* No row is marked active here any more: the rail lists the OTHER Jubilee
+   sites, and the one you are on is the page behind it. Re-add
+   `.jir-item.is-active { background-color: color-mix(in srgb, var(--jir-azure)
+   14%, transparent); }` (+ `svg { fill: var(--jir-azure) }`) if a row ever
+   needs highlighting again. */
+
+.jir-label {
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--jir-text);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+  margin-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.jir-rail.is-open .jir-label { opacity: 1; visibility: visible; }
+.jir-item.is-head .jir-label { color: var(--jir-head); letter-spacing: 1px; font-size: 12px; }
+
+/* ---------- collapsed tooltips ------------------------------------------- */
+
+.jir-rail:not(.is-open) .jir-item[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: #1b1b1b;
+  border: 1px solid var(--jir-border);
+  color: var(--jir-text);
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- collapse arrow ----------------------------------------------- */
+
+.jir-collapse {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--jir-azure);
+  cursor: pointer;
+  z-index: 2;
+}
+.jir-rail.is-open .jir-collapse { display: flex; }
+.jir-collapse:hover { color: var(--jir-azure); filter: brightness(1.25); }
+.jir-collapse svg { width: 16px; height: 16px; }
+
+/* ---------- the spacer that pins the brand to the floor ------------------ */
+
+.jir-spacer { flex: 1; }
+
+/* ---------- branding, bottom corner -------------------------------------- */
+
+/* Vertical in both states, anchored to the LEFT EDGE at the same offsets
+   JubileeInspire.com uses (Sidebar.module.css: .brand left:10px bottom:55px,
+   .avatar left:8px bottom:10px) rather than centred on the icon column — so
+   the wordmark and avatar sit exactly where they do on the chat sidebar. */
+.jir-brand {
+  position: absolute;
+  bottom: 55px;
+  left: 10px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-decoration: none;
+}
+.jir-brand-text {
+  font-family: "Agency FB", Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--jir-text);
+  letter-spacing: 0.5px;
+}
+.jir-brand-accent { color: var(--jir-azure); }
+.jir-brand-tld { color: var(--jir-text); font-weight: normal; }
+
+.jir-avatar {
+  position: absolute;
+  bottom: 10px;
+  left: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--jir-azure);   /* the azure ring JubileeInspire's has */
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.jir-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---------- the mobile hamburger + backdrop ------------------------------ */
+
+.jir-burger {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  background: var(--jir-bg);
+  border: 1px solid #3f3f3f;
+  border-radius: 6px;
+  color: #8e8e8e;
+  cursor: pointer;
+  padding: 0;
+  z-index: 320;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.jir-burger:hover { background: #3f3f3f; border-color: var(--jir-azure); color: var(--jir-azure); }
+.jir-burger svg { width: 22px; height: 22px; fill: currentColor; pointer-events: none; }
+.jir-burger.is-hidden { display: none !important; }
+
+.jir-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 290;
+}
+
+/* ---------- moving the page out from under the rail ---------------------- */
+
+body.jir-on { padding-left: var(--jir-w); }
+
+/* The home page has no fixed chrome left to offset (its footer was removed);
+   the results header and footer are sticky, in flow, and clear the rail on
+   their own. Body padding is all that is needed. */
+
+/* ---------- 1024px and down: the rail becomes a drawer -------------------- */
+
+@media (max-width: 1024px) {
+  .jir-rail {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease, width 0.3s ease;
+    width: 260px;
+    max-width: 80vw;
+    background: var(--jir-bg);
+    z-index: 1000;
+  }
+  .jir-rail.is-open { transform: translateX(0); width: 260px; }
+  .jir-rail .jir-label { opacity: 1; visibility: visible; }
+  .jir-collapse { display: none !important; }
+  .jir-burger { display: flex; }
+  .jir-backdrop { display: block; }
+
+  body.jir-on { padding-left: 0; }
+
+  /* Keep the results-page wordmark clear of the fixed hamburger. */
+  body.jir-on .results-header-inner { padding-left: 44px; }
+}
+
+@media (max-width: 768px) {
+  .jir-burger { top: 10px; left: 10px; width: 32px; height: 32px; }
+  .jir-burger svg { width: 19px; height: 19px; }
+  body.jir-on .results-header-inner { padding-left: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jir-rail { transition: none; }
+  .jir-label { transition: none; }
+}
