@@ -1,5 +1,6 @@
 import 'server-only';
 import type { SearchParams, SearchResponse } from './types';
+import { getSession } from './session';
 
 // Server-side client for the engine (§14).
 //
@@ -44,15 +45,29 @@ export async function search(params: SearchParams): Promise<SearchResponse> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
+  // The access token is attached here and only here.
+  //
+  // It lives in an httpOnly cookie and is read on the server, so it never
+  // reaches the browser's JavaScript -- and this is the only call that needs
+  // it. §17 makes the engine record `jubilee_id` "only where the user is
+  // signed in", and §14 gives an authenticated session 300 searches a minute
+  // rather than 60; both are decided by whether this header is present.
+  //
+  // The client-side calls (/suggest, /event, /report) deliberately stay
+  // anonymous. A click event is already tied to a query_id the engine logged
+  // with the identity, so sending the token again would add nothing but
+  // exposure.
+  const session = await getSession();
+
   try {
     const res = await fetch(`${ENGINE}/api/v1/search?${toQuery(params)}`, {
       signal: controller.signal,
+      ...(session ? { headers: { authorization: `Bearer ${session.access_token}` } } : {}),
       // The engine has its own result cache keyed on far more than the URL
       // (§13.7: the expansion set, the filters, the index version). Caching the
       // same response again in Next would add a second, dumber layer that
       // cannot be invalidated when an editor changes a lexicon term.
       cache: 'no-store',
-      headers: { accept: 'application/json' },
     });
 
     if (!res.ok) {
@@ -74,6 +89,15 @@ export async function search(params: SearchParams): Promise<SearchResponse> {
 export interface HealthResponse {
   status: string;
   index: { indexed_pages: number; embedding_backlog: number; index_version: number };
+  // Why `embedding_backlog` may never move. With no Inference API configured,
+  // nothing is embedded and search runs on word overlap alone -- a query that
+  // shares no words with a page returns nothing, which reads as a broken engine
+  // rather than a missing dependency.
+  inference: {
+    configured: boolean;
+    search_mode: 'hybrid' | 'lexical-only';
+    embedding_model: string;
+  };
 }
 
 export async function health(): Promise<HealthResponse | null> {
@@ -82,6 +106,31 @@ export async function health(): Promise<HealthResponse | null> {
     return res.ok ? ((await res.json()) as HealthResponse) : null;
   } catch {
     return null;
+  }
+}
+
+/**
+ * Pass a reader's content request to the engine (§13.5, §10.3).
+ *
+ * Called from the route handler, not the browser, so nothing about the reader
+ * travels with it: no session cookie, no bearer token, no forwarded IP. That is
+ * the point rather than an oversight -- see 017_content_requests.sql. The engine
+ * stores what was wanted, never who wanted it.
+ */
+export async function contentRequest(
+  input: { q: string; note?: string; lang?: string },
+): Promise<boolean> {
+  try {
+    const res = await fetch(`${ENGINE}/api/v1/content-request`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(input),
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      cache: 'no-store',
+    });
+    return res.ok;
+  } catch {
+    return false;
   }
 }
 

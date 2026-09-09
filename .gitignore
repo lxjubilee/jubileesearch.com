@@ -15,11 +15,12 @@ next-env.d.ts
 *.tsbuildinfo
 
 # Engine local dev state
-.pglite-dev/
+.pglite-*/
 .dev-content/
 
 # Deploy snapshots
 *.bak-*
+*.bak
 
 # Logs and caches
 *.log

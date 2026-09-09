@@ -1,0 +1,185 @@
+/* Shared by /privacy and /terms.
+ *
+ * Long-form prose on a site whose other pages are a search box and a list of
+ * results, so the measure is tight and the type scale is quieter than the
+ * search UI's. Nothing here is in the ported globals.css.
+ */
+
+.page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 64px 24px 112px;
+}
+
+.eyebrow {
+  font-family: 'Agency FB', 'Open Sans', sans-serif;
+  font-size: 13px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: #80868b;
+  margin: 0 0 10px;
+}
+
+.title {
+  font-family: 'Agency FB', 'Open Sans', sans-serif;
+  font-size: 40px;
+  line-height: 1.08;
+  letter-spacing: 0.5px;
+  color: #f2f2f2;
+  margin: 0 0 16px;
+}
+.title span { color: var(--accent, #3DA5FF); }
+
+.lead {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #bdc1c6;
+  margin: 0 0 8px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  margin: 26px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid #2a2a2a;
+  font-size: 12.5px;
+  color: #80868b;
+}
+.meta b { color: #9aa0a6; font-weight: 500; }
+
+/* Section headings carry their own number, because both documents are
+   referred to by clause in practice. */
+.section { margin-top: 44px; }
+.section > h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: 'Agency FB', 'Open Sans', sans-serif;
+  font-size: 21px;
+  letter-spacing: 0.4px;
+  color: #f2f2f2;
+  margin: 0 0 12px;
+}
+.section > h2 em {
+  font-style: normal;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--accent, #3DA5FF);
+  flex: none;
+}
+
+.section p {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: #bdc1c6;
+  margin: 0 0 14px;
+}
+.section p strong { color: #f2f2f2; font-weight: 600; }
+.section a { color: var(--accent, #3DA5FF); }
+
+.section ul { margin: 0 0 16px; padding-left: 20px; }
+.section li {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #bdc1c6;
+  margin-bottom: 7px;
+}
+.section li strong { color: #f2f2f2; font-weight: 600; }
+
+.section code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px;
+  background: #1c1c1c;
+  border-radius: 3px;
+  padding: 1px 5px;
+  color: #e8eaed;
+}
+
+/* A table for "what is stored / why / how long" — the shape those questions
+   actually have. */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4px 0 18px;
+  font-size: 13.5px;
+}
+.table th, .table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 10px 12px;
+  border-bottom: 1px solid #232323;
+}
+.table th {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #80868b;
+  border-bottom-color: #2f2f2f;
+  font-weight: 600;
+}
+.table td { color: #bdc1c6; }
+.table td:first-child { color: #e8eaed; }
+.wrap { overflow-x: auto; }
+
+/* Used for the handful of statements that are the point of the document. */
+.pledge {
+  border: 1px solid #2a2a2a;
+  border-left: 3px solid var(--accent, #3DA5FF);
+  border-radius: 8px;
+  background: #111;
+  padding: 16px 20px;
+  margin: 0 0 18px;
+}
+.pledge p:last-child { margin-bottom: 0; }
+
+/* The unfilled-blanks banner, same treatment as the bot page's D7 note. */
+.todo {
+  border: 1px solid #2f2f2f;
+  border-left: 3px solid #ffbd59;
+  background: #141210;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 24px 0 0;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #bdc1c6;
+}
+.todo b { display: block; color: #f2f2f2; margin-bottom: 6px; }
+.todo ul { margin: 8px 0 0; padding-left: 20px; }
+.todo li { font-size: 13.5px; margin-bottom: 4px; }
+
+.footerNav {
+  margin-top: 56px;
+  padding-top: 22px;
+  border-top: 1px solid #2a2a2a;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 13px;
+}
+.footerNav a { color: #9aa0a6; text-decoration: none; }
+.footerNav a:hover { color: #f2f2f2; text-decoration: underline; }
+
+@media (max-width: 620px) {
+  .page { padding: 44px 18px 80px; }
+  .title { font-size: 31px; }
+  .section > h2 { font-size: 19px; }
+}
+
+/* The account page's sign-out control. A form, because sign-out is a POST. */
+.signoutForm { margin-top: 14px; }
+.signout {
+  background: none;
+  border: 1px solid rgba(242, 117, 106, 0.5);
+  color: #f2756a;
+  border-radius: 999px;
+  padding: 9px 20px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.signout:hover { background: rgba(242, 117, 106, 0.1); }
+.signout:focus-visible { outline: 2px solid #f2756a; outline-offset: 2px; }

@@ -1,0 +1,83 @@
+-- 026 — record that the Zone A relevance floor is effectively DISABLED.
+--
+-- `zone_a_relevance_floor = 0.0080` reads like a tuned threshold. It is not. It
+-- is the highest value that still returns a result for every one of 21 known-good
+-- queries, and at that value **every one of 35 measured negative queries also
+-- returns a result**. The gate admits everything. Anyone reading the number later
+-- would reasonably assume otherwise, so it is written down here.
+--
+-- WHY NO VALUE WORKS. The floor is applied to the fused score, and the fused
+-- score is RRF -- 1/(k + rank). It is derived from RANK and carries no
+-- magnitude: a rank-1 result scores identically whether the match is excellent
+-- or absurd. Measured over the real 600-article corpus:
+--
+--   Floor    Wanted kept (of 21)   Junk admitted (of 35)
+--   0.0080            21                    35
+--   0.0100            20                    35
+--   0.0115            19                    35
+--   0.0123            19                    34
+--   0.0137            17                    34
+--   0.0146            16                    33
+--   0.0153            14                    33
+--   0.0174            14                    31
+--   0.0183            12                    30
+--   0.0217            12                    13
+--   0.0250            10                    13
+--   0.0273             9                    12
+--   0.0320             8                    11
+--   0.0351             7                    10
+--   0.0370             5                    10
+--   0.0406             4                     6
+--   0.0421             3                     3
+--   0.0422             1                     1
+--
+-- 0.0217 looks attractive (junk 33->13 for 2 wanted lost) but keeps only
+-- 12/21 -- 43% of legitimate queries return zero results. Rejected on the
+-- declared objective: a missed article is silent and total.
+--
+-- THE OBJECTIVE THIS NUMBER WAS CHOSEN UNDER, recorded here because a threshold
+-- without its trade rate is not reviewable:
+--
+--   Cost of a MISSED REAL ARTICLE (false negative)   HIGH
+--     A reader who searches "Marriage" across 600 faith articles and gets
+--     nothing concludes the search is broken, and says nothing. The failure is
+--     silent, total for that query, and costs trust in the product rather than
+--     in one result.
+--
+--   Cost of an ADMITTED JUNK RESULT (false positive)  LOW
+--     Judged in about a second and dismissed. Zone A already softens it:
+--     coverage sizing shows two results for a weak match rather than five, and
+--     the empty state is honest when there is nothing.
+--
+--   Cost of an ADMITTED HONEST WEAK MATCH             ~ZERO
+--     "repair" returning an article about repair is the engine working. A
+--     threshold that excluded these would be over-tuned, not correct.
+--
+--   RULE APPLIED: maximise recall, then take the HIGHEST threshold that still
+--   keeps every one of the 21 wanted queries. That is 0.0080.
+--
+-- There is no knee that survives this objective. Every point that excludes
+-- meaningful junk costs more wanted queries than it saves.
+--
+-- NEITHER PRE-FUSION ARM WORKS EITHER, and the reason is structural rather than
+-- a matter of tuning: the arms are COMPLEMENTARY. Nine of the 21 wanted queries
+-- have no cosine score at all on their top result (found lexically), and three
+-- have no BM25 score (found semantically). A cosine floor deletes the first
+-- nine; a BM25 floor deletes the last three. Gating on one arm discards exactly
+-- what the other arm is for.
+--
+--   cosine  wanted 0.2716-0.6268   junk 0.1610-0.5183   no separating value
+--   bm25    wanted 0.0010-7.6000   junk 0.0007-9.4000   no separating value
+--
+-- THE WORKING GATE IS `zone_a_cross_encoder_floor` (migration 025), currently -1
+-- and therefore off. §6.1 specifies a cross-encoder (bge-reranker-v2-m3) that
+-- scores query and document together -- the one signal in the design with both
+-- magnitude and cross-query comparability. Until it is serving, roughly 15 of
+-- the 35 negatives return a genuine false positive ("best laptop deals" ->
+-- "Sons Do Not Hand It Back"). The remaining 20 are honest weak matches on words
+-- the corpus really uses ("repair" -> "Repair Does Not Require a Villain"), and
+-- a threshold that suppressed those would be over-tuned rather than correct.
+
+UPDATE ranking_config SET description =
+  'Minimum fused score for a Zone A result. CURRENTLY A NO-OP: at 0.0080 all 35 measured negative queries are admitted. RRF is rank-derived and carries no magnitude, so no value separates relevant from irrelevant, and neither pre-fusion arm can either (they are complementary). Recall-first by decision. The working gate is zone_a_cross_encoder_floor, awaiting the specified cross-encoder. See migration 026 for the full threshold curve.'
+WHERE key = 'zone_a_relevance_floor';

@@ -1,8 +1,14 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import SearchBox from '@/components/SearchBox';
+import AccountCorner from '@/components/AccountCorner';
 
-// The home page. A server component: it holds no state, and the only
-// interactive part is the search box, which is a client component of its own.
+// The home page. A server component: the only interactive part is the search
+// box, which is a client component of its own.
+//
+// It holds no state itself, but AccountCorner reads the session cookie, so the
+// route renders per request rather than once at build. See that component for
+// why that trade is worth making.
 //
 // The markup and class names are the static site's, unchanged. The vertical
 // rhythm — 140px avatar, 88px wordmark, 760px composer — was copied box for box
@@ -18,6 +24,9 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <div className="home-container">
+      {/* Out of flow, so the centred stack below is untouched by it. */}
+      <AccountCorner />
+
       <div className="welcome-state">
         <div className="avatar-container">
           <div className="avatar-wrapper">
@@ -37,8 +46,8 @@ export default function HomePage() {
           <div className="search-copyright">
             Copyright &copy; 2026 JubileeSearch.com | All Rights Reserved.
             Jubilee and AI can make mistakes.&nbsp;|&nbsp;
-            <a href="https://jubileeenterprise.com/privacy">Privacy Policy</a>&nbsp;|&nbsp;
-            <a href="https://jubileeenterprise.com/terms">Terms of Use</a>
+            <Link href="/privacy">Privacy Policy</Link>&nbsp;|&nbsp;
+            <Link href="/terms">Terms of Use</Link>
           </div>
         </SearchBox>
       </div>

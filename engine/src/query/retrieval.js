@@ -161,6 +161,7 @@ function buildQuery(zone, ctx) {
     , fused AS (
         SELECT COALESCE(l.page_id, s.page_id) AS page_id,
                l.rank AS lex_rank,
+               l.lex_score,
                s.rank AS sem_rank,
                s.chunk_text,
                s.heading_path,
@@ -174,7 +175,7 @@ function buildQuery(zone, ctx) {
            p.category, p.persona, p.office, p.related_slugs, p.characters,
            p.published_at, p.modified_at, p.quality_score, p.engagement_score,
            p.safety_score, d.host, d.display_name,
-           f.lex_rank, f.sem_rank, f.rrf_lex, f.rrf_sem, f.dist,
+           f.lex_rank, f.sem_rank, f.lex_score, f.rrf_lex, f.rrf_sem, f.dist,
            f.chunk_text, f.heading_path,
            (f.rrf_lex + f.rrf_sem) AS rrf,
            COALESCE(ctr.corrected_ctr, 0) AS corrected_ctr,
@@ -241,7 +242,13 @@ function shape(row, zone, ctx) {
       rrf: { lexical_rank: numOrNull(row.lex_rank), semantic_rank: numOrNull(row.sem_rank),
              lexical_contribution: Number(row.rrf_lex), semantic_contribution: Number(row.rrf_sem),
              k: ctx.cfg.rrf_k, intent_weights: ctx.fusion, total: Number(row.rrf) },
+      // The two PRE-FUSION magnitudes. RRF is built from rank and therefore
+      // carries no magnitude at all -- a rank-1 result scores alike whether the
+      // match is excellent or terrible -- so these are the only numbers in the
+      // payload that say how good a match actually is.
+      lexical_score: numOrNull(row.lex_score),
       vector_distance: numOrNull(row.dist),
+      cosine_similarity: row.dist === null || row.dist === undefined ? null : 1 - Number(row.dist),
       boosts: zone === 'A'
         ? { quality: factor(ctx.cfg.w_quality, row.quality_score, 100),
             engagement: factor(ctx.cfg.w_engage, row.engagement_score, 100),

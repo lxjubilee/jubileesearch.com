@@ -1,0 +1,31 @@
+/* The account chip on the home page.
+ *
+ * The home page has no header bar to put this in -- it is an avatar, a wordmark
+ * and a search box, centred on their own content -- so the chip is taken out of
+ * flow entirely. Nothing about .welcome-state's vertical rhythm changes, which
+ * is the point: that rhythm was matched box for box against JubileeInspire's
+ * chat welcome state and must not move to make room for this.
+ *
+ * Top-right is free at every breakpoint: the rail owns the left edge, and the
+ * mobile hamburger is at top:12px left:12px (inspire-rail.css).
+ */
+
+.corner {
+  position: fixed;
+  top: 18px;
+  right: 24px;
+  /* Above the page, below the rail (200 desktop / 1000 as a mobile drawer). */
+  z-index: 60;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  /* Level with the hamburger on the other side. AccountMenu.module.css already
+     drops the name at this width, leaving the initial and, for an admin, the
+     badge -- narrow enough not to crowd the wordmark below it. */
+  .corner {
+    top: 12px;
+    right: 12px;
+  }
+}

@@ -10,7 +10,7 @@
 //   * Pages under 100 words produce a single chunk
 //   * Pages under 25 words of main content are rejected as thin content
 
-import { stripMarkdown } from './markdown.js';
+import { stripMarkdown, parseFrontmatter } from './markdown.js';
 
 export const TARGET_TOKENS = 500;
 export const MAX_TOKENS = 600;
@@ -34,12 +34,24 @@ export const estimateTokens = (text) =>
   Math.ceil(String(text ?? '').split(/\s+/).filter(Boolean).length * TOKENS_PER_WORD);
 
 /**
- * @param {string} markdown  the body, frontmatter already removed
+ * @param {string} markdown  the article source; a leading frontmatter block is
+ *                           removed here if one is still present
  * @param {{title?: string}} page
  * @returns {{chunks: Array, rejected: string|null}}
+ *
+ * This used to be documented as "frontmatter already removed" and every one of
+ * its three callers passed the raw file anyway -- jobs/ingest.js,
+ * api/routes/ingest.js and jobs/import-cdn.js. The result was chunks whose first
+ * few hundred characters were `---,title: "...",slug: ...`, embedded as though
+ * the YAML were prose.
+ *
+ * When every caller violates a contract, the contract is the thing that is
+ * wrong. Stripping here fixes all three at once and cannot be got wrong by a
+ * fourth. It is idempotent: text with no frontmatter is returned untouched.
  */
 export function chunkMarkdown(markdown, page = {}) {
-  const plain = stripMarkdown(markdown);
+  const { body } = parseFrontmatter(markdown);
+  const plain = stripMarkdown(body);
   const words = plain.split(/\s+/).filter(Boolean).length;
 
   if (words < THIN_CONTENT_WORDS) {
@@ -50,8 +62,20 @@ export function chunkMarkdown(markdown, page = {}) {
   }
 
   const chunks = [];
-  for (const section of splitSections(markdown)) {
-    const text = stripMarkdown(section.body);
+  // `body`, not `markdown`: the frontmatter was stripped above, and splitting
+  // the raw file instead would put the YAML block back as the first section.
+  for (const section of splitSections(body)) {
+    // `.join('\n')`, and it is load-bearing. `section.body` is the ARRAY of
+    // lines splitSections collected; handing an array to stripMarkdown coerces
+    // it with String(), which joins on a COMMA. Every chunk built through this
+    // path came out as ",First line.,,Second line.," -- line breaks replaced by
+    // commas, paragraph breaks by double commas.
+    //
+    // It corrupted the text twice over: the embedding was computed on
+    // comma-spliced prose, and the same string is what a semantic-only result
+    // shows as its snippet, so readers saw it too. The two other places in this
+    // file that touch `.body` already join on '\n'; this one did not.
+    const text = stripMarkdown(section.body.join('\n'));
     if (!text) continue;
     for (const piece of splitToWindows(text)) {
       chunks.push(finish(piece, section.headingPath, page, chunks.length));

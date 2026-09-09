@@ -42,8 +42,11 @@ const FIELD_MAP = {
   persona: ['persona', 'inspire_persona', 'author'],
   category: ['category', 'section', 'collection'],
   office: ['office', 'fivefold_office', 'five_fold', 'fivefold'],
-  published_at: ['created', 'published', 'date', 'published_at'],
-  modified_at: ['updated', 'modified', 'updated_at', 'modified_at'],
+  // 'date_created' / 'date_updated' are what the JubileeVerse CDN bundles use.
+  // Added to the existing map rather than special-cased in the CDN importer, so
+  // there stays one place that knows what a frontmatter date can be called.
+  published_at: ['created', 'published', 'date', 'published_at', 'date_created'],
+  modified_at: ['updated', 'modified', 'updated_at', 'modified_at', 'date_updated'],
   language: ['language', 'lang', 'locale'],
   slug: ['slug', 'permalink', 'path'],
   og_image_url: ['image', 'og_image', 'cover', 'thumbnail'],

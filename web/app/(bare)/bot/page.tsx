@@ -107,7 +107,7 @@ export default function BotPage() {
       <footer>
         JubileeSearchBot is operated by Jubilee Software, Inc.
         &middot; <a href="https://www.jubileesearch.com/">JubileeSearch.com</a>
-        &middot; <a href="https://jubileeenterprise.com/privacy">Search privacy notice</a>
+        &middot; <a href="/privacy">Search privacy notice</a>
       </footer>
     </main>
   );

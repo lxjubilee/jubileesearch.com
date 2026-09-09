@@ -22,9 +22,11 @@ specification and the arbiter of anything this README and the code disagree on.
 
 Still not built:
 
-* **The admin console UI.** All ten screens' APIs exist; there are no pages. Two
-  acceptance criteria (17 and 27) cannot be demonstrated without it, and the
-  safety queue has no interface for the owner decision D4 is about.
+* **Parts of the admin console.** The ten screens exist in `web/app/(admin)/`,
+  but five of them are missing controls whose endpoints this API does not have:
+  domain bulk import / edit / pause / forced reingest, lexicon bulk import and
+  expansion preview, best-bet reorder and scheduling, analytics by position and
+  by concept, and per-page reindex, purge and re-embed.
 * **Headless rendering.** `render_js` is honoured to the extent that the fetcher
   refuses the page and says why, rather than indexing an empty shell. §9.4 wants
   it off by default anyway.
@@ -122,6 +124,35 @@ Two things will be missing and both say so rather than failing: there is no
 Inference API, so retrieval is lexical-only with no rerank; and no JSV API, so a
 scripture query routes correctly and renders no card.
 
+**Read "lexical-only" literally.** It does not mean slightly worse ranking, it
+means no semantic matching at all, and the difference is easy to mistake for a
+broken engine. Measured against the dev corpus:
+
+| query | lexical-only | with embeddings |
+|---|---|---|
+| `safety classification` | correct page first | correct page first |
+| `how do we avoid overloading a site` | **0 results** | 3 results |
+
+The second query wants the crawl-politeness section and shares no words with it.
+`/api/v1/health` names the mode so this is never a guess:
+
+```json
+"inference": { "configured": false, "search_mode": "lexical-only" }
+```
+
+Before trusting an Inference API URL, check it against the contract:
+
+```bash
+npm run inference:check
+```
+
+The embedding dimension is the check that matters most. `chunks.embedding` is
+`halfvec(1024)`, so a 768- or 1536-dimension model does not degrade — it fails
+every insert. It also catches a service that ignores batching, one that returns
+the same vector for every input (which passes every other check while making
+search useless), and a classifier that is down (P1 default deny then leaves
+every crawled page in T0, and Zone B stays empty).
+
 **One connection.** PGlite is single-writer, so the API server holds
 `.pglite-dev` exclusively. `npm run admin` and the jobs need the server stopped
 first, or their own `PGLITE_DIR`.
@@ -130,7 +161,12 @@ first, or their own `PGLITE_DIR`.
 
 ```bash
 npm run migrate          # applies db/migrations in order, each in a transaction
-npm test                 # 224 tests
+npm test                 # 253 tests
+                         # run it plain -- do not set `PGLITE_DIR`. The
+                         # DB tests run in memory and each opens its own
+                         # PGlite; pointing them all at one directory
+                         # makes them contend for a single-writer
+                         # database and the suite hangs.
 npm start                # API on :4038
 ```
 
@@ -152,6 +188,7 @@ npm run embed            # embedding backfill; --publish-only for the priority-1
 npm run ctr-rollup       # nightly click rollup; --compare prints acceptance 18's evidence
 npm run engagement       # quality recompute plus the Analytics pull (R8)
 npm run entities         # JubileePedia entity sync for the panels (R10)
+npm run retention        # strips identifiers from logs past 13 months (§17); --dry-run first
 npm run blocklists       # refresh gate-1 blocklists; --dry-run parses without writing
 ```
 
@@ -416,6 +453,8 @@ ledger instead.
 | `013_near_duplicates` | SimHash columns, banded index, and `duplicate_of` (§9.6) |
 | `014_crawl_state` | adaptive-backoff counter and the `crawl_failures` record (§9.3, §9.4) |
 | `015_discovery` | `domain_candidates`, `links.to_host`, blocklist load history (§10.2, §15) |
+| `016_retention` | retention windows and the `retention_runs` audit trail (§17) |
+| `017_content_requests` | the inbox behind Zone A’s empty state; deliberately holds no identifier |
 | `020`–`024` | seeds: 56 owned domains, position bias, ranking config, starter lexicon, blocklist |
 
 The v0 schema is in `legacy-v0/db/` with a note on why it could not be migrated
@@ -430,7 +469,7 @@ exist.
 npm test
 ```
 
-224 tests. None of them needs a database.
+253 tests. None of them needs a database.
 
 Most are over code that does no I/O at all — normalisation, scripture reference
 parsing and its refusals, the intent router, Zone A coverage sizing, host

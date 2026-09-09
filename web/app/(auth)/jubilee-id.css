@@ -1,0 +1,430 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   The Jubilee ID door — /signin, /login, /signup.
+
+   Ported from kJubilee.com's public/css/jubilee-id.css, following
+   docs/JUBILEE-ID-DOOR-STANDARD.md — specifically its closing section,
+   "Applying this to a third site". JubileeSearch is that third site.
+
+   What the standard says to COPY: the ladder, the sizes and the spacing below
+   the wordmark. Every rule marked with a § below is one of those.
+
+   What the standard says NOT to copy, and this file therefore does not:
+
+     * The wordmark. kJubilee's is "kJubilee.com" in Orbitron; this is
+       "JubileeSearch.com" in Agency FB, which is the face the home page and the
+       results header already set it in. The standard is explicit that the
+       heading takes "the variable the wordmark uses" rather than Orbitron by
+       name, and that a serif caption under a techno wordmark reads as two
+       designs on one panel.
+     * The colours. The accent here is #3DA5FF — which happens to be identical,
+       because globals.css already records it as "kjubilee.com's --accent". So
+       the two doors match on colour by inheritance, not by paste.
+
+   One deliberate departure, in the right-hand panel: kJubilee loads four
+   photographs from images.unsplash.com. That would hand a third party the IP
+   address of everyone who opens this page, and the privacy notice enumerates
+   who sees anything. The panel is built from gradients instead. Drop real
+   photographs into /images/auth/ and swap the BACKDROPS constant in
+   AuthShell.tsx if that trade is worth making.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* The wordmark's face, self-hosted. Restated here rather than importing
+   globals.css: that file is the ported search design, and the door should not
+   drag a results-page stylesheet in to get one @font-face. */
+@font-face {
+  font-family: 'Agency FB';
+  font-weight: bold;
+  font-display: swap;
+  src: url('/fonts/AGENCYB.TTF');
+}
+@font-face {
+  font-family: 'Agency FB';
+  font-display: swap;
+  src: url('/fonts/AGENCYR.TTF');
+}
+
+:root {
+  --kj-accent: #3DA5FF;
+  --kj-accent-hi: #7CC4FF;
+  --kj-accent-lo: #1B6FB8;
+  --kj-accent-ink: #06182b;
+  --kj-accent-25: rgba(61, 165, 255, .25);
+  --kj-accent-30: rgba(61, 165, 255, .30);
+  --kj-accent-40: rgba(61, 165, 255, .40);
+  --kj-accent-12: rgba(61, 165, 255, .12);
+  --kj-accent-08: rgba(61, 165, 255, .08);
+  --kj-accent-35: rgba(61, 165, 255, .35);
+  /* The door's own wordmark face, named as a variable so §1's heading can take
+     "the variable the wordmark uses" rather than a hard-coded family. */
+  --font-logo: 'Agency FB', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Wave bar ── */
+.wave-bar {
+  position: fixed; top: 0; left: 0; width: 100%; height: 6px; z-index: 999;
+  background: linear-gradient(90deg, var(--kj-accent), var(--kj-accent-hi), var(--kj-accent));
+  background-size: 200% 100%;
+  animation: waveSlide 3s linear infinite;
+}
+@keyframes waveSlide { 0% { background-position: 0 0 } 100% { background-position: 200% 0 } }
+
+/* dvh, not vh: on a phone 100vh is the viewport with the browser chrome
+   RETRACTED, so a 100vh column is always taller than what you can actually see
+   and its last rows sit under the address bar. */
+body:has(.auth-row) {
+  font-family: 'Open Sans', system-ui, sans-serif;
+  background: #1a1a1a;
+  color: #fff;
+  min-height: 100dvh;
+  display: flex;
+}
+
+/* ── Layout ── */
+.auth-row { display: flex; width: 100%; min-height: 100dvh; }
+
+/* height, not min-height: the column has to be exactly the viewport for its own
+   overflow-y to produce a scrollbar. scrollbar-gutter:stable because the column
+   lands within a pixel or two of the viewport height, and a bar that appears and
+   disappears changes the inner width, which reflows the content, which changes
+   the height again. */
+.auth-form-panel {
+  width: 33%; min-width: 380px; max-width: 520px;
+  background: #2b2b2b;
+  display: flex; flex-direction: column;
+  padding: 30px 2.5rem 2rem;
+  position: relative; z-index: 2;
+  overflow-y: auto; scrollbar-gutter: stable;
+  height: 100dvh;
+}
+/* `safe center` rather than plain `center`: when the content is TALLER than the
+   column — which the create-a-Jubilee-ID screen is — centring pushes the first
+   rows above the top of the scroll box, where no scrolling can reach them. */
+.auth-form-inner { flex: 1; display: flex; flex-direction: column; justify-content: safe center; }
+
+/* ── Right panel ── */
+.auth-bg-panel { flex: 1; position: relative; overflow: hidden; }
+.auth-bg-panel .bg-slide {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 1.5s ease;
+}
+.auth-bg-panel .bg-slide.active { opacity: 1; }
+.auth-bg-panel .bg-overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, .5); z-index: 1; }
+
+.bubbles { position: absolute; inset: 0; z-index: 0; overflow: hidden; list-style: none; }
+.bubbles li {
+  position: absolute; bottom: -80px;
+  background: var(--kj-accent-08);
+  border-radius: 50%;
+  animation: floatUp linear infinite;
+}
+.bubbles li:nth-child(1) { left: 5%;  width: 40px; height: 40px; animation-duration: 22s; animation-delay: 0s }
+.bubbles li:nth-child(2) { left: 15%; width: 20px; height: 20px; animation-duration: 18s; animation-delay: 2s }
+.bubbles li:nth-child(3) { left: 30%; width: 60px; height: 60px; animation-duration: 28s; animation-delay: 4s }
+.bubbles li:nth-child(4) { left: 45%; width: 30px; height: 30px; animation-duration: 20s; animation-delay: 1s }
+.bubbles li:nth-child(5) { left: 55%; width: 50px; height: 50px; animation-duration: 32s; animation-delay: 3s }
+.bubbles li:nth-child(6) { left: 65%; width: 25px; height: 25px; animation-duration: 24s; animation-delay: 5s }
+.bubbles li:nth-child(7) { left: 75%; width: 70px; height: 70px; animation-duration: 26s; animation-delay: 0s }
+.bubbles li:nth-child(8) { left: 85%; width: 35px; height: 35px; animation-duration: 19s; animation-delay: 6s }
+.bubbles li:nth-child(9) { left: 92%; width: 15px; height: 15px; animation-duration: 30s; animation-delay: 2s }
+.bubbles li:nth-child(10){ left: 40%; width: 45px; height: 45px; animation-duration: 21s; animation-delay: 7s }
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1 }
+  100% { transform: translateY(-120vh) rotate(720deg); opacity: 0 }
+}
+
+.scripture-quote {
+  position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+  z-index: 2; text-align: center; max-width: 80%;
+  color: #fff; font-family: Georgia, serif; font-size: 1.5rem; font-style: italic;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .6); line-height: 1.6;
+}
+.scripture-quote span, .scripture-quote cite { transition: opacity .5s ease; }
+.scripture-quote cite {
+  display: block; margin-top: .75rem; font-size: 1rem; font-style: normal;
+  color: var(--kj-accent-hi); letter-spacing: 1px;
+}
+
+/* ── Logo ──
+   §2 The wordmark-to-heading gap is 4px. It is carried here, and the heading
+   below has no margin-top of its own. */
+.auth-logo { text-align: center; margin-bottom: 4px; display: block; }
+.auth-logo a { text-decoration: none; display: inline-flex; flex-direction: column; align-items: center; }
+/* §4 The branding circle: 75% of its original size. JubileeSearch's own circle
+   is 92px on this panel, so 69px — the same landing point as kJubilee's, which
+   is what §4 standardises. Changed in CSS, not in the width/height attributes:
+   those reserve the aspect ratio against layout shift and keep naming the
+   intrinsic size. */
+.auth-logo-img {
+  width: 69px; height: 69px; border-radius: 50%;
+  border: 2px solid var(--kj-accent);
+  box-shadow: 0 0 15px var(--kj-accent-40);
+  object-fit: cover;
+}
+/* NOT standardised — this is the brand. JubileeSearch's wordmark, its face and
+   its accent span, exactly as the home page sets it. */
+.auth-logo-text {
+  margin-top: .75rem;
+  font-family: var(--font-logo);
+  font-size: 34px; font-weight: 700; letter-spacing: .5px; color: #fff; line-height: 1;
+}
+.auth-logo-text .search { color: var(--kj-accent); }
+.auth-logo-text .dotcom { color: #fff; }
+
+/* ── Headings ──
+   §1 The heading: the wordmark's own face, uppercase, 60.75% of the original,
+   1px tracking. The size chain is written as the chain rather than the answer,
+   so the three reductions that were asked for stay legible. */
+.door-heading {
+  font-size: calc(1.55rem * .75);
+  font-weight: 700; text-align: center; line-height: 1.3; letter-spacing: .2px;
+  margin-bottom: .6rem;
+}
+.door-heading--caps {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: var(--font-logo);
+  font-size: calc(1.55rem * .75 * .9 * .9);
+  /* §3 The line under the heading sits 2.4px below it. */
+  margin-bottom: 2.4px;
+}
+.door-helper {
+  color: #b0b4bd; font-size: calc(.95rem * .75);
+  text-align: center; line-height: 1.55; margin-bottom: 1.9rem;
+}
+.door-subtext {
+  color: #b0b4bd; font-size: .92rem; text-align: center; line-height: 1.6; margin-bottom: 1.6rem;
+}
+/* §5 The disclaimer sits on the button: 6.4px above. The button carries no
+   margin of its own, so this one value is the whole gap. */
+.door-disclaimer { color: #b0b4bd; font-size: .84rem; text-align: center; margin-top: 6.4px; }
+
+/* ── Alerts ── */
+.auth-alert { border-radius: 8px; padding: 12px 16px; margin-bottom: 1.25rem; font-size: .875rem; line-height: 1.5; }
+.auth-alert--error { background: rgba(248, 113, 113, .15); border: 1px solid rgba(248, 113, 113, .3); color: #f87171; }
+.auth-alert--notice { background: var(--kj-accent-12); border: 1px solid var(--kj-accent-35); color: var(--kj-accent-hi); }
+
+/* ── Account row (read-only email + "Use a different email") ── */
+.account-row {
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+  margin-bottom: 1.35rem; color: #fff; text-align: center;
+}
+.account-row .account-email {
+  max-width: 100%; margin: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: var(--font-logo);
+  font-size: calc(1.55rem * .75 * .9 * .9); letter-spacing: 1px;
+}
+.account-row .use-different {
+  background: none; border: none; color: var(--kj-accent); font-size: .8rem;
+  cursor: pointer; white-space: nowrap; text-decoration: underline; padding: 0; font-family: inherit;
+}
+.account-row .use-different:hover { color: var(--kj-accent-hi); }
+
+/* ── Fields ── */
+.input-group { position: relative; margin-bottom: 1.25rem; }
+.input-group input {
+  width: 100%; height: 58px; padding: 22px 16px 8px;
+  background: rgba(80, 80, 80, .7); border: 2px solid transparent; border-radius: 8px;
+  color: #fff; font-size: 1rem; font-family: inherit;
+  transition: border-color .2s, box-shadow .2s; outline: none;
+}
+.input-group input:focus { border-color: var(--kj-accent-hi); box-shadow: 0 0 0 3px var(--kj-accent-25); }
+.input-group label {
+  position: absolute; left: 16px; top: 18px; font-size: .95rem; color: #999;
+  pointer-events: none; transition: all .2s ease;
+}
+.input-group input:not(:placeholder-shown) + label,
+.input-group input:focus + label { top: 8px; font-size: .75rem; color: var(--kj-accent); }
+.input-group input[type="password"] { color: var(--kj-accent); letter-spacing: 3px; }
+.input-group input[type="password"]::placeholder { color: #999; letter-spacing: 0; }
+.input-group input[readonly] { opacity: .75; cursor: default; }
+
+/* A date input has no empty state to key :placeholder-shown off, so its label is
+   parked in the raised position from the start. */
+.input-group.label-up label { top: 8px; font-size: .75rem; color: var(--kj-accent); }
+.input-group input[type="date"] { color-scheme: dark; padding-right: 44px; }
+.input-group input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute; right: 0; top: 0; width: 44px; height: 100%; opacity: 0; cursor: pointer;
+}
+.input-group.date-field::after {
+  content: ""; position: absolute; right: 14px; top: calc(50% + 4px); transform: translateY(-50%);
+  width: 20px; height: 20px; pointer-events: none;
+  background: no-repeat center/20px 20px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233DA5FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>");
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.25rem; }
+.form-row .input-group { margin-bottom: 0; }
+
+/* ── Password toggle ── */
+.password-wrapper { position: relative; }
+.password-toggle {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: #999; cursor: pointer; padding: 4px;
+  display: flex; align-items: center;
+}
+.password-toggle:hover { color: var(--kj-accent); }
+.password-toggle svg { width: 20px; height: 20px; }
+.password-wrapper input { padding-right: 46px; }
+
+/* ── Password feedback ── */
+.password-hint { font-size: .75rem; color: #bdbdbd; margin-top: 6px; }
+.password-strength { margin-top: 8px; }
+.strength-bar { height: 4px; background: #444; border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+.strength-fill { height: 100%; border-radius: 2px; transition: width .2s ease, background-color .2s ease; }
+.strength-fill.weak { width: 33%; background: #f87171; }
+.strength-fill.fair { width: 66%; background: #fbbf24; }
+.strength-fill.strong { width: 100%; background: #4ade80; }
+.strength-text { font-size: .7rem; }
+.strength-text.weak { color: #f87171; }
+.strength-text.fair { color: #fbbf24; }
+.strength-text.strong { color: #4ade80; }
+
+/* Green and red rather than the accent: this is a yes/no answer about what was
+   typed, not site furniture, and it has to read as such at a glance. */
+.password-match { font-size: .72rem; margin-top: 6px; }
+.password-match.is-match { color: #4ade80; }
+.password-match.is-mismatch { color: #f87171; }
+
+/* ── Forgot / extras ── */
+.forgot-row { margin: -.55rem 0 1.35rem; text-align: right; font-size: .85rem; }
+.forgot-link { color: var(--kj-accent); text-decoration: none; font-weight: 500; }
+.forgot-link:hover { text-decoration: underline; }
+
+/* ── Keep me signed in ── */
+.remember-row { margin: 1.25rem 0 1.35rem; }
+.checkbox-wrapper {
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+  color: #ccc; font-size: .875rem; user-select: none;
+}
+.checkbox-wrapper input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 18px; height: 18px; flex: none;
+  border: 2px solid var(--kj-accent); border-radius: 4px;
+  cursor: pointer; position: relative; background: transparent; transition: background .2s;
+}
+.checkbox-wrapper input[type="checkbox"]:checked { background: var(--kj-accent); }
+.checkbox-wrapper input[type="checkbox"]:checked::after {
+  content: '✓'; position: absolute; top: -2px; left: 2px;
+  font-size: 13px; color: var(--kj-accent-ink); font-weight: 700;
+}
+.checkbox-wrapper input[type="checkbox"]:focus-visible { outline: 2px solid var(--kj-accent-hi); outline-offset: 2px; }
+
+/* ── Consent ── */
+.consent-line { font-size: .78rem; color: #bdbdbd; line-height: 1.55; margin: 0 0 1.15rem; text-align: center; }
+.consent-line a { color: var(--kj-accent); text-decoration: none; }
+.consent-line a:hover { text-decoration: underline; }
+
+/* ── Primary button ── */
+.btn-primary {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--kj-accent), var(--kj-accent-lo));
+  border: none; border-radius: 8px; color: #fff;
+  font-size: 1rem; font-weight: 600; font-family: inherit; cursor: pointer;
+  box-shadow: 0 4px 12px var(--kj-accent-30);
+  transition: all .2s; letter-spacing: .5px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--kj-accent-lo), var(--kj-accent-lo));
+  transform: translateY(-1px); box-shadow: 0 6px 16px var(--kj-accent-40);
+}
+.btn-primary:active:not(:disabled) { transform: translateY(0); }
+.btn-primary:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+.spinner {
+  display: inline-block; width: 18px; height: 18px;
+  border: 2px solid rgba(255, 255, 255, .3); border-top-color: #fff;
+  border-radius: 50%; animation: spin .6s linear infinite; flex: none;
+}
+@keyframes spin { to { transform: rotate(360deg) } }
+
+/* ── Success ── */
+.success-state { text-align: center; padding: 1rem 0; }
+.success-icon-circle {
+  width: 80px; height: 80px; margin: 0 auto 1rem;
+  background: rgba(74, 222, 128, .15); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.success-icon-circle svg { width: 40px; height: 40px; color: #4ade80; }
+.success-state h2 { font-size: 1.35rem; margin-bottom: .5rem; }
+.success-state p { font-size: .9rem; color: #bdbdbd; line-height: 1.6; margin-bottom: 2rem; }
+
+/* ── What signing in costs, kept from the page this replaces ──
+   §16 makes sign-in optional and §17 says a signed-in search is stored with a
+   Jubilee ID. The door it replaced said so beside the two benefits, and dropping
+   that to match kJubilee would have quietly removed a disclosure. */
+.door-ledger { margin: 0 0 1.6rem; display: grid; gap: .55rem; }
+.door-ledger li { display: flex; gap: .6rem; font-size: .82rem; line-height: 1.5; color: #b0b4bd; list-style: none; }
+.door-ledger .mark { flex: none; width: 1.1em; text-align: center; font-weight: 700; }
+.door-ledger .yes .mark { color: #4ade80; }
+.door-ledger .cost .mark { color: var(--kj-accent-hi); }
+
+/* ── Footer ──
+   §6 The copyright line: 8pt. A point size, written as 8pt, not converted. */
+.auth-footer { text-align: center; padding-top: 1.5rem; margin-top: auto; }
+.auth-footer .copyright { font-size: 8pt; color: #fff; }
+.auth-footer .copyright a { color: var(--kj-accent-hi); text-decoration: none; transition: color .2s ease; }
+.auth-footer .copyright a:hover { color: #fff; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ── Mobile ── */
+@media (max-width: 1024px) {
+  .auth-bg-panel { display: none; }
+  .auth-form-panel { width: 100%; min-width: 0; max-width: none; padding: 2rem 1.5rem; }
+}
+@media (max-width: 480px) {
+  /* §4 again — shrink the narrow-screen override by the same quarter, or phones
+     keep the old proportion. */
+  .auth-logo-text { font-size: 1.7rem; }
+  .auth-logo-img { width: 57px; height: 57px; }
+  .door-heading { font-size: calc(1.3rem * .75); }
+  .door-heading--caps { font-size: calc(1.3rem * .75 * .9 * .9); }
+  .input-group input { height: 52px; }
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+  .form-row .input-group { margin-bottom: 1.25rem; }
+}
+
+/* Someone who has asked for less motion should not get drifting bubbles, a
+   sliding wave bar, or cross-fading backdrops. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .bubbles { display: none; }
+}
+
+/* ── Autofill ──
+   Chromium and Safari own the paint on an autofilled field and ignore any
+   background-color an author sets. They animate it, though — so a transition
+   that takes two hours to begin never begins, and the field keeps the fill it
+   was given. border-color and box-shadow are restated because a transition
+   declaration replaces the one on the base rule outright. */
+.input-group input:-webkit-autofill,
+.input-group input:-webkit-autofill:hover,
+.input-group input:-webkit-autofill:focus,
+.input-group input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff;
+  caret-color: #fff;
+  transition: background-color 8000s ease-in-out 0s, border-color .2s, box-shadow .2s;
+}
+.input-group input[type="password"]:-webkit-autofill { -webkit-text-fill-color: var(--kj-accent); }
+.input-group input:-webkit-autofill + label { top: 8px; font-size: .75rem; color: var(--kj-accent); }
+
+/* Its own block, not folded into the list above: a browser that does not know
+   one selector in a comma list throws the whole list away. */
+.input-group input:autofill {
+  background-color: transparent;
+  -webkit-text-fill-color: #fff;
+  caret-color: #fff;
+  transition: background-color 8000s ease-in-out 0s, border-color .2s, box-shadow .2s;
+}
+.input-group input:autofill + label { top: 8px; font-size: .75rem; color: var(--kj-accent); }

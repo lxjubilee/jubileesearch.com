@@ -23,7 +23,12 @@
     "dev:seed": "node --env-file-if-exists=.env bin/dev-seed.mjs",
     "drive": "node bin/drive.mjs",
     "discover": "node --env-file-if-exists=.env src/jobs/discover.js",
-    "entities": "node --env-file-if-exists=.env src/jobs/entities.js"
+    "entities": "node --env-file-if-exists=.env src/jobs/entities.js",
+    "retention": "node --env-file-if-exists=.env src/jobs/retention.js",
+    "inference:check": "node --env-file-if-exists=.env bin/inference-check.mjs",
+    "dev:inference": "node bin/dev-inference.mjs",
+    "import:feed": "node --env-file-if-exists=.env src/jobs/import-feed.js",
+    "import:cdn": "node --env-file-if-exists=.env src/jobs/import-cdn.js"
   },
   "dependencies": {
     "htmlparser2": "^12.0.0",
@@ -32,6 +37,7 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.8",
-    "@electric-sql/pglite-pgvector": "^0.0.9"
+    "@electric-sql/pglite-pgvector": "^0.0.9",
+    "@huggingface/transformers": "^4.2.0"
   }
 }

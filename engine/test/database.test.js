@@ -503,3 +503,295 @@ describe('blocklist admin guard', () => {
       /no such manual entry/);
   });
 });
+
+describe('retention (§17 privacy)', () => {
+  before(async () => {
+    const { rows: domain } = await pool.query(
+      "SELECT id FROM domains WHERE host = 'jubileeverse.com'");
+    const { rows: page } = await pool.query(
+      "SELECT id FROM pages WHERE tier = 'T1' LIMIT 1");
+
+    // Three query logs: one old and identified, one old and already anonymous,
+    // one recent and identified.
+    // A distinct label per row: two of these are the same age, and a shared
+    // query_text would make the lookups below match both.
+    const add = async (label, age, jubileeId, sessionId) => {
+      const { rows } = await pool.query(
+        `INSERT INTO search_queries
+            (query_text, normalized, intent, lang, jubilee_id, session_id, created_at)
+         VALUES ($1, $1, 'topical', 'en', $2, $3, now() - ($4 || ' days')::interval)
+         RETURNING id`,
+        [label, jubileeId, sessionId, String(age)]);
+      return Number(rows[0].id);
+    };
+
+    const oldIdentified = await add('probe old identified', 400, 'jubilee|old', 'sess-old');
+    await add('probe old anonymous', 400, null, null);
+    await add('probe recent', 10, 'jubilee|recent', 'sess-recent');
+
+    // An impression on the old row, to prove anonymising keeps aggregate
+    // click learning intact rather than cascading it away.
+    await pool.query(
+      `INSERT INTO result_impressions (query_id, page_id, zone, position, clicked)
+       VALUES ($1, $2, 'A', 1, TRUE)`, [oldIdentified, page[0].id]);
+
+    await pool.query(
+      `INSERT INTO abuse_reports (page_id, url, reason, reporter_ip, created_at)
+       VALUES ($1, 'https://x.example/old', 'probe', '198.51.100.7'::inet,
+               now() - interval '400 days')`, [page[0].id]);
+    await pool.query(
+      `INSERT INTO abuse_reports (page_id, url, reason, reporter_ip, created_at)
+       VALUES ($1, 'https://x.example/new', 'probe', '198.51.100.8'::inet, now())`,
+      [page[0].id]);
+
+    await pool.query(
+      `INSERT INTO crawl_failures (domain_id, url, reason, outcome, at)
+       VALUES ($1, 'https://x.example/f', 'probe', 'error', now() - interval '200 days')`,
+      [domain[0].id]);
+
+    void domain;
+  });
+
+  test('a dry run reports what it would do and changes nothing', async () => {
+    const { run } = await import('../src/jobs/retention.js');
+    const planned = await run(pool, { dryRun: true });
+
+    assert.equal(planned.dry_run, true);
+    assert.ok(planned.would_anonymise >= 1, 'the 400-day-old identified query was not counted');
+    assert.ok(planned.would_drop_ips >= 1);
+
+    const { rows } = await pool.query(
+      "SELECT jubilee_id FROM search_queries WHERE query_text = 'probe old identified' AND jubilee_id IS NOT NULL");
+    assert.equal(rows.length, 1, 'a dry run modified data');
+  });
+
+  test('strips the identifiers from a query older than the window', async () => {
+    const { run } = await import('../src/jobs/retention.js');
+    const result = await run(pool);
+    assert.ok(result.queries_anonymised >= 1);
+
+    const { rows } = await pool.query(
+      "SELECT jubilee_id, session_id, query_text FROM search_queries WHERE query_text = 'probe old identified'");
+    assert.equal(rows.length, 1, 'the row was deleted; it should have been anonymised');
+    assert.equal(rows[0].jubilee_id, null);
+    assert.equal(rows[0].session_id, null);
+    // The query itself survives. It is what makes aggregate learning possible
+    // and, with no identifier attached, is no longer about anybody.
+    assert.equal(rows[0].query_text, 'probe old identified');
+  });
+
+  test('leaves a recent query alone', async () => {
+    const { rows } = await pool.query(
+      "SELECT jubilee_id FROM search_queries WHERE query_text = 'probe recent'");
+    assert.equal(rows[0].jubilee_id, 'jubilee|recent');
+  });
+
+  test('aggregate click learning survives anonymisation', async () => {
+    // §17 permits purging *or* anonymising, and this is why it is the latter:
+    // deleting the row would cascade the impression away with it.
+    const { rows } = await pool.query(
+      `SELECT count(*) AS n FROM result_impressions ri
+         JOIN search_queries sq ON sq.id = ri.query_id
+        WHERE sq.query_text = 'probe old identified' AND ri.clicked`);
+    assert.equal(Number(rows[0].n), 1, 'the click was lost with the identifier');
+  });
+
+  test('drops an old reporter IP and keeps the report', async () => {
+    const { rows } = await pool.query(
+      "SELECT reporter_ip, reason FROM abuse_reports WHERE url = 'https://x.example/old'");
+    assert.equal(rows.length, 1, 'the report itself was deleted; it is a record of a decision');
+    assert.equal(rows[0].reporter_ip, null);
+  });
+
+  test('keeps a recent reporter IP, which is still needed to investigate', async () => {
+    const { rows } = await pool.query(
+      "SELECT reporter_ip FROM abuse_reports WHERE url = 'https://x.example/new'");
+    assert.ok(rows[0].reporter_ip, 'a current report lost the address it may need');
+  });
+
+  test('deletes stale operational logs', async () => {
+    const { rows } = await pool.query(
+      "SELECT count(*) AS n FROM crawl_failures WHERE url = 'https://x.example/f'");
+    assert.equal(Number(rows[0].n), 0);
+  });
+
+  test('records the pass, so the claim is auditable', async () => {
+    const { rows } = await pool.query(
+      'SELECT queries_anonymised, ran_at FROM retention_runs ORDER BY id DESC LIMIT 1');
+    assert.ok(rows[0], 'no retention_runs row was written');
+    assert.ok(Number(rows[0].queries_anonymised) >= 1);
+  });
+
+  test('the audit agrees the privacy notice is accurate once it has run', async () => {
+    const { audit } = await import('../src/jobs/retention.js');
+    const result = await audit(pool);
+    assert.equal(result.overdue_records, 0);
+    assert.equal(result.notice_is_accurate, true,
+      'the notice promises a retention window the database does not honour');
+  });
+
+  test('a second pass is a no-op', async () => {
+    const { run } = await import('../src/jobs/retention.js');
+    const again = await run(pool);
+    assert.equal(again.queries_anonymised, 0);
+    assert.equal(again.ips_dropped, 0);
+  });
+});
+
+
+describe('content requests (§13.5 empty state)', () => {
+  // Zone A's empty state invites the reader to say what they wanted. The link
+  // 404'd for the whole life of the page before this; these pin the table it
+  // now writes to, and the promise the page makes about it.
+
+  test('a request is stored with the query it came from', async () => {
+    await pool.query(
+      `INSERT INTO content_requests (query_text, note, lang)
+       VALUES ($1, $2, $3)`,
+      ['tell me about bible', 'Somewhere to start reading as an adult convert.', 'en']);
+
+    const { rows } = await pool.query(
+      `SELECT query_text, note, lang FROM content_requests
+        WHERE query_text = 'tell me about bible'`);
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].note, 'Somewhere to start reading as an adult convert.');
+    assert.equal(rows[0].lang, 'en');
+  });
+
+  test('the note is optional -- a bare query is still a signal', async () => {
+    await pool.query(
+      'INSERT INTO content_requests (query_text, lang) VALUES ($1, $2)',
+      ['fasting for beginners', 'en']);
+    const { rows } = await pool.query(
+      `SELECT note FROM content_requests WHERE query_text = 'fasting for beginners'`);
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].note, null);
+  });
+
+  test('the table holds no identifier of any kind', async () => {
+    // The privacy notice and the page both promise this outright: a request
+    // cannot be traced to a person. The cheapest way for that to become false
+    // later is for someone to add a column, so assert on the shape itself.
+    const { rows } = await pool.query(
+      `SELECT column_name FROM information_schema.columns
+        WHERE table_name = 'content_requests'`);
+    const columns = rows.map((r) => r.column_name).sort();
+    assert.deepEqual(columns, ['created_at', 'id', 'lang', 'note', 'query_text'],
+      'content_requests gained a column; if it identifies a reader, the privacy notice is now false');
+  });
+});
+
+
+// ---------------------------------------------------------------------------
+// Ranking config drift.
+//
+// A fresh deployment once seeded zone_a_relevance_floor = 0.0150 while migration
+// 026's own comment asserted the tuned value was 0.0080. Nothing errored and no
+// test failed: the value had been changed through /api/v1/admin/ranking, which
+// writes to ONE database and leaves the migrations untouched. It surfaced only
+// from replaying the migrations onto a clean database by hand.
+//
+// That will recur — tuning through the console is the point of the console — so
+// this makes the comparison visible on every run rather than something someone
+// has to think to check.
+//
+// It PRINTS rather than fails on divergence between a database and the seeds:
+// a dev database being tuned is legitimate. What it does assert is the one thing
+// that is always a bug — a migration whose prose names a value its SQL does not
+// set, which is exactly what shipped.
+// ---------------------------------------------------------------------------
+describe('ranking config drift', () => {
+  const ZONE_A = [
+    'zone_a_relevance_floor',
+    'zone_a_moderate_threshold',
+    'zone_a_strong_threshold',
+    'zone_a_cross_encoder_floor',
+  ];
+
+  /** Replay the migration files to find the last value each key is given. */
+  async function seededValues() {
+    const files = (await readdir(migrationsDir)).filter((f) => f.endsWith('.sql')).sort();
+    const seeded = new Map();
+    for (const file of files) {
+      const sql = await readFile(join(migrationsDir, file), 'utf8');
+      // Strip comments first, or a value quoted in prose is read as if it were set.
+      const code = sql.replace(/--[^\n]*/g, '');
+
+      // Per STATEMENT, not per file. A lazy match across a whole file will
+      // happily pair one UPDATE's value with a later statement's key: the first
+      // version of this reported drift on two keys that had none, which is worse
+      // than no test at all — it trains everyone to ignore the output.
+      for (const stmt of code.split(';')) {
+        for (const key of ZONE_A) {
+          const hasKey = new RegExp(`key\\s*=\\s*'${key}'`).test(stmt);
+          const upd = stmt.match(/UPDATE\s+ranking_config\s+SET\s+value\s*=\s*(-?[0-9.]+)/);
+          if (upd && hasKey) seeded.set(key, { value: Number(upd[1]), file });
+
+          const ins = stmt.match(new RegExp(`\\('${key}',\\s*(-?[0-9.]+)`));
+          if (ins) seeded.set(key, { value: Number(ins[1]), file });
+        }
+      }
+    }
+    return seeded;
+  }
+
+  test('live values match what the migrations seed (prints, does not fail)', async () => {
+    const seeded = await seededValues();
+    const { rows } = await pool.query(
+      `SELECT key, value FROM ranking_config WHERE key = ANY($1)`, [ZONE_A],
+    );
+    const live = new Map(rows.map((r) => [r.key, Number(r.value)]));
+
+    const lines = [];
+    let drifted = 0;
+    for (const key of ZONE_A) {
+      const s = seeded.get(key);
+      const l = live.get(key);
+      if (s === undefined || l === undefined) {
+        lines.push(`    ${key.padEnd(28)} seeded=${s ? s.value : 'MISSING'}  live=${l ?? 'MISSING'}`);
+        continue;
+      }
+      const same = Math.abs(s.value - l) < 1e-9;
+      if (!same) drifted += 1;
+      lines.push(`    ${key.padEnd(28)} seeded=${String(s.value).padEnd(8)} live=${String(l).padEnd(8)} ${same ? 'ok' : '<-- DRIFT'}  (${s.file})`);
+    }
+
+    console.log('\n  ranking config, migrations vs this database:');
+    for (const line of lines) console.log(line);
+    if (drifted) {
+      console.log(`  ${drifted} key(s) differ. Legitimate in a tuned database — but a value that`);
+      console.log('  should survive a deployment needs a migration, not a console change.');
+    }
+
+    // Every key must exist. A missing one means a rename that left readers of
+    // ranking_config looking for something that is not there.
+    for (const key of ZONE_A) {
+      assert.ok(live.has(key), `${key} is absent from ranking_config`);
+      assert.ok(seeded.has(key), `${key} is never set by any migration`);
+    }
+  });
+
+  test('a migration never names a value in prose that its SQL does not set', async () => {
+    // The shipped bug: 026's comment said 0.0080, and on a fresh database the
+    // value was 0.0150, because only a later migration set it.
+    const seeded = await seededValues();
+    const files = (await readdir(migrationsDir)).filter((f) => f.endsWith('.sql')).sort();
+
+    for (const file of files) {
+      const sql = await readFile(join(migrationsDir, file), 'utf8');
+      for (const key of ZONE_A) {
+        // "zone_a_relevance_floor = 0.0080" or "zone_a_relevance_floor is set to 0.0080"
+        for (const m of sql.matchAll(
+          new RegExp(key + "\\s*(?:=|is set to)\\s*`?(-?[0-9.]+)`?", 'g'),
+        )) {
+          const claimed = Number(m[1]);
+          const actual = seeded.get(key)?.value;
+          assert.ok(actual !== undefined, `${file} names ${key} but no migration sets it`);
+          assert.ok(Math.abs(claimed - actual) < 1e-9,
+            `${file} says ${key} = ${claimed}, but the migrations leave it at ${actual} `
+            + `(set in ${seeded.get(key).file}). Documentation and configuration disagree.`);
+        }
+      }
+    }
+  });
+});

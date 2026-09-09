@@ -7,6 +7,7 @@ import ResultTelemetry from '@/components/ResultTelemetry';
 import { ZoneA, ZoneB } from '@/components/Zones';
 import { BestBets, ScriptureCard, EntityPanel, Navigational } from '@/components/Panels';
 import SiteFooter from '@/components/SiteFooter';
+import AccountMenu from '@/components/AccountMenu';
 
 // The results page.
 //
@@ -113,7 +114,7 @@ export default async function SearchPage({ searchParams }: Props) {
         <ScopeChips query={query} zones={scope} />
 
         <ResultTelemetry queryId={response.query_id}>
-          {zoneA && <ZoneA block={zoneA} />}
+          {zoneA && <ZoneA block={zoneA} query={query} lang={response.lang} />}
           {zoneB && <ZoneB block={zoneB} />}
         </ResultTelemetry>
 
@@ -131,6 +132,7 @@ export default async function SearchPage({ searchParams }: Props) {
 }
 
 function ResultsHeader({ query }: { query: string }) {
+  const here = query ? `/search?q=${encodeURIComponent(query)}` : '/search';
   return (
     <header className="results-header">
       <div className="results-header-inner">
@@ -138,6 +140,8 @@ function ResultsHeader({ query }: { query: string }) {
           Jubilee<span className="highlight">Search</span>
         </Link>
         <SearchBox initialQuery={query} variant="results" />
+        {/* Signing in returns the reader to the search they were doing. */}
+        <AccountMenu next={here} />
       </div>
     </header>
   );

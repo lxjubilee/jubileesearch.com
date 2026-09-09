@@ -5,6 +5,7 @@ import { ranking } from '../../config.js';
 import { isAdmin } from '../auth.js';
 import { normalize } from '../../text/normalize.js';
 import { embeddingCacheStats } from '../../query/cache.js';
+import { inferenceStatus } from '../../inference/client.js';
 
 const exact = (path) => (p) => p === path;
 
@@ -196,6 +197,38 @@ export const routes = [
   },
 
   {
+    // Zone A's empty state invites the reader to say what they were looking for
+    // (§13.5), and §10.3 treats a gap as a writing assignment before it is a
+    // crawl target. This is where that invitation lands.
+    //
+    // The zero-result query is already logged by the search itself. What this
+    // adds is the reader's own words, which is the difference between a signal
+    // and a brief.
+    method: 'POST', match: exact('/api/v1/content-request'),
+    handle: async ({ body, db }) => {
+      const { q, note, lang } = body.parsed ?? {};
+      if (!q || typeof q !== 'string' || !q.trim()) throw bad('q is required');
+
+      // Nothing identifying is read from the request -- not the IP, not the
+      // session, not the token. See 017_content_requests.sql: a table pairing a
+      // person with what they hoped to read is the behavioural profile §17
+      // forbids, and it would be more revealing than the search log.
+      await db.query(
+        `INSERT INTO content_requests (query_text, note, lang)
+         VALUES ($1, $2, $3)`,
+        [
+          q.trim().slice(0, 500),
+          note && String(note).trim() ? String(note).trim().slice(0, 4000) : null,
+          lang && typeof lang === 'string' ? lang.slice(0, 16) : null,
+        ]);
+
+      // Same discipline as /report: the reader is told it landed, and nothing
+      // about what the index does or does not contain.
+      return { status: 202, body: { received: true } };
+    },
+  },
+
+  {
     method: 'GET', match: exact('/api/v1/health'), auth: false, rateLimit: false,
     handle: async ({ db }) => {
       const started = Date.now();
@@ -223,6 +256,9 @@ export const routes = [
             },
             queues: { safety_review: Number(r.safety_queue) },
             domains: { active: Number(r.active_domains), failing: Number(r.failing_domains) },
+            // Explains embedding_backlog above: with no Inference API every
+            // chunk stays unembedded and every search is lexical-only.
+            inference: inferenceStatus(),
             embedding_cache: embeddingCacheStats(),
           },
         };

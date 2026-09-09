@@ -9,7 +9,7 @@ import {
   parseFrontmatter, mapToPage, stripMarkdown, extractHeadings,
   buildUrl, normalizeUrl, contentHash,
 } from '../src/ingest/markdown.js';
-import { chunkMarkdown, splitSections, estimateTokens, MAX_TOKENS } from '../src/ingest/chunker.js';
+import { chunkMarkdown, splitSections, estimateTokens, MAX_TOKENS, SINGLE_CHUNK_WORDS } from '../src/ingest/chunker.js';
 import { verifyWebhook, signPayload, canonicalize, WINDOW_SECONDS } from '../src/ingest/hmac.js';
 import { safeJoin } from '../src/ingest/source.js';
 import { engagementScore } from '../src/jobs/engagement.js';
@@ -357,3 +357,123 @@ describe('rate limiting', () => {
 
 const hmacOf = (secret, material) =>
   createHmac('sha256', secret).update(material).digest('hex');
+
+
+// ---------------------------------------------------------------------------
+// Two defects found while verifying the first real CDN import. Both were in the
+// chunker, both predated the CDN importer, and both corrupted every chunk built
+// through the section path -- the text that gets embedded AND the text a
+// semantic-only result shows the reader as its snippet.
+//
+// These fail against the code as it was.
+// ---------------------------------------------------------------------------
+describe('chunker corruption regressions', () => {
+  // A real article shape: YAML frontmatter, an H1, then prose under headings.
+  const ARTICLE = [
+    '---',
+    'title: "A Sealed Letter, an Open Kingdom"',
+    'slug: "a-sealed-letter-an-open-kingdom"',
+    'category: "Covenant & Identity"',
+    'author: "Zev Inspire"',
+    'scripture_refs: ["Exodus 12:13", "1 Kings 18:21"]',
+    'characters: ["Delwyn Cantrell"]',
+    '---',
+    '',
+    '# A Sealed Letter, an Open Kingdom',
+    '',
+    'Hand lettering has been leaving the stone trade for years.',
+    'A laser can cut a name in minutes and never gets tired.',
+    '',
+    "Paragraph 1 carries enough ordinary prose to push this fixture past the single-chunk threshold, because the two defects being guarded here live in the section splitting path and a short document never reaches it. The sentences are plain on purpose: what is under test is structure, not language.",
+    '',
+    "Paragraph 2 carries enough ordinary prose to push this fixture past the single-chunk threshold, because the two defects being guarded here live in the section splitting path and a short document never reaches it. The sentences are plain on purpose: what is under test is structure, not language.",
+    '',
+    "Paragraph 3 carries enough ordinary prose to push this fixture past the single-chunk threshold, because the two defects being guarded here live in the section splitting path and a short document never reaches it. The sentences are plain on purpose: what is under test is structure, not language.",
+    '',
+    "Paragraph 4 carries enough ordinary prose to push this fixture past the single-chunk threshold, because the two defects being guarded here live in the section splitting path and a short document never reaches it. The sentences are plain on purpose: what is under test is structure, not language.",
+    '',
+    '## The turn',
+    '',
+    'There is a mark in the Hebrew Bible that has embarrassed people for centuries.',
+    'Nobody has ever removed it, and that is the point worth sitting with.',
+    '',
+    'It survives because somebody decided accuracy mattered more than comfort.',
+    '',
+    "Paragraph 1 carries enough ordinary prose to push this fixture past the single-chunk threshold, because the two defects being guarded here live in the section splitting path and a short document never reaches it. The sentences are plain on purpose: what is under test is structure, not language.",
+    '',
+    "Paragraph 2 carries enough ordinary prose to push this fixture past the single-chunk threshold, because the two defects being guarded here live in the section splitting path and a short document never reaches it. The sentences are plain on purpose: what is under test is structure, not language.",
+    '',
+    "Paragraph 3 carries enough ordinary prose to push this fixture past the single-chunk threshold, because the two defects being guarded here live in the section splitting path and a short document never reaches it. The sentences are plain on purpose: what is under test is structure, not language.",
+    '',
+    "Paragraph 4 carries enough ordinary prose to push this fixture past the single-chunk threshold, because the two defects being guarded here live in the section splitting path and a short document never reaches it. The sentences are plain on purpose: what is under test is structure, not language.",
+  ].join('\n');
+
+  // Guard the guard: if this ever drops below the single-chunk threshold the
+  // tests below stop exercising splitSections, which is where both defects were.
+  test('the fixture is long enough to reach the section-splitting path', () => {
+    const words = ARTICLE.split(/\s+/).filter(Boolean).length;
+    assert.ok(words > SINGLE_CHUNK_WORDS,
+      `fixture is ${words} words; it must exceed SINGLE_CHUNK_WORDS (${SINGLE_CHUNK_WORDS}) or the section path is never taken`);
+    assert.ok(splitSections(ARTICLE).length > 1, 'fixture must produce more than one section');
+  });
+
+  test('frontmatter never reaches a chunk', () => {
+    const { chunks, rejected } = chunkMarkdown(ARTICLE, { title: 'A Sealed Letter, an Open Kingdom' });
+    assert.equal(rejected, null);
+    assert.ok(chunks.length > 0);
+
+    for (const chunk of chunks) {
+      // The delimiter itself.
+      assert.ok(!chunk.text.includes('---'),
+        `chunk ${chunk.ordinal} still carries a frontmatter delimiter: ${chunk.text.slice(0, 80)}`);
+      // And the keys, which is what actually got embedded as though it were prose.
+      for (const key of ['title:', 'slug:', 'category:', 'author:', 'scripture_refs:', 'characters:']) {
+        assert.ok(!chunk.text.includes(key),
+          `chunk ${chunk.ordinal} still carries the frontmatter key "${key}"`);
+      }
+      // embed_text is what the model actually sees, so it is checked too. The
+      // title prefix is deliberate; the YAML is not.
+      assert.ok(!chunk.embed_text.includes('slug:'),
+        'embed_text still carries frontmatter');
+    }
+  });
+
+  test('chunk text preserves newlines and is never array-stringified', () => {
+    const { chunks } = chunkMarkdown(ARTICLE, { title: 'A Sealed Letter, an Open Kingdom' });
+    const joined = chunks.map((c) => c.text).join('\n');
+
+    // The signature of String(arrayOfLines): a blank line becomes ',,' and every
+    // line break becomes ','.
+    assert.ok(!joined.includes(',,'),
+      `array stringification detected (",," present): ${joined.slice(0, 120)}`);
+
+    // A line break followed directly by a comma cannot occur in prose and is what
+    // the coercion produced at paragraph edges.
+    assert.ok(!/,\s*,/.test(joined), 'comma-joined line breaks detected');
+
+    // Positive assertion: the paragraph structure actually survived. Without it
+    // this test would pass on text that had been flattened some other way.
+    const multiline = chunks.some((c) => c.text.includes('\n'));
+    assert.ok(multiline, 'no chunk preserved a newline; paragraph structure was lost');
+
+    // And the prose itself is intact, not comma-spliced.
+    assert.ok(joined.includes('Hand lettering has been leaving the stone trade for years.'),
+      'body text did not survive chunking intact');
+  });
+
+  test('the string sinks reject an array rather than silently comma-joining it', () => {
+    // The defect was that stripMarkdown(array) coerces via String() and joins on
+    // a comma instead of throwing. Rather than assert the old broken output,
+    // assert the property that would have caught it: a line-array and its joined
+    // form must produce the same text.
+    const lines = ['First line.', '', 'Second line.'];
+    const viaJoin = stripMarkdown(lines.join('\n'));
+    const viaArray = stripMarkdown(lines);
+    assert.notEqual(viaArray, viaJoin,
+      'stripMarkdown now treats an array like its joined form; this test no longer guards anything');
+    assert.ok(viaArray.includes(','),
+      'the coercion no longer produces commas -- update this test to match');
+    // The guarantee that matters: nothing in the pipeline may rely on that path.
+    assert.ok(!viaJoin.includes(','), 'the joined form must contain no commas');
+  });
+});

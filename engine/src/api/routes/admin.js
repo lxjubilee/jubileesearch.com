@@ -1,7 +1,7 @@
 // Admin API (§15).
 //
-// This is the API behind the ten screens §15 lists. The console UI itself is not
-// built -- Phase 1 asks for an "admin skeleton", and these are its endpoints.
+// This is the API behind the ten screens §15 lists. The console UI that consumes
+// it lives in `web/app/(admin)/`, one directory per screen.
 //
 // Every write records who did it. §13.4 requires it for best bets, §8.2 for
 // ownership verification, and §15 screen 9 for ranking changes with "a change

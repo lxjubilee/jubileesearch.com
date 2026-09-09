@@ -16,6 +16,7 @@
 // outage is an incident.
 
 import { env } from '../config.js';
+import { verifyJwt } from './jwt.js';
 
 const CACHE_MS = 60_000;
 const cache = new Map();
@@ -43,6 +44,26 @@ export async function identify(req) {
 
 async function introspect(token) {
   const url = process.env.SSO_INTROSPECT_URL;
+
+  // Introspection first where it exists, because it is authoritative: it
+  // answers "is this token valid right now", which a signature check cannot --
+  // a revoked token verifies perfectly until it expires. JWKS verification is
+  // the fallback for the many authorities that do not expose introspection to
+  // a client, and it is faster, so a deployment that sets both is choosing
+  // correctness over latency deliberately.
+  if (!url && env.ssoJwksUrl) {
+    const claims = await verifyJwt(token, {
+      jwksUri: env.ssoJwksUrl,
+      issuer: process.env.SSO_ISSUER_URL || undefined,
+      audience: process.env.SSO_AUDIENCE || undefined,
+    });
+    if (!claims) return anonymous();
+    return {
+      jubilee_id: claims.sub ?? null,
+      rights: rightsFrom(claims),
+      authenticated: true,
+    };
+  }
 
   if (!url) {
     // Development escape hatch. Two independent conditions, and it is inert in
@@ -75,12 +96,12 @@ async function introspect(token) {
     const json = await res.json();
     if (json?.active !== true) return anonymous();
 
-    const rights = Array.isArray(json.rights) ? json.rights
-      : String(json.scope ?? '').split(/\s+/).filter(Boolean);
-
     return {
       jubilee_id: json.sub ?? json.jubilee_id ?? null,
-      rights,
+      // The same rule as the JWKS path. Both must agree about what grants
+      // `search_admin`, or which verification a deployment happens to use would
+      // change who is an administrator.
+      rights: rightsFrom(json),
       authenticated: true,
     };
   } catch (err) {
@@ -92,6 +113,22 @@ async function introspect(token) {
 }
 
 const anonymous = () => ({ jubilee_id: null, rights: [], authenticated: false });
+
+/**
+ * Rights come from the authority, never from here.
+ *
+ * Providers disagree about which claim carries them, so several are read -- but
+ * nothing is inferred and nothing is granted locally. A token with no rights
+ * claim gets no rights, and the admin routes refuse it. §14: the right is
+ * "issued through the Jubilee SSO authority".
+ */
+function rightsFrom(claims) {
+  for (const value of [claims.rights, claims.roles, claims.groups,
+                       claims.permissions, claims.realm_access?.roles]) {
+    if (Array.isArray(value)) return value.map(String);
+  }
+  return String(claims.scope ?? '').split(/\s+/).filter(Boolean);
+}
 
 export const isAdmin = (identity) => identity.rights.includes(RIGHTS.admin);
 // §15: "A view-only right exists alongside the admin right." An admin implies it.

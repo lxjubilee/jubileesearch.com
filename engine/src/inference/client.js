@@ -144,6 +144,29 @@ export async function classifyContent(text) {
   }
 }
 
+/**
+ * Whether this engine can reach a model at all, for /health.
+ *
+ * Without it the absence of an Inference API is invisible: `embedQuery` returns
+ * null by design, retrieval quietly drops to its lexical arm, and the only
+ * symptom is that queries which share no words with a page find nothing. That
+ * looks exactly like a broken search and is nothing of the kind, so health says
+ * which mode the engine is actually in.
+ *
+ * Deliberately no URL and no key: /health is unauthenticated (§14), and the
+ * address of an internal service is not something to hand out at the door.
+ */
+export function inferenceStatus() {
+  const configured = Boolean(env.inferenceUrl);
+  return {
+    configured,
+    // The one field worth reading. 'lexical-only' means no semantic matching:
+    // every result comes from word overlap alone.
+    search_mode: configured ? 'hybrid' : 'lexical-only',
+    embedding_model: env.embeddingModel,
+  };
+}
+
 function warn(op, err) {
   console.warn(JSON.stringify({ level: 'warn', at: `inference.${op}`, msg: err.message }));
 }

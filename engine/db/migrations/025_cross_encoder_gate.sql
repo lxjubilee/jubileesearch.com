@@ -1,0 +1,52 @@
+-- 020 — the relevance gate that is waiting on the cross-encoder.
+--
+-- WHY THE ZONE A FLOOR CANNOT DO THIS JOB.
+--
+-- §13.5 gives Zone A a relevance floor so that an unrelated query returns
+-- nothing rather than five weak Jubilee pages. The floor is applied to the
+-- fused score, and the fused score is RRF — 1/(k + rank). It is built from
+-- RANK and carries no magnitude at all: a rank-1 result scores the same whether
+-- the match is excellent or absurd. Measured over the real 600-article corpus,
+-- 21 wanted queries and 35 negatives:
+--
+--   wanted  RRF top-scores  0.0081 – 0.0422
+--   junk    RRF top-scores  0.0122 – 0.0422
+--
+-- They overlap along their whole length. No value of this floor separates them,
+-- and the highest value that keeps all 21 wanted queries (0.0080) admits every
+-- one of the 35 negatives. That is not a tuning failure; it is what a
+-- rank-derived score is.
+--
+-- The two PRE-FUSION arms do carry magnitude, and both were measured:
+--
+--   cosine  wanted 0.2716 – 0.6268   junk 0.1610 – 0.5183
+--   bm25    wanted 0.0010 – 7.6000   junk 0.0007 – 9.4000
+--
+-- Neither separates either, and there is a structural reason: the arms are
+-- COMPLEMENTARY. Nine of the 21 wanted queries have no cosine score at all on
+-- their top result (found lexically), and three have no BM25 score (found
+-- semantically). A cosine floor deletes the first nine; a BM25 floor deletes the
+-- last three. Gating on one arm throws away what the other arm is for.
+--
+-- WHAT WOULD WORK. §6.1 specifies a cross-encoder (bge-reranker-v2-m3) that
+-- scores query and document TOGETHER. That is the one signal in the design with
+-- both magnitude and cross-query comparability. The development stand-in is a
+-- bi-encoder, whose scores are not on the same scale — tuning a gate to it would
+-- mean retuning the moment the real reranker lands, so the value below is left
+-- unset on purpose.
+--
+-- -1 means NO GATE, and it is a sentinel rather than a NULL because
+-- `ranking_config.value` is NOT NULL — a constraint protecting twenty other
+-- keys from being blanked, which is not worth weakening for this one row.
+--
+-- -1 is safe as "disabled" because it is below the floor of every similarity
+-- scale in use: cosine is bounded at -1, so a floor of -1 admits everything,
+-- which is exactly what "no gate" means. There is no value a real cross-encoder
+-- could return that this would wrongly exclude.
+--
+-- Nothing reads it yet. Wiring it is a one-line predicate in
+-- src/query/coverage.js once a real cross-encoder is answering.
+INSERT INTO ranking_config (key, value, description) VALUES
+  ('zone_a_cross_encoder_floor', -1,
+   'Minimum cross-encoder relevance for a Zone A result. -1 = no gate (disabled). Deliberately unset: the RRF floor cannot separate relevant from irrelevant (it is rank-derived and carries no magnitude), and neither pre-fusion arm can either (they are complementary - gating on one discards what the other found). Set this only when the specified cross-encoder (bge-reranker-v2-m3, spec 6.1) is serving; the development bi-encoder stand-in is not on the same scale.')
+ON CONFLICT (key) DO NOTHING;

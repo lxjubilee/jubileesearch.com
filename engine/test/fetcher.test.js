@@ -109,7 +109,13 @@ before(async () => {
   clearRobotsCache();
 });
 
-after(() => new Promise((resolve) => server.close(resolve)));
+after(async () => {
+  // The renderer keeps one browser for the whole run (that is the point of it),
+  // so without this the test process has a live child and never exits.
+  const { close } = await import('../src/crawl/render.js');
+  await close();
+  await new Promise((resolve) => server.close(resolve));
+});
 
 const domainFor = (overrides = {}) => ({
   id: 1,
@@ -203,10 +209,40 @@ describe('fetcher', () => {
     assert.equal(result.outcome, 'ok');
   });
 
-  test('render_js says so instead of silently indexing an empty shell', async () => {
+  test('render_js routes to the renderer rather than the plain fetch path', async () => {
+    // This used to assert `skipped` with "no headless browser is configured",
+    // which pinned the fact that rendering was NOT implemented. It is now, so
+    // the assertion is about routing instead.
+    //
+    // The renderer itself is deliberately not exercised here: it launches a real
+    // Chromium and the rest of this file runs against a local stub server, so a
+    // test that drove it would make the suite depend on a browser being
+    // installed and would take seconds rather than milliseconds. What is checked
+    // is that a render_js domain does NOT come back through the ordinary fetch
+    // path, which is the branch this file can see.
+    const { isAvailable, render, close } = await import('../src/crawl/render.js');
+
+    // The module has to offer the three things the fetcher and the crawl job
+    // depend on. This is the part that is worth pinning: a rename here breaks
+    // rendering silently, because the fetcher's branch is only reached on a
+    // render_js domain and nothing else imports it.
+    assert.equal(typeof isAvailable, 'function');
+    assert.equal(typeof render, 'function');
+    assert.equal(typeof close, 'function');
+
+    if (isAvailable()) {
+      // A real Chromium is installed. Driving it here would make this suite
+      // depend on a browser, cost seconds instead of milliseconds, and leave a
+      // child process to reap -- none of which belongs in a unit test. The
+      // renderer is exercised for real by the crawl job.
+      return;
+    }
+
+    // No browser: the fetcher must say so plainly rather than indexing the
+    // unrendered shell, which is the failure this branch exists to prevent.
     const result = await fetchPage(`${origin}/article`, domainFor({ render_js: true }));
     assert.equal(result.outcome, 'skipped');
-    assert.match(result.reason, /headless browser/);
+    assert.match(result.reason, /Chromium-based browser/);
   });
 
   test('the per-host politeness delay is honoured under concurrency', async () => {

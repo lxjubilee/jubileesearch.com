@@ -21,6 +21,7 @@
 import { acceptsContentType } from './policy.js';
 import { parseRobots, isAllowed } from './robots.js';
 import { detectCharset } from './extractor.js';
+import { render, isAvailable as renderAvailable } from './render.js';
 
 export const USER_AGENT = 'JubileeSearchBot/1.0 (+https://jubileesearch.com/bot)';
 const MAX_BYTES = 5 * 1024 * 1024;
@@ -147,14 +148,19 @@ export async function fetchPage(url, domain, known = {}) {
 
   if (domain.render_js) {
     // §9.4 allows headless rendering only when render_js is set, and notes it
-    // costs 10 to 40 times a plain fetch. Playwright is not installed here, and
-    // adding a browser pool is a piece of work in its own right. Saying so is
-    // better than silently indexing an empty shell of a page.
-    return {
-      outcome: 'skipped',
-      reason: 'render_js is set but no headless browser is configured (see engine/README.md)',
-      retryable: false,
-    };
+    // costs 10 to 40 times a plain fetch -- which is why it is per-domain and
+    // off by default rather than a global setting.
+    //
+    // Inside the host lock, exactly like a plain fetch: rendering must not
+    // become a way to hit a host faster than the crawl delay allows.
+    if (!renderAvailable()) {
+      return {
+        outcome: 'skipped',
+        reason: 'render_js is set but no Chromium-based browser was found; set CRAWLER_BROWSER',
+        retryable: false,
+      };
+    }
+    return withHostLock(host, crawlDelayMs, () => render(url, { userAgent: USER_AGENT }));
   }
 
   return withHostLock(host, crawlDelayMs, async () => {

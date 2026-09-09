@@ -1,0 +1,362 @@
+/* The admin console's own stylesheet.
+ *
+ * Deliberately not globals.css. That file is the ported search design and is
+ * kept byte-identical to the static site; the console is a working surface with
+ * different needs -- denser type, real tables, status colour that means
+ * something. Sharing one stylesheet would drag search's rhythm into an operator
+ * tool and make both harder to change.
+ *
+ * Semantic colour is reserved: green/amber/red mean healthy/attention/urgent
+ * and are never used decoratively, so a red number on a dashboard is always
+ * worth acting on.
+ */
+
+:root {
+  --a-bg: #0e0f11;
+  --a-panel: #16181b;
+  --a-panel-2: #1c1f23;
+  --a-line: #2a2e34;
+  --a-line-soft: #22262b;
+  --a-ink: #e7eaee;
+  --a-ink-dim: #a4acb7;
+  --a-ink-faint: #737c88;
+  --a-accent: #3DA5FF;
+  --a-good: #4ec98a;
+  --a-warn: #e8b84b;
+  --a-bad: #f2756a;
+  --a-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--a-bg);
+  color: var(--a-ink);
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--a-accent); }
+
+/* ---------- shell ---------- */
+
+.shell { display: flex; min-height: 100vh; }
+
+.side {
+  width: 216px;
+  flex: none;
+  background: var(--a-panel);
+  border-right: 1px solid var(--a-line);
+  padding: 18px 0 24px;
+  display: flex;
+  flex-direction: column;
+
+  /* The section list stays put while the screen beside it scrolls. A safety
+     queue or a domain table runs far past the fold, and losing the navigation
+     on the way down means scrolling back up to change screen.
+
+     `align-self` is the part that actually makes this work: a flex item is
+     stretched to the container's full height by default, and a sticky element
+     with no room to move never moves. Pinning it to the top gives it a definite
+     100vh box to stick within. */
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  /* Ten sections plus the footer overflow a short window; the sidebar then
+     scrolls within itself rather than clipping. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.brand {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  padding: 0 18px 16px;
+  color: var(--a-ink);
+  text-decoration: none;
+}
+.brand span { color: var(--a-accent); }
+.brandTag {
+  display: block;
+  font: 500 10.5px/1 var(--a-mono);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--a-ink-faint);
+  margin-top: 5px;
+}
+
+.nav { display: flex; flex-direction: column; gap: 1px; }
+
+.navItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 18px;
+  color: var(--a-ink-dim);
+  text-decoration: none;
+  font-size: 13.5px;
+  border-left: 2px solid transparent;
+}
+.navItem:hover { background: var(--a-panel-2); color: var(--a-ink); }
+.navItem[aria-current="page"] {
+  background: var(--a-panel-2);
+  color: var(--a-ink);
+  border-left-color: var(--a-accent);
+}
+
+/* A count beside a nav item is a queue depth: it is there to be emptied. */
+.navCount {
+  font: 600 11px/1 var(--a-mono);
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: #2a2e34;
+  color: var(--a-ink-dim);
+}
+.navCount[data-urgent="true"] { background: rgba(242, 117, 106, 0.16); color: var(--a-bad); }
+
+.sideFoot {
+  margin-top: auto;
+  padding: 16px 18px 0;
+  border-top: 1px solid var(--a-line-soft);
+  font-size: 12px;
+  color: var(--a-ink-faint);
+  line-height: 1.6;
+}
+.sideFoot a { color: var(--a-ink-dim); text-decoration: none; }
+.sideFoot a:hover { color: var(--a-ink); }
+.who { color: var(--a-ink); font-weight: 600; word-break: break-all; }
+.rightTag {
+  display: inline-block;
+  font: 500 10px/1 var(--a-mono);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid rgba(61, 165, 255, 0.4);
+  color: var(--a-accent);
+  margin-top: 6px;
+}
+.rightTag[data-level="view"] {
+  border-color: rgba(164, 172, 183, 0.4);
+  color: var(--a-ink-dim);
+}
+
+.main { flex: 1; min-width: 0; padding: 28px 32px 72px; }
+
+.head { margin-bottom: 22px; }
+.h1 { font-size: 21px; font-weight: 700; margin: 0 0 5px; letter-spacing: -0.2px; }
+.sub { margin: 0; color: var(--a-ink-dim); font-size: 13.5px; max-width: 76ch; line-height: 1.6; }
+
+/* ---------- panels and tables ---------- */
+
+.panel {
+  background: var(--a-panel);
+  border: 1px solid var(--a-line);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.panelHead {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--a-line);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.panelTitle { font-size: 13.5px; font-weight: 600; margin: 0; }
+.panelNote { font-size: 12px; color: var(--a-ink-faint); }
+.panelBody { padding: 16px; }
+
+.scroll { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left;
+  font: 600 11px/1.4 var(--a-mono);
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--a-ink-faint);
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--a-line);
+  white-space: nowrap;
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--a-line-soft);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: rgba(255, 255, 255, 0.018); }
+.numCell { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--a-mono); }
+.mono { font-family: var(--a-mono); font-size: 12.5px; }
+.wrapCell { word-break: break-word; min-width: 220px; }
+
+/* ---------- stat tiles ---------- */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.tile {
+  background: var(--a-panel);
+  border: 1px solid var(--a-line);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.tileLabel {
+  font: 600 10.5px/1.3 var(--a-mono);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--a-ink-faint);
+  margin: 0 0 8px;
+}
+.tileValue {
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.tileValue[data-state="good"] { color: var(--a-good); }
+.tileValue[data-state="warn"] { color: var(--a-warn); }
+.tileValue[data-state="bad"]  { color: var(--a-bad); }
+.tileFoot { font-size: 11.5px; color: var(--a-ink-faint); margin-top: 6px; line-height: 1.5; }
+
+/* ---------- pills ---------- */
+
+.pill {
+  display: inline-block;
+  font: 600 11px/1.5 var(--a-mono);
+  letter-spacing: 0.4px;
+  padding: 1px 7px;
+  border-radius: 3px;
+  border: 1px solid var(--a-line);
+  color: var(--a-ink-dim);
+  white-space: nowrap;
+}
+.pill[data-tone="good"] { border-color: rgba(78,201,138,.42); color: var(--a-good); }
+.pill[data-tone="warn"] { border-color: rgba(232,184,75,.42); color: var(--a-warn); }
+.pill[data-tone="bad"]  { border-color: rgba(242,117,106,.42); color: var(--a-bad); }
+.pill[data-tone="accent"] { border-color: rgba(61,165,255,.42); color: var(--a-accent); }
+
+/* ---------- forms and actions ---------- */
+
+.btn {
+  font: 600 12.5px/1 inherit;
+  padding: 7px 13px;
+  border-radius: 5px;
+  border: 1px solid var(--a-line);
+  background: var(--a-panel-2);
+  color: var(--a-ink);
+  cursor: pointer;
+}
+.btn:hover { border-color: #3d434b; }
+.btn:focus-visible { outline: 2px solid var(--a-accent); outline-offset: 2px; }
+.btn[data-tone="primary"] { background: var(--a-accent); border-color: var(--a-accent); color: #06243c; }
+.btn[data-tone="primary"]:hover { background: #64b8ff; }
+.btn[data-tone="danger"] { border-color: rgba(242,117,106,.5); color: var(--a-bad); }
+.btn[data-tone="danger"]:hover { background: rgba(242,117,106,.1); }
+.btn[data-tone="good"] { border-color: rgba(78,201,138,.5); color: var(--a-good); }
+.btn[data-tone="good"]:hover { background: rgba(78,201,138,.1); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+input[type="text"], input[type="number"], input[type="url"], select, textarea {
+  background: var(--a-bg);
+  border: 1px solid var(--a-line);
+  border-radius: 5px;
+  color: var(--a-ink);
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 13px;
+  width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--a-accent);
+}
+label { display: block; font-size: 12px; color: var(--a-ink-dim); margin-bottom: 5px; }
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+
+/* ---------- notices ---------- */
+
+.notice {
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  border: 1px solid var(--a-line);
+  background: var(--a-panel);
+}
+.notice[data-tone="bad"]  { border-color: rgba(242,117,106,.45); background: rgba(242,117,106,.07); }
+.notice[data-tone="warn"] { border-color: rgba(232,184,75,.45);  background: rgba(232,184,75,.07); }
+.notice[data-tone="good"] { border-color: rgba(78,201,138,.45);  background: rgba(78,201,138,.07); }
+
+.empty {
+  padding: 30px 16px;
+  text-align: center;
+  color: var(--a-ink-faint);
+  font-size: 13px;
+}
+
+/* Page text pulled from a crawled site. §17 Security: fetched HTML is never
+   rendered as markup in the console. React escapes it; this makes it *look*
+   like the quoted data it is. */
+.excerpt {
+  font-family: var(--a-mono);
+  font-size: 12px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 190px;
+  overflow: auto;
+  background: var(--a-bg);
+  border: 1px solid var(--a-line);
+  border-radius: 5px;
+  padding: 10px 12px;
+  color: var(--a-ink-dim);
+}
+
+.gate {
+  max-width: 520px;
+  margin: 14vh auto;
+  padding: 0 24px;
+  text-align: left;
+}
+.gate h1 { font-size: 22px; margin: 0 0 12px; }
+.gate p { color: var(--a-ink-dim); line-height: 1.65; }
+
+@media (max-width: 900px) {
+  .shell { flex-direction: column; }
+  .side {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--a-line);
+    /* Undo the pinning: stacked, the sidebar is a horizontal bar across the top,
+       and a 100vh sticky block here would be the whole screen. */
+    position: static;
+    align-self: auto;
+    height: auto;
+    overflow: visible;
+  }
+  .nav { flex-direction: row; flex-wrap: wrap; padding: 0 10px; }
+  .navItem { border-left: none; border-bottom: 2px solid transparent; padding: 8px 10px; }
+  .navItem[aria-current="page"] { border-left-color: transparent; border-bottom-color: var(--a-accent); }
+  .sideFoot { padding-top: 12px; }
+  .main { padding: 20px 16px 56px; }
+}

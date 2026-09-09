@@ -15,18 +15,27 @@ import ZoneBCollapse from './ZoneBCollapse';
 // Server components: the results are already in the HTML when it reaches the
 // browser, so the guarantee holds before any JavaScript runs.
 
-export function ZoneA({ block }: { block: ZoneABlock }) {
+export function ZoneA({ block, query, lang }: { block: ZoneABlock; query?: string; lang?: string }) {
   if (block.results.length === 0) {
     // The honest empty state (§13.5). "When the network has no good answer, say
     // so plainly and give the space to Zone B." Padding this block with five
     // weak matches is the failure the whole coverage mechanism exists to
     // prevent, and every one of these is logged as a content gap.
+    //
+    // The query travels with the link. Without it /suggest has nothing to file
+    // the request against, and the reader would be asked to type out what they
+    // just searched for.
+    const params = new URLSearchParams();
+    if (query) params.set('q', query);
+    if (lang) params.set('lang', lang);
+    const suggestHref = params.size ? `/suggest?${params}` : '/suggest';
+
     return (
       <section className="zone zone-a zone-a-empty" aria-labelledby="zone-a-heading">
         <h2 id="zone-a-heading" className="zone-heading">{block.label}</h2>
         <p className="zone-empty-copy">
           The Jubilee network has not covered this one yet.{' '}
-          <Link href="/suggest" className="zone-empty-link">
+          <Link href={suggestHref} className="zone-empty-link">
             Tell us what you were looking for
           </Link>{' '}
           and we will pass it to the writing team.
