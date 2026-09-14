@@ -727,3 +727,20 @@ no concept and are still gated.
 
 **Still open:** D5 (a markdown source per domain), and the 5 domains that were
 down at crawl time.
+
+## 14. The three sibling systems in §16 do not exist yet
+
+**Status 2026-09-14.** Wiring them is one URL each in the engine's `.env`
+(`JSV_API_URL`, `JUBILEEPEDIA_API_URL`, `ANALYTICS_API_URL`); the jobs and the
+card are built and tested. Checked on this workstation and on the public hosts:
+
+| system | what exists | what the engine needs |
+| --- | --- | --- |
+| **JSV Bible** | `jsvbible.com` serves static chapter pages with per-verse markup (`<span class="verse" id="v1">`, `verse-num`). `api.jsvbible.com` answers 502; the API in `W:/JSVBible.com/api` is a stub with `/health` and `/api/v1/status` only. No verse data in the repo (`JubileeTranslations` is a .NET tool). | `GET /passage?book=&chapter=&verse=&verse_end=` → `{book, chapter, verses:[{verse,text}], chapter_url}`. The site's own pages could feed it. |
+| **JubileePedia** | `W:/JubileePedia.com` is an empty folder; `jubileepedia.com` does not resolve. | `GET /v1/entities?cursor=` → `{entities:[{entity_key|key, ...}], next}` (see `jobs/entities.js`). |
+| **Jubilee Analytics** | No code anywhere on `W:` answers `pages/metrics`; no analytics host resolves. | `POST /v1/pages/metrics {urls, window_days}` → per-URL dwell, scroll depth, bounce, completion (see `jobs/engagement.js`). |
+
+Until then: no scripture card (the query is reported as topical), no entity
+panels, and Zone A ranks without the R8 engagement signal. None of these can
+be closed from the JubileeSearch side without inventing another product's API.
+

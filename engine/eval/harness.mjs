@@ -116,15 +116,23 @@ async function rerankList(results, queryText, cfg, force = null) {
   });
 }
 
-/** `cdn:<cat>__<slug>` -> `<cat>__<slug>`, keyed by page_id. */
+/**
+ * Target keys, by page_id and by key.
+ *
+ * Two forms. CDN articles: `cdn:<cat>__<slug>` -> `<cat>__<slug>`, stable across
+ * reindex and model changes. Crawled pages (the rest of the network, and the
+ * Romanian sites the cross-language pairs need) have no source_path, so their
+ * key is `url:<absolute url>` -- equally stable, since a page's URL is its
+ * identity in the index.
+ */
 export async function targetIndex() {
   const { rows } = await pool.query(
-    `SELECT id, source_path, url, title FROM pages WHERE source_path LIKE 'cdn:%'`,
+    `SELECT id, source_path, url, title FROM pages WHERE status = 'indexed'`,
   );
   const byId = new Map();
   const byTarget = new Map();
   for (const r of rows) {
-    const t = r.source_path.slice(4);
+    const t = r.source_path?.startsWith('cdn:') ? r.source_path.slice(4) : `url:${r.url}`;
     byId.set(Number(r.id), t);
     byTarget.set(t, { id: Number(r.id), url: r.url, title: r.title });
   }
