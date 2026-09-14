@@ -80,7 +80,7 @@ export default async function AccountPage() {
         {/* POST, not a link: a GET sign-out can be triggered by any page that can
             make a browser fetch a URL. */}
         <form method="POST" action="/api/auth/signout" className={styles.signoutForm}>
-          <input type="hidden" name="next" value="/" />
+          <input type="hidden" name="next" value="/signin" />
           <button type="submit" className={styles.signout}>Sign out</button>
         </form>
       </Section>

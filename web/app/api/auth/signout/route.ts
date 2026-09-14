@@ -36,7 +36,11 @@ export async function POST(request: Request) {
     }
   }
 
-  // Built from the request's own origin: Next normalises request.url to the
-  // bound hostname, so this is right behind the tunnel and on 127.0.0.1 alike.
-  return NextResponse.redirect(new URL(next, url.origin), { status: 303 });
+  // A relative Location, not one built from request.url: behind nginx Next sees
+  // the address it is bound to (127.0.0.1:3038, or localhost), and an absolute
+  // redirect built from that sends the browser off the public site. A relative
+  // Location is resolved by the browser against the page it posted from, so it
+  // is right behind a proxy, behind a tunnel and on 127.0.0.1 alike. safeNext()
+  // has already guaranteed `next` is a root-relative path on this origin.
+  return new NextResponse(null, { status: 303, headers: { Location: next } });
 }
