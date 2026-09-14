@@ -23,6 +23,7 @@ export const env = {
   analyticsApiUrl: process.env.ANALYTICS_API_URL ?? '',
   jubileepediaApiUrl: process.env.JUBILEEPEDIA_API_URL ?? '',
   ssoJwksUrl: process.env.SSO_JWKS_URL ?? '',
+  ssoBase: process.env.SSO_BASE ?? '',                    // Jubilee authority; see api/auth.js
   botContactEmail: process.env.BOT_CONTACT_EMAIL ?? '',   // decision D7
   corsAllowlist: (process.env.CORS_ALLOWLIST ?? '').split(',').map((s) => s.trim()).filter(Boolean),
   logLevel: process.env.LOG_LEVEL ?? 'info',

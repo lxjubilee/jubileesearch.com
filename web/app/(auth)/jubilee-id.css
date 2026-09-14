@@ -97,6 +97,13 @@ body:has(.auth-row) {
   position: relative; z-index: 2;
   overflow-y: auto; scrollbar-gutter: stable;
   height: 100dvh;
+  /* Makes this panel the container the wordmark's cqw fit guard measures
+     against. Without it `cqw` has no container and falls back to the viewport,
+     which is far wider than this column — the guard would never bite and the
+     name would clip exactly where it is supposed to be protected.
+     inline-size only, never `size`: the column's height is 100dvh and size
+     containment would break it. */
+  container-type: inline-size;
 }
 /* ── The scrollbar ──
    The door is its own root layout (app/(auth)/layout.tsx) and deliberately does
@@ -199,12 +206,27 @@ html { scrollbar-width: thin; scrollbar-color: #4a4a4a transparent; }
   box-shadow: 0 0 15px var(--kj-accent-40);
   object-fit: cover;
 }
-/* NOT standardised — this is the brand. JubileeSearch's wordmark, its face and
-   its accent span, exactly as the home page sets it. */
+/* The FACE and the accent span are the brand and stay JubileeSearch's own —
+   Agency FB, not kJubilee's Orbitron. The SIZE and tracking are kJubilee's:
+   32px / 1px, per the 2026-09-08 decision that every family door matches
+   kJubilee absolutely rather than each site's own values times a factor.
+   This was 34px / .5px.
+
+   min() IS A FIT GUARD, NOT A SIZE CHOICE. 32px is what shows wherever there is
+   room; the cap only bites in the narrow band where the panel is ~252px, which
+   is exactly where JubileeBibleTalks was found clipping its name mid-word as
+   "JubileeBibleTalks.cc". Measured, not guessed: "JubileeSearch.com" at 32px
+   with 1px tracking is 287.9px of ink, so it needs 3200/287.9 = 11.11cqw per
+   1px of font-size, and 11cqw is that rounded down for margin. Measured against
+   the Cambria fallback deliberately — Agency FB is condensed and therefore
+   narrower, so a guard sized for the fallback protects both.
+
+   Verify a change here at ~1000-1200px, not just at desktop and mobile: both
+   ends looked correct on JBT while the middle was clipped. */
 .auth-logo-text {
   margin-top: .75rem;
   font-family: var(--font-logo);
-  font-size: 34px; font-weight: 700; letter-spacing: .5px; color: #fff; line-height: 1;
+  font-size: min(32px, 11cqw); font-weight: 700; letter-spacing: 1px; color: #fff; line-height: 1;
 }
 .auth-logo-text .search { color: var(--kj-accent); }
 .auth-logo-text .dotcom { color: #fff; }
@@ -427,7 +449,10 @@ html { scrollbar-width: thin; scrollbar-color: #4a4a4a transparent; }
 @media (max-width: 480px) {
   /* §4 again — shrink the narrow-screen override by the same quarter, or phones
      keep the old proportion. */
-  .auth-logo-text { font-size: 1.7rem; }
+  /* kJubilee's own narrow value. Overrides the min() guard below 480px, where
+     the panel is full-width and the container query would allow more than the
+     door wants. Was 1.7rem. */
+  .auth-logo-text { font-size: 1.6rem; }
   .auth-logo-img { width: 57px; height: 57px; }
   .door-heading { font-size: calc(1.3rem * .75); }
   .door-heading--caps { font-size: calc(1.3rem * .75 * .9 * .9); }

@@ -134,4 +134,36 @@ export async function contentRequest(
   }
 }
 
+/**
+ * Write this person into the engine's local mirror of Jubilee identities.
+ *
+ * Called once per sign-in, from the server, with the authority's own access
+ * token — which is the only place that token is available. It lives in an
+ * httpOnly cookie precisely so the browser cannot read it, so the browser
+ * cannot make this call and must not be asked to.
+ *
+ * The token is the whole request. Nothing about the person is sent: the engine
+ * asks the authority who the bearer belongs to and mirrors the answer, so a
+ * caller cannot write a row for an identity that is not its own. See
+ * engine/src/api/routes/me.js.
+ *
+ * BEST EFFORT, ALWAYS. The mirror is a convenience for reporting and for
+ * hanging per-user data on later; it is not part of being signed in. A sign-in
+ * the authority has already approved must never fail because this did, so every
+ * outcome resolves to a boolean and nothing throws.
+ */
+export async function mirrorUser(accessToken: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${ENGINE}/api/v1/me`, {
+      method: 'POST',
+      headers: { authorization: `Bearer ${accessToken}` },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      cache: 'no-store',
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 export const engineOrigin = () => ENGINE;

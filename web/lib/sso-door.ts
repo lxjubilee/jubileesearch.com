@@ -5,15 +5,20 @@ import {
   type SsoUser, type SsoTokens,
 } from './sso';
 import { setSession, setFamilySession } from './session';
+import { mirrorUser } from './api';
 
 // The pieces of the Jubilee ID door that more than one route needs.
 //
-// Ported from kJubilee's `lib/sso-door.js`, minus everything that reads a local
-// user table: kJubilee mirrors identities into `kj_users` and can sign someone
-// in on a legacy local password. JubileeSearch has no such table and never
-// should (§14 — "Never a separate password system"), so the branches for a
-// pre-door account and for a local password hash are absent by design rather
-// than left out for later.
+// Ported from kJubilee's `lib/sso-door.js`, minus the branch that signs someone
+// in on a legacy local password. §14 — "Never a separate password system" —
+// forbids that here, so it is absent by design rather than left out for later,
+// and nothing below ever consults a local credential.
+//
+// There IS now a local users table (migration 034), added on the owner's
+// decision so this site has a row per member like every other Jubilee property.
+// It changes nothing about authentication: it is written AFTER the authority
+// has already decided, it is never read to sign anyone in, and it holds no
+// secret. A mirror, not a credential store.
 
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -119,6 +124,20 @@ export async function respondSignedIn(
   } catch {
     // Signed in to JubileeSearch alone. That is the whole cost.
   }
+
+  // AND MIRROR THE IDENTITY into the engine's users table (migration 034), so
+  // this site holds a row per member the way the rest of the family does.
+  //
+  // Sent from here because here is the only place the authority's token exists:
+  // it is sealed into an httpOnly cookie above and the browser can never read
+  // it. The token is the entire request — the engine asks the authority whose
+  // it is and mirrors that answer, so this cannot write a row for anyone else.
+  //
+  // Best-effort, like the family session above. The mirror serves reporting and
+  // whatever per-user data comes later; a lost write is repaired by the next
+  // sign-in, whereas failing the sign-in over it would cost the person the one
+  // thing they came for.
+  await mirrorUser(tokens.access_token);
 
   return json({
     success: true,

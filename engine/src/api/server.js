@@ -24,10 +24,11 @@ import { identify, isAdmin, canView } from './auth.js';
 import { consume, LIMITS } from './ratelimit.js';
 import { routes as adminRoutes } from './routes/admin.js';
 import { routes as ingestRoutes } from './routes/ingest.js';
+import { routes as meRoutes } from './routes/me.js';
 import { routes as publicRoutes } from './routes/public.js';
 import { routes as widgetRoutes } from './routes/widget.js';
 
-const ROUTES = [...publicRoutes, ...ingestRoutes, ...adminRoutes, ...widgetRoutes];
+const ROUTES = [...publicRoutes, ...ingestRoutes, ...meRoutes, ...adminRoutes, ...widgetRoutes];
 
 const server = createServer(async (req, res) => {
   const started = Date.now();
