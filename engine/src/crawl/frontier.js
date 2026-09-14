@@ -55,7 +55,7 @@ export async function enqueue(db, urls, domain, options = {}) {
 
   const { rowCount } = await db.query(
     `INSERT INTO crawl_queue (url, url_hash, domain_id, tier, priority, depth, source, discovered_from)
-     SELECT u.url, u.hash, $2, $3, $4, $5, $6, $7
+     SELECT u.url, h.hash, $2, $3, $4, $5, $6, $7
        FROM unnest($1::text[]) AS u(url)
        CROSS JOIN LATERAL (SELECT sha256(convert_to(u.url, 'UTF8')) AS hash) h(hash)
      ON CONFLICT (url_hash) DO NOTHING`,

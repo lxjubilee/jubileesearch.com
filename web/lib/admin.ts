@@ -109,7 +109,7 @@ export interface Dashboard {
 
 export interface Domain {
   id: number; host: string; display_name: string | null; tier: string; status: string;
-  ingest_mode: string; source_root: string | null; owner_org: string | null;
+  ingest_mode: string; source_root: string | null; url_template: string | null; owner_org: string | null;
   crawl_interval_hours: Count; max_pages: Count; max_depth: Count; crawl_delay_ms: Count;
   respect_robots: boolean; render_js: boolean; language_hint: string | null;
   zone_a_eligible: boolean; approved_by: string | null; verification_method: string | null;
@@ -288,6 +288,79 @@ export const sweepCache = () =>
   call<{ rows_swept: number }>('/api/v1/admin/index/sweep-cache', { level: 'admin', method: 'POST' });
 
 /** Postgres bigints arrive as strings; every screen renders through this. */
+// --- the endpoints added for the console's remaining screens (routes/admin-ops.js)
+
+export interface ImportResult {
+  total: number; inserted?: number; updated?: number; failed: number;
+  results?: { host: string; ok: boolean; inserted?: boolean; error?: string }[];
+  concepts_created?: number; terms_written?: number;
+  errors?: { term: string; error: string }[];
+}
+export interface BestBetAudit {
+  id: number; best_bet_id: number; action: string; actor: string;
+  before_state: Record<string, unknown> | null; after_state: Record<string, unknown> | null; at: string;
+}
+export interface LexiconPreview {
+  query: string; normalized: string; lang: string; concepts: string[];
+  groups: { weight: number; terms: string[] }[];
+}
+export interface IndexLog {
+  url: string;
+  domain: { host: string; status: string; ingest_mode: string; last_crawl_started: string | null;
+            last_crawl_finished: string | null; next_crawl_due: string | null } | null;
+  page: { id: number } | null;
+  ingest_runs: { id: number; mode: string; started_at: string; finished_at: string | null;
+                 pages_seen: Count; pages_changed: Count; pages_failed: Count; error: string | null }[];
+  crawl_failures: { status: number | null; reason: string; outcome: string; at: string }[];
+  queue: { priority: number; source: string; scheduled_for: string; claimed_by: string | null;
+           claimed_at: string | null; attempts: number; last_error: string | null }[];
+}
+export interface AnalyticsOverview {
+  days: number;
+  by_intent: { intent: string; searches: Count; zero_results: Count }[];
+  by_language: { lang: string; searches: Count }[];
+  ctr_by_position: { zone: string; position: number; impressions: Count; clicks: Count; ctr: Count }[];
+  concept_hits: { concept_key: string; hits: Count }[];
+  top_queries: { normalized: string; times: Count; zone_a_empty: Count }[];
+}
+
+export const updateDomain = (id: number, patch: Record<string, unknown>) =>
+  call<Domain>(`/api/v1/admin/domains/${id}`, { level: 'admin', method: 'PUT', body: patch });
+export const pauseDomain = (id: number, paused: boolean) =>
+  call<Domain>(`/api/v1/admin/domains/${id}/pause`, { level: 'admin', method: 'POST', body: { paused } });
+export const reingestDomain = (id: number) =>
+  call<{ host: string; pages_reset: number; queued: number }>(
+    `/api/v1/admin/domains/${id}/reingest`, { level: 'admin', method: 'POST', body: {} });
+export const importDomains = (csv: string) =>
+  call<ImportResult>('/api/v1/admin/domains/import', { level: 'admin', method: 'POST', body: { csv } });
+export const issueVerificationToken = (id: number) =>
+  call<{ host: string; token: string; dns_txt: string; well_known_url: string }>(
+    `/api/v1/admin/domains/${id}/verification-token`, { level: 'admin', method: 'POST', body: {} });
+
+export const updateBestBet = (id: number, patch: Record<string, unknown>) =>
+  call<BestBet>(`/api/v1/admin/best-bets/${id}`, { level: 'admin', method: 'PUT', body: patch });
+export const reorderBestBets = (order: number[]) =>
+  call<{ reordered: number }>('/api/v1/admin/best-bets/reorder', { level: 'admin', method: 'POST', body: { order } });
+export const getBestBetAudit = (limit = 50) =>
+  call<{ entries: BestBetAudit[] }>(`/api/v1/admin/best-bets/audit?limit=${limit}`);
+
+export const previewLexicon = (q: string, lang?: string) =>
+  call<LexiconPreview>(`/api/v1/admin/lexicon/preview?q=${encodeURIComponent(q)}${lang ? `&lang=${encodeURIComponent(lang)}` : ''}`);
+export const importLexicon = (csv: string) =>
+  call<ImportResult>('/api/v1/admin/lexicon/import', { level: 'admin', method: 'POST', body: { csv } });
+
+export const reindex = (target: { url?: string; host?: string }) =>
+  call<{ pages_reset: number; queued: number }>('/api/v1/admin/index/reindex', { level: 'admin', method: 'POST', body: target });
+export const purgePage = (url: string) =>
+  call<{ purged: boolean }>('/api/v1/admin/index/purge-page', { level: 'admin', method: 'POST', body: { url } });
+export const reembed = (target: { url?: string; host?: string }) =>
+  call<{ chunks_reset: number }>('/api/v1/admin/index/reembed', { level: 'admin', method: 'POST', body: target });
+export const indexLog = (url: string) =>
+  call<IndexLog>(`/api/v1/admin/index/log?url=${encodeURIComponent(url)}`);
+
+export const getAnalyticsOverview = (days = 7) =>
+  call<AnalyticsOverview>(`/api/v1/admin/analytics/overview?days=${days}`);
+
 export const num = (v: Count | undefined): number => {
   const n = Number(v ?? 0);
   return Number.isFinite(n) ? n : 0;

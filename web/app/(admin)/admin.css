@@ -382,3 +382,17 @@ label { display: block; font-size: 12px; color: var(--a-ink-dim); margin-bottom:
   .sideFoot { padding-top: 12px; }
   .main { padding: 20px 16px 56px; }
 }
+
+/* ---------- inline editors under a table row ---------- */
+.rowDetails > summary {
+  cursor: pointer;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--a-ink-faint);
+  list-style: none;
+}
+.rowDetails > summary::before { content: '▸ '; }
+.rowDetails[open] > summary::before { content: '▾ '; }
+.rowDetails > summary:hover { color: var(--a-ink); }
+.rowDetails[open] { background: var(--a-panel-2); border-top: 1px solid var(--a-line-soft); }
+.rowDetails textarea { width: 100%; }

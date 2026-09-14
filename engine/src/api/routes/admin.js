@@ -13,6 +13,7 @@ import { validatePattern } from '../../query/bestbets.js';
 import { dedupeExact } from '../../ingest/service.js';
 import { sweepResultCache } from '../../query/cache.js';
 import { beginProbe } from '../../crawl/discovery.js';
+import { checkProof } from '../../crawl/verification.js';
 
 const exact = (path) => (p) => p === path;
 const pattern = (re) => (p) => re.test(p);
@@ -21,7 +22,7 @@ const bad = (msg) => Object.assign(new Error(msg), { statusCode: 400 });
 
 // Never selected: webhook_secret. A shared secret that can be read back out of
 // an admin GET is a secret that ends up in a browser history and a screenshot.
-const DOMAIN_COLUMNS = `
+export const DOMAIN_COLUMNS = `
   id, host, display_name, tier, status, ingest_mode, source_root, url_template,
   owner_org, crawl_interval_hours, max_pages, max_depth, crawl_delay_ms,
   respect_robots, render_js, language_hint, zone_a_eligible, approved_by,
@@ -177,6 +178,18 @@ export const routes = [
       const method = body.parsed?.method;
       if (!['dns_txt', 'well_known', 'authoritative_list'].includes(method)) {
         throw bad("method must be 'dns_txt', 'well_known' or 'authoritative_list'");
+      }
+      // DNS and well-known are PROOFS, not attestations: the token issued by
+      // /verification-token has to be found where the owner was told to put
+      // it. Only the authoritative list is taken on the operator's word.
+      if (method !== 'authoritative_list') {
+        const { rows: d } = await db.query(
+          `SELECT host, verification_token FROM domains WHERE id = $1 AND tier = 'T1'`, [params.id]);
+        if (!d[0]) throw bad('no such T1 domain');
+        const proof = await checkProof(method, d[0].host, d[0].verification_token, body.probe ?? {});
+        if (!proof.ok) {
+          return { status: 422, body: { error: `verification failed: ${proof.reason}`, method, host: d[0].host } };
+        }
       }
       const { rows } = await db.query(
         `UPDATE domains
@@ -726,7 +739,7 @@ function explainUnservable(p) {
 }
 
 // §8.3, per-domain policy defaults by tier.
-const TIER_DEFAULTS = {
+export const TIER_DEFAULTS = {
   T1: { ingest_mode: 'hybrid', crawl_interval_hours: 24,  max_pages: null,  max_depth: 10, crawl_delay_ms: 250 },
   T2: { ingest_mode: 'crawl',  crawl_interval_hours: 168, max_pages: 5000,  max_depth: 4,  crawl_delay_ms: 1500 },
   T3: { ingest_mode: 'crawl',  crawl_interval_hours: 720, max_pages: 500,   max_depth: 2,  crawl_delay_ms: 2500 },

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { getLexicon, num, AdminRequestFailed } from '@/lib/admin';
+import { getLexicon, previewLexicon, num, AdminRequestFailed } from '@/lib/admin';
 import { getSession, isAdmin } from '@/lib/session';
-import { addLexiconTermAction } from '@/lib/admin-actions';
+import { addLexiconTermAction, importLexiconAction } from '@/lib/admin-actions';
 import { ActionForm, SubmitButton } from '@/components/admin/ActionForm';
-import { PageHead, Panel, Pill, Empty, LoadFailed } from '@/components/admin/ui';
+import { PageHead, Panel, Pill, Empty, LoadFailed, Notice } from '@/components/admin/ui';
 
 // Screen 3: lexicon editor (§15).
 //
@@ -11,19 +11,21 @@ import { PageHead, Panel, Pill, Empty, LoadFailed } from '@/components/admin/ui'
 // term, bulk import, and a live preview showing how a sample query expands.
 // Enforces the Hebrew article validation rule."
 //
-// The validation rule is enforced in the database, not here: a CHECK constraint
-// named `lexicon_terms_no_doubled_article` refuses a term carrying both the
-// English article and the Hebrew Ha- prefix. The API translates that constraint
-// into a sentence an editor can act on, and this page shows it. Re-implementing
-// the check in the browser would give two rules to keep in step, and the one
-// that matters would still be the database's.
-//
-// `register` appears here and on no reader-facing surface. §7.5 makes it an
-// internal editing label; this is the console, so it is shown.
+// The preview asks the engine to run the query pipeline's own expansion step
+// (routes/admin-ops.js -> query/lexicon.js expand) without running a search,
+// so what it shows is what a reader's search would use, not a browser-side
+// imitation of it. It is a GET form, so a preview is a URL that can be shared.
 
 export const metadata: Metadata = { title: 'Lexicon' };
 
-export default async function LexiconPage() {
+export default async function LexiconPage(
+  { searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> },
+) {
+  const params = await searchParams;
+  const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? '';
+  const sample = one(params.q).trim();
+  const sampleLang = one(params.lang).trim();
+
   const session = await getSession();
   const admin = isAdmin(session);
 
@@ -44,6 +46,14 @@ export default async function LexiconPage() {
     );
   }
 
+  let preview = null;
+  let previewError = '';
+  if (sample) {
+    try { preview = await previewLexicon(sample, sampleLang || undefined); } catch (err) {
+      previewError = err instanceof AdminRequestFailed ? err.message : String(err);
+    }
+  }
+
   const concepts = data.concepts;
   const termCount = concepts.reduce((n, c) => n + (c.terms?.length ?? 0), 0);
 
@@ -54,11 +64,56 @@ export default async function LexiconPage() {
         sub={`${concepts.length} concepts, ${termCount} terms. This is what lets a search for "repentance" find a page that says "teshuvah", and the reverse.`}
       />
 
+      <Panel title="Preview an expansion" note="exactly what the query pipeline does, without the search">
+        <div className="panelBody">
+          <form method="GET" className="formGrid">
+            <div style={{ gridColumn: '1 / span 2' }}>
+              <label htmlFor="lx-q">Sample query</label>
+              <input id="lx-q" name="q" type="text" defaultValue={sample} placeholder="the ruach kodesh" required />
+            </div>
+            <div>
+              <label htmlFor="lx-qlang">Language (blank = detect)</label>
+              <input id="lx-qlang" name="lang" type="text" defaultValue={sampleLang} placeholder="en" />
+            </div>
+            <div><button type="submit" className="btn" data-tone="primary">Preview</button></div>
+          </form>
+
+          {previewError && <div className="notice" data-tone="bad" style={{ marginTop: 14, marginBottom: 0 }}>{previewError}</div>}
+
+          {preview && (
+            <div style={{ marginTop: 16 }}>
+              <div className="sub" style={{ marginBottom: 8 }}>
+                Normalised to <span className="mono">{preview.normalized}</span> · language <Pill>{preview.lang}</Pill>
+              </div>
+              {preview.concepts.length === 0 ? (
+                <Notice tone="warn">No concept matched, so this query is searched as typed.</Notice>
+              ) : (
+                <>
+                  <div style={{ marginBottom: 8 }}>
+                    Concepts hit: {preview.concepts.map((c) => <Pill key={c} tone="accent">{c}</Pill>)}
+                  </div>
+                  <div className="scroll">
+                    <table>
+                      <thead><tr><th className="numCell">Weight</th><th className="wrapCell">Terms added to the search</th></tr></thead>
+                      <tbody>
+                        {preview.groups.map((g) => (
+                          <tr key={g.weight}>
+                            <td className="numCell">{g.weight.toFixed(1)}</td>
+                            <td className="wrapCell mono">{g.terms.join(' · ')}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      </Panel>
+
       {admin && (
-        <Panel
-          title="Add or update a term"
-          note="the doubled-article rule is enforced by the database"
-        >
+        <Panel title="Add or update a term" note="the doubled-article rule is enforced by the database">
           <div className="panelBody">
             <ActionForm action={addLexiconTermAction}>
               <div className="formGrid">
@@ -94,6 +149,23 @@ export default async function LexiconPage() {
                   </label>
                 </div>
                 <div><SubmitButton tone="primary">Save term</SubmitButton></div>
+              </div>
+            </ActionForm>
+          </div>
+        </Panel>
+      )}
+
+      {admin && (
+        <Panel title="Bulk import" note="CSV with a header row, or a JSON array; new concepts are created, existing terms updated">
+          <div className="panelBody">
+            <ActionForm action={importLexiconAction}>
+              <label htmlFor="lx-csv">Rows</label>
+              <textarea id="lx-csv" name="csv" rows={6} required
+                        placeholder={'concept_key,gloss,term,lang,register,weight,is_primary\nteshuvah,Repentance and return,teshuvah,en,hebraic,1,true\nteshuvah,,repentance,en,plain,0.9,false'}
+                        style={{ width: '100%', fontFamily: 'var(--a-mono)', fontSize: 12 }} />
+              <div className="actions" style={{ marginTop: 10 }}>
+                <SubmitButton tone="primary">Import</SubmitButton>
+                <span className="sub">Columns: concept_key, term, lang (required); gloss, register, weight, is_primary. Up to 5000 rows. Terms breaking the doubled-article rule are reported and skipped.</span>
               </div>
             </ActionForm>
           </div>
@@ -147,12 +219,6 @@ export default async function LexiconPage() {
           </Panel>
         ))
       )}
-
-      <p className="sub">
-        Not yet on this screen: bulk import, and the live preview of how a sample query expands.
-        The preview needs an endpoint that runs expansion without running a search; the API has
-        none, and faking it in the browser would preview something other than what the engine does.
-      </p>
     </>
   );
 }

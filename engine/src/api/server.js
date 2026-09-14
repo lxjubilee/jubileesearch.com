@@ -23,6 +23,7 @@ import { search } from '../query/orchestrator.js';
 import { identify, isAdmin, canView } from './auth.js';
 import { consume, LIMITS } from './ratelimit.js';
 import { routes as adminRoutes } from './routes/admin.js';
+import { routes as adminOpsRoutes } from './routes/admin-ops.js';
 import { routes as ingestRoutes } from './routes/ingest.js';
 import { routes as meRoutes } from './routes/me.js';
 import { routes as passwordResetRoutes } from './routes/password-resets.js';
@@ -32,7 +33,7 @@ import { routes as widgetRoutes } from './routes/widget.js';
 
 const ROUTES = [
   ...publicRoutes, ...ingestRoutes, ...meRoutes, ...usersRoutes, ...passwordResetRoutes,
-  ...adminRoutes, ...widgetRoutes,
+  ...adminRoutes, ...adminOpsRoutes, ...widgetRoutes,
 ];
 
 const server = createServer(async (req, res) => {
@@ -110,7 +111,7 @@ function applyCors(req, res) {
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Headers', 'content-type, authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 }
 
 function clientIp(req) {

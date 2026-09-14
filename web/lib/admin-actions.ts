@@ -288,3 +288,149 @@ export async function sweepCacheAction(): Promise<ActionResult> {
     return { ok: false, message: err instanceof Error ? err.message : 'failed' };
   }
 }
+
+// --- the endpoints added for the console's remaining screens ------------------
+
+const opt = (f: FormData, k: string): string | undefined => (f.has(k) ? str(f, k) : undefined);
+
+export async function updateDomainAction(_: ActionResult | null, form: FormData) {
+  const id = int(form, 'id');
+  const patch: Record<string, unknown> = {};
+  for (const k of ['display_name', 'tier', 'ingest_mode', 'source_root', 'url_template', 'owner_org',
+                   'crawl_interval_hours', 'max_pages', 'max_depth', 'crawl_delay_ms', 'language_hint',
+                   'sitemap_urls', 'allow_patterns', 'deny_patterns']) {
+    const v = opt(form, k);
+    if (v !== undefined) patch[k] = v;
+  }
+  if (form.has('respect_robots_present')) patch.respect_robots = form.get('respect_robots') === 'on';
+  if (form.has('render_js_present')) patch.render_js = form.get('render_js') === 'on';
+  return run('Saved.', () => admin.updateDomain(id, patch), '/admin/domains');
+}
+
+export async function pauseDomainAction(_: ActionResult | null, form: FormData) {
+  const id = int(form, 'id');
+  const paused = str(form, 'paused') === 'true';
+  return run(paused ? 'Paused. No ingest or crawl will run until it is resumed.' : 'Resumed.',
+    () => admin.pauseDomain(id, paused), '/admin/domains');
+}
+
+export async function reingestDomainAction(_: ActionResult | null, form: FormData) {
+  const id = int(form, 'id');
+  try {
+    const r = await admin.reingestDomain(id);
+    revalidatePath('/admin/domains');
+    return { ok: true, message: `Re-ingest scheduled for ${r.host}: ${r.pages_reset} pages reset, ${r.queued} queued.` };
+  } catch (err) {
+    return failure(err);
+  }
+}
+
+export async function importDomainsAction(_: ActionResult | null, form: FormData) {
+  const csv = str(form, 'csv');
+  if (!csv) return { ok: false, message: 'Paste CSV or JSON rows first.' };
+  try {
+    const r = await admin.importDomains(csv);
+    revalidatePath('/admin/domains');
+    const failed = (r.results ?? []).filter((x) => !x.ok).slice(0, 5)
+      .map((x) => `${x.host}: ${x.error}`).join('; ');
+    return {
+      ok: r.failed === 0,
+      message: `${r.inserted ?? 0} added, ${r.updated ?? 0} updated, ${r.failed} failed${failed ? ` (${failed})` : ''}.`,
+    };
+  } catch (err) {
+    return failure(err);
+  }
+}
+
+export async function issueVerificationTokenAction(_: ActionResult | null, form: FormData) {
+  const id = int(form, 'id');
+  try {
+    const r = await admin.issueVerificationToken(id);
+    revalidatePath('/admin/domains');
+    return {
+      ok: true,
+      message: `Token issued for ${r.host}. Publish EITHER a DNS TXT record on ${r.host}: ${r.dns_txt}  OR the file ${r.well_known_url} containing ${r.token}. Then verify below.`,
+    };
+  } catch (err) {
+    return failure(err);
+  }
+}
+
+export async function updateBestBetAction(_: ActionResult | null, form: FormData) {
+  const id = int(form, 'id');
+  const patch: Record<string, unknown> = {};
+  for (const k of ['match_type', 'pattern', 'lang', 'target_url', 'title_override', 'blurb', 'position',
+                   'starts_at', 'ends_at']) {
+    const v = opt(form, k);
+    if (v !== undefined) patch[k] = v;
+  }
+  if (form.has('active_present')) patch.active = form.get('active') === 'on';
+  return run('Saved. Live on the next search.', () => admin.updateBestBet(id, patch), '/admin/best-bets');
+}
+
+export async function moveBestBetAction(_: ActionResult | null, form: FormData) {
+  // The ordered id list comes from the page; the one being moved swaps with
+  // its neighbour in the given direction.
+  const id = int(form, 'id');
+  const dir = str(form, 'dir');
+  const order = str(form, 'order').split(',').map(Number).filter(Number.isInteger);
+  const i = order.indexOf(id);
+  const j = dir === 'up' ? i - 1 : i + 1;
+  if (i < 0 || j < 0 || j >= order.length) return { ok: false, message: 'Nothing to move.' };
+  [order[i], order[j]] = [order[j]!, order[i]!];
+  return run('Reordered.', () => admin.reorderBestBets(order), '/admin/best-bets');
+}
+
+export async function importLexiconAction(_: ActionResult | null, form: FormData) {
+  const csv = str(form, 'csv');
+  if (!csv) return { ok: false, message: 'Paste CSV or JSON rows first.' };
+  try {
+    const r = await admin.importLexicon(csv);
+    revalidatePath('/admin/lexicon');
+    const errs = (r.errors ?? []).slice(0, 5).map((e) => `${e.term}: ${e.error}`).join('; ');
+    return {
+      ok: r.failed === 0,
+      message: `${r.concepts_created ?? 0} concepts created, ${r.terms_written ?? 0} terms written, ${r.failed} failed${errs ? ` (${errs})` : ''}.`,
+    };
+  } catch (err) {
+    return failure(err);
+  }
+}
+
+export async function reindexAction(_: ActionResult | null, form: FormData) {
+  const target = str(form, 'target');
+  const body = /^https?:\/\//i.test(target) ? { url: target } : { host: target };
+  try {
+    const r = await admin.reindex(body);
+    revalidatePath('/admin/index-tools');
+    return { ok: true, message: `Reindex scheduled: ${r.pages_reset} page(s) reset, ${r.queued} queued for fetch.` };
+  } catch (err) {
+    return failure(err);
+  }
+}
+
+export async function purgePageAction(_: ActionResult | null, form: FormData) {
+  const url = str(form, 'url');
+  return run('Purged. The index version was bumped, so no cached result can still show it.',
+    () => admin.purgePage(url), '/admin/index-tools');
+}
+
+export async function reembedAction(_: ActionResult | null, form: FormData) {
+  const target = str(form, 'target');
+  const body = /^https?:\/\//i.test(target) ? { url: target } : { host: target };
+  try {
+    const r = await admin.reembed(body);
+    revalidatePath('/admin/index-tools');
+    return { ok: true, message: `${r.chunks_reset} chunk(s) cleared; the embed job will redo them with the current model.` };
+  } catch (err) {
+    return failure(err);
+  }
+}
+
+function failure(err: unknown): ActionResult {
+  if (err instanceof NotAuthorised) {
+    return { ok: false, message: err.reason === 'anonymous' ? 'Your session has expired. Sign in again.' : 'This account does not carry search_admin, so nothing was changed.' };
+  }
+  if (err instanceof AdminRequestFailed) return { ok: false, message: err.message };
+  return { ok: false, message: err instanceof Error ? err.message : 'unknown failure' };
+}
