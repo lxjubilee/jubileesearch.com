@@ -60,6 +60,7 @@ const claimSql = (t) => `
   JOIN pages p ON p.id = c.page_id
   LEFT JOIN crawl_queue q ON q.url_hash = p.url_hash
   WHERE c.${t.at} IS NULL
+    AND NOT c.boilerplate
     AND c.${t.attempts} < $2
     AND ($3::boolean IS FALSE OR COALESCE(q.priority, 100) = 1)
   ORDER BY COALESCE(q.priority, 100), c.id
@@ -110,6 +111,17 @@ export async function runOnce({ publishOnly = false, batch = BATCH, target = 'li
 }
 
 export async function run({ publishOnly = false, maxBatches = Infinity, target = 'live' } = {}) {
+  // Site boilerplate first (migration 036): chunks whose text recurs across a
+  // domain's pages are template, not content, and must not reach the index.
+  // Idempotent, so every run may call it; a crawl that just ran is the reason to.
+  try {
+    const { rows } = await pool.query('SELECT mark_boilerplate_chunks(3) AS marked');
+    if (Number(rows[0]?.marked) > 0) {
+      console.log(JSON.stringify({ level: 'info', at: 'job.embed.boilerplate', marked: Number(rows[0].marked) }));
+    }
+  } catch (err) {
+    console.error(JSON.stringify({ level: 'warn', at: 'job.embed.boilerplate', msg: err.message }));
+  }
   let embedded = 0;
   let failed = 0;
   let batches = 0;

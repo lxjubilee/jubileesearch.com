@@ -1,10 +1,16 @@
 {
-  "version": "1.0",
+  "version": "1.0+xlang",
   "created": "2026-09-09",
   "corpus": {
     "source": "https://cdn.jubileeverse.com/articles",
     "articles": 600,
-    "categories": ["covenant-identity", "teshuvah-restoration", "shalom-salvation", "celebration-mishpakhah", "torah-hebraic-insights"]
+    "categories": [
+      "covenant-identity",
+      "teshuvah-restoration",
+      "shalom-salvation",
+      "celebration-mishpakhah",
+      "torah-hebraic-insights"
+    ]
   },
   "authoring_method": "Authored FROM the corpus, not from search output. Each pair was written by reading an article's title, summary, tags and — for the cross-register set — the actual register terms in its body, then deciding what query ought to find it. No pair was created by running a search and recording what came back: that would encode the current model's behaviour as the expected answer and turn every later evaluation into a comparison against a predecessor rather than against the content. Where the pipeline disagrees with a pair, the assumption is that the pipeline is wrong.",
   "target_field": "source_path minus the 'cdn:' prefix, i.e. <categorySlug>__<slug>. Stable across reindex and model changes.",
@@ -14,114 +20,711 @@
     "8": "zero failures on cross-register pairs",
     "10": "paraphrase queries return the target in the top 5"
   },
-  "cross_language_status": "DEFERRED — 15 pairs cannot be authored. No article in the corpus carries a language field in either its manifest entry or its YAML frontmatter, so all 600 default to 'en'. This is blocked upstream at JubileeVerse publishing, not a search defect. 85 of the required 100 pairs are present.",
+  "cross_language_status": "15 pairs authored 2026-09-14. Romanian content comes from pocaieste.com and pocaintasibotez.com (InspireManna tenants, language ro-RO), registered as T1 and crawled; those targets are keyed 'url:<absolute url>' (see harness.mjs targetIndex). L01-L07 are Romanian queries against English CDN articles whose relevance was already vetted by the pair named in each note; L08-L15 are English queries against Romanian articles, written from each article's own description and the scripture it teaches from.",
   "softened_pairs": "None. Any pair the pipeline disagrees with is recorded in eval/results/*.json as a failure, not rewritten.",
-
   "pairs": [
-    { "id": "T01", "type": "topical", "query": "chiasm in Hebrew writing", "target": "torah-hebraic-insights__the-middle-is-the-message" },
-    { "id": "T02", "type": "topical", "query": "Aaronic blessing lifting the face", "target": "torah-hebraic-insights__the-judge-who-plays-favorites" },
-    { "id": "T03", "type": "topical", "query": "ketubah marriage contract commandments", "target": "covenant-identity__every-rule-was-a-vow" },
-    { "id": "T04", "type": "topical", "query": "Ezekiel valley of dry bones", "target": "teshuvah-restoration__the-valley-was-never-a-graveyard" },
-    { "id": "T05", "type": "topical", "query": "Jonah mercy and the book's final question", "target": "teshuvah-restoration__the-last-word-is-a-question" },
-    { "id": "T06", "type": "topical", "query": "Gideon altar Yahuah-Shalom", "target": "shalom-salvation__he-named-it-before-it-was-true" },
-    { "id": "T07", "type": "topical", "query": "woman at the well request before offer", "target": "shalom-salvation__he-asked-before-he-offered" },
-    { "id": "T08", "type": "topical", "query": "feeding an enemy army instead of striking them", "target": "shalom-salvation__one-meal-ended-the-war" },
-    { "id": "T09", "type": "topical", "query": "Joseph and his brothers speaking to the heart", "target": "celebration-mishpakhah__he-wooed-his-own-brothers" },
-    { "id": "T10", "type": "topical", "query": "Anna the prophetess belonging and singleness", "target": "celebration-mishpakhah__her-name-was-a-full-sentence" },
-    { "id": "T11", "type": "topical", "query": "Leviticus law about being fully covered", "target": "torah-hebraic-insights__all-of-it-came-back-clean" },
-    { "id": "T12", "type": "topical", "query": "carts in Torah and automation at work", "target": "torah-hebraic-insights__the-carts-were-gods-idea" },
-    { "id": "T13", "type": "topical", "query": "orchard fruit stripped for three years", "target": "torah-hebraic-insights__your-closed-years-are-making-fruit" },
-    { "id": "T14", "type": "topical", "query": "a word spoken at the right time", "target": "torah-hebraic-insights__a-word-has-wheels" },
-    { "id": "T15", "type": "topical", "query": "Zephaniah perhaps the boldest intercessors", "target": "teshuvah-restoration__the-bravest-prayer-says-perhaps" },
-    { "id": "T16", "type": "topical", "query": "the most quoted line in Job written two ways", "target": "teshuvah-restoration__one-sound-carries-both-answers" },
-    { "id": "T17", "type": "topical", "query": "closed letter in Isaiah and the foundation stone", "target": "covenant-identity__a-sealed-letter-an-open-kingdom" },
-    { "id": "T18", "type": "topical", "query": "blessing spoken over one person not a crowd", "target": "covenant-identity__nobody-was-blessed-as-a-crowd" },
-    { "id": "T19", "type": "topical", "query": "Ezekiel property law about a borrowed room", "target": "covenant-identity__sons-do-not-hand-it-back" },
-    { "id": "T20", "type": "topical", "query": "healing on Shabbat and watering an ox", "target": "shalom-salvation__even-the-ox-gets-water" },
-    { "id": "T21", "type": "topical", "query": "the Hebrew word for hope and immersion", "target": "celebration-mishpakhah__hope-is-a-body-of-water" },
-    { "id": "T22", "type": "topical", "query": "meal train ending after week three", "target": "celebration-mishpakhah__comfort-was-never-a-sentence" },
-    { "id": "T23", "type": "topical", "query": "a community meal missing the people it was built for", "target": "celebration-mishpakhah__the-overlooked-got-the-ledger" },
-    { "id": "T24", "type": "topical", "query": "Elizabeth and Mary celebrating a promise with no evidence", "target": "celebration-mishpakhah__he-danced-before-he-was-born" },
-    { "id": "T25", "type": "topical", "query": "a grandmother setting places for guests who are not there", "target": "celebration-mishpakhah__a-feast-is-a-circle" },
-    { "id": "T26", "type": "topical", "query": "the plan finished before the builder arrived", "target": "covenant-identity__the-plan-arrived-before-the-builder" },
-    { "id": "T27", "type": "topical", "query": "exile and having a covering taken off", "target": "teshuvah-restoration__nothing-was-buried-only-uncovered" },
-    { "id": "T28", "type": "topical", "query": "the bird in the psalm whose name means liberty", "target": "shalom-salvation__freedom-is-a-bird-that-nests" },
-    { "id": "T29", "type": "topical", "query": "a stork named faithful and a nation that will not return", "target": "teshuvah-restoration__the-stork-is-named-faithful" },
-    { "id": "T30", "type": "topical", "query": "answered prayer that felt like nothing", "target": "shalom-salvation__the-rescue-went-ahead-anyway" },
-
-    { "id": "C01", "type": "conversational", "query": "Why do I feel nothing after God answered my prayer?", "target": "shalom-salvation__the-rescue-went-ahead-anyway" },
-    { "id": "C02", "type": "conversational", "query": "How do I forgive a brother I already forgave publicly?", "target": "celebration-mishpakhah__he-wooed-his-own-brothers" },
-    { "id": "C03", "type": "conversational", "query": "Is it wrong to pray maybe instead of being certain?", "target": "teshuvah-restoration__the-bravest-prayer-says-perhaps" },
-    { "id": "C04", "type": "conversational", "query": "What happens to my place in church if I walk away for years?", "target": "teshuvah-restoration__your-name-stayed-on-the-list" },
-    { "id": "C05", "type": "conversational", "query": "How do I keep going when nothing is growing?", "target": "torah-hebraic-insights__your-closed-years-are-making-fruit" },
-    { "id": "C06", "type": "conversational", "query": "Does God notice work that nobody ever sees?", "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw" },
-    { "id": "C07", "type": "conversational", "query": "What do I do when my job is being automated away?", "target": "torah-hebraic-insights__the-carts-were-gods-idea" },
-    { "id": "C08", "type": "conversational", "query": "How do I know I belong if I am single and have no family here?", "target": "celebration-mishpakhah__her-name-was-a-full-sentence" },
-    { "id": "C09", "type": "conversational", "query": "Why does nobody say my name anymore?", "target": "covenant-identity__nobody-was-blessed-as-a-crowd" },
-    { "id": "C10", "type": "conversational", "query": "How should I treat an enemy who is completely at my mercy?", "target": "shalom-salvation__one-meal-ended-the-war" },
-    { "id": "C11", "type": "conversational", "query": "What should I say first to someone who is lonely?", "target": "shalom-salvation__he-asked-before-he-offered" },
-    { "id": "C12", "type": "conversational", "query": "Can I call something peace before anything has changed?", "target": "shalom-salvation__he-named-it-before-it-was-true" },
-    { "id": "C13", "type": "conversational", "query": "Why do people stop showing up after the crisis passes?", "target": "celebration-mishpakhah__comfort-was-never-a-sentence" },
-    { "id": "C14", "type": "conversational", "query": "How do I read the Bible so the point does not get lost?", "target": "torah-hebraic-insights__the-middle-is-the-message" },
-    { "id": "C15", "type": "conversational", "query": "Why would God show favouritism when the law forbids judges to?", "target": "torah-hebraic-insights__the-judge-who-plays-favorites" },
-    { "id": "C16", "type": "conversational", "query": "I keep waiting for care that never comes. Does that matter to God?", "target": "shalom-salvation__even-the-ox-gets-water" },
-    { "id": "C17", "type": "conversational", "query": "What does it mean that my identity cannot be taken away?", "target": "covenant-identity__the-seal-you-cannot-misplace" },
-    { "id": "C18", "type": "conversational", "query": "Why was I passed over again and again?", "target": "covenant-identity__forward-looked-like-standing-still" },
-    { "id": "C19", "type": "conversational", "query": "How do I include people who keep getting left out?", "target": "celebration-mishpakhah__the-overlooked-got-the-ledger" },
-    { "id": "C20", "type": "conversational", "query": "Why can I not bring myself to sign up for baptism?", "target": "celebration-mishpakhah__hope-is-a-body-of-water" },
-
-    { "id": "P01", "type": "paraphrase", "query": "a cemetery that turns out to be a nursery", "target": "teshuvah-restoration__the-valley-was-never-a-graveyard", "note": "shares no content word with the title or summary" },
-    { "id": "P02", "type": "paraphrase", "query": "credentials your employer never issued", "target": "covenant-identity__the-seal-you-cannot-misplace" },
-    { "id": "P03", "type": "paraphrase", "query": "the empty seat nobody is allowed to take", "target": "celebration-mishpakhah__nobody-moves-that-chair" },
-    { "id": "P04", "type": "paraphrase", "query": "counting an unbroken streak until it breaks", "target": "teshuvah-restoration__the-ladder-was-never-required" },
-    { "id": "P05", "type": "paraphrase", "query": "labour with no monument to point at", "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw" },
-    { "id": "P06", "type": "paraphrase", "query": "standing still while moving forward", "target": "covenant-identity__forward-looked-like-standing-still" },
-    { "id": "P07", "type": "paraphrase", "query": "one text message after nine years of silence", "target": "teshuvah-restoration__the-packing-list-was-the-pardon" },
-    { "id": "P08", "type": "paraphrase", "query": "humming where you are told to be quiet", "target": "shalom-salvation__the-quiet-was-not-the-point" },
-    { "id": "P09", "type": "paraphrase", "query": "a broadcast reaching the country that imprisoned your father", "target": "teshuvah-restoration__the-last-word-is-a-question" },
-    { "id": "P10", "type": "paraphrase", "query": "twenty minutes to decide about your own entry", "target": "celebration-mishpakhah__her-name-was-a-full-sentence" },
-
-    { "id": "X01", "type": "cross-register", "register": "en->he", "query": "Holy Spirit breathing life into dry bones", "target": "teshuvah-restoration__the-valley-was-never-a-graveyard", "note": "article uses Ruach HaKodesh; query uses the English register" },
-    { "id": "X02", "type": "cross-register", "register": "he->en", "query": "Ruach HaKodesh and the seal on your identity", "target": "covenant-identity__the-seal-you-cannot-misplace", "note": "article uses Ruach HaKodesh; both directions must resolve" },
-    { "id": "X03", "type": "cross-register", "register": "en->he", "query": "steadfast love toward someone passed over for years", "target": "covenant-identity__forward-looked-like-standing-still", "note": "article uses chesed" },
-    { "id": "X04", "type": "cross-register", "register": "en->he", "query": "lovingkindness at a funeral nobody attends", "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw", "note": "article uses chesed" },
-    { "id": "X05", "type": "cross-register", "register": "he->en", "query": "chesed shown to a boy in his third foster placement", "target": "celebration-mishpakhah__nobody-moves-that-chair" },
-    { "id": "X06", "type": "cross-register", "register": "he->en", "query": "chesed and a migrating bird named loyal", "target": "teshuvah-restoration__the-stork-is-named-faithful" },
-    { "id": "X07", "type": "cross-register", "register": "en->he", "query": "repentance and a name still on the roll", "target": "teshuvah-restoration__your-name-stayed-on-the-list", "note": "article uses teshuvah" },
-    { "id": "X08", "type": "cross-register", "register": "he->en", "query": "teshuvah in the book of Jonah", "target": "teshuvah-restoration__the-last-word-is-a-question" },
-    { "id": "X09", "type": "cross-register", "register": "en->he", "query": "peace declared before the war is over", "target": "shalom-salvation__he-named-it-before-it-was-true", "note": "article uses shalom" },
-    { "id": "X10", "type": "cross-register", "register": "he->en", "query": "shalom made by feeding an enemy", "target": "shalom-salvation__one-meal-ended-the-war" },
-    { "id": "X11", "type": "cross-register", "register": "en->he", "query": "family that sets a place for you anyway", "target": "celebration-mishpakhah__comfort-was-never-a-sentence", "note": "article uses mishpakhah" },
-    { "id": "X12", "type": "cross-register", "register": "he->en", "query": "mishpakhah and belonging without a spouse", "target": "celebration-mishpakhah__her-name-was-a-full-sentence" },
-    { "id": "X13", "type": "cross-register", "register": "he->en", "query": "Adonai and a room held on thirty days notice", "target": "covenant-identity__sons-do-not-hand-it-back" },
-    { "id": "X14", "type": "cross-register", "register": "he->en", "query": "Adonai and liberty pictured as a nesting bird", "target": "shalom-salvation__freedom-is-a-bird-that-nests" },
-    { "id": "X15", "type": "cross-register", "register": "en->he", "query": "Jesus asking a woman for a drink", "target": "shalom-salvation__he-asked-before-he-offered", "note": "article uses Yeshua" },
-    { "id": "X16", "type": "cross-register", "register": "en->he", "query": "the Lord's covering removed in exile", "target": "teshuvah-restoration__nothing-was-buried-only-uncovered" },
-    { "id": "X17", "type": "cross-register", "register": "he->en", "query": "Torah teaching about carts and doing less work", "target": "torah-hebraic-insights__the-carts-were-gods-idea" },
-    { "id": "X18", "type": "cross-register", "register": "he->en", "query": "Shabbat healing after eighteen years of waiting", "target": "shalom-salvation__even-the-ox-gets-water" },
-    { "id": "X19", "type": "cross-register", "register": "he->en", "query": "birkat kohanim and a judge lifting the face", "target": "torah-hebraic-insights__the-judge-who-plays-favorites" },
-    { "id": "X20", "type": "cross-register", "register": "en->he", "query": "marriage covenant written as a list of what is owed", "target": "covenant-identity__every-rule-was-a-vow", "note": "article uses ketubah" },
-
-    { "id": "N01", "type": "navigational", "query": "JubileeVerse", "target": "__navigational__jubileeverse.com" },
-    { "id": "N02", "type": "navigational", "query": "KJubilee", "target": "__navigational__kjubilee.com" },
-    { "id": "N03", "type": "navigational", "query": "Jubilee Inspire", "target": "__navigational__jubileeinspire.com" },
-    { "id": "N04", "type": "navigational", "query": "Jubilee Bible Talks", "target": "__navigational__jubileebibletalks.com" },
-    { "id": "N05", "type": "navigational", "query": "Born Again DNA", "target": "__navigational__bornagaindna.com" }
+    {
+      "id": "T01",
+      "type": "topical",
+      "query": "chiasm in Hebrew writing",
+      "target": "torah-hebraic-insights__the-middle-is-the-message"
+    },
+    {
+      "id": "T02",
+      "type": "topical",
+      "query": "Aaronic blessing lifting the face",
+      "target": "torah-hebraic-insights__the-judge-who-plays-favorites"
+    },
+    {
+      "id": "T03",
+      "type": "topical",
+      "query": "ketubah marriage contract commandments",
+      "target": "covenant-identity__every-rule-was-a-vow"
+    },
+    {
+      "id": "T04",
+      "type": "topical",
+      "query": "Ezekiel valley of dry bones",
+      "target": "teshuvah-restoration__the-valley-was-never-a-graveyard"
+    },
+    {
+      "id": "T05",
+      "type": "topical",
+      "query": "Jonah mercy and the book's final question",
+      "target": "teshuvah-restoration__the-last-word-is-a-question"
+    },
+    {
+      "id": "T06",
+      "type": "topical",
+      "query": "Gideon altar Yahuah-Shalom",
+      "target": "shalom-salvation__he-named-it-before-it-was-true"
+    },
+    {
+      "id": "T07",
+      "type": "topical",
+      "query": "woman at the well request before offer",
+      "target": "shalom-salvation__he-asked-before-he-offered"
+    },
+    {
+      "id": "T08",
+      "type": "topical",
+      "query": "feeding an enemy army instead of striking them",
+      "target": "shalom-salvation__one-meal-ended-the-war"
+    },
+    {
+      "id": "T09",
+      "type": "topical",
+      "query": "Joseph and his brothers speaking to the heart",
+      "target": "celebration-mishpakhah__he-wooed-his-own-brothers"
+    },
+    {
+      "id": "T10",
+      "type": "topical",
+      "query": "Anna the prophetess belonging and singleness",
+      "target": "celebration-mishpakhah__her-name-was-a-full-sentence"
+    },
+    {
+      "id": "T11",
+      "type": "topical",
+      "query": "Leviticus law about being fully covered",
+      "target": "torah-hebraic-insights__all-of-it-came-back-clean"
+    },
+    {
+      "id": "T12",
+      "type": "topical",
+      "query": "carts in Torah and automation at work",
+      "target": "torah-hebraic-insights__the-carts-were-gods-idea"
+    },
+    {
+      "id": "T13",
+      "type": "topical",
+      "query": "orchard fruit stripped for three years",
+      "target": "torah-hebraic-insights__your-closed-years-are-making-fruit"
+    },
+    {
+      "id": "T14",
+      "type": "topical",
+      "query": "a word spoken at the right time",
+      "target": "torah-hebraic-insights__a-word-has-wheels"
+    },
+    {
+      "id": "T15",
+      "type": "topical",
+      "query": "Zephaniah perhaps the boldest intercessors",
+      "target": "teshuvah-restoration__the-bravest-prayer-says-perhaps"
+    },
+    {
+      "id": "T16",
+      "type": "topical",
+      "query": "the most quoted line in Job written two ways",
+      "target": "teshuvah-restoration__one-sound-carries-both-answers"
+    },
+    {
+      "id": "T17",
+      "type": "topical",
+      "query": "closed letter in Isaiah and the foundation stone",
+      "target": "covenant-identity__a-sealed-letter-an-open-kingdom"
+    },
+    {
+      "id": "T18",
+      "type": "topical",
+      "query": "blessing spoken over one person not a crowd",
+      "target": "covenant-identity__nobody-was-blessed-as-a-crowd"
+    },
+    {
+      "id": "T19",
+      "type": "topical",
+      "query": "Ezekiel property law about a borrowed room",
+      "target": "covenant-identity__sons-do-not-hand-it-back"
+    },
+    {
+      "id": "T20",
+      "type": "topical",
+      "query": "healing on Shabbat and watering an ox",
+      "target": "shalom-salvation__even-the-ox-gets-water"
+    },
+    {
+      "id": "T21",
+      "type": "topical",
+      "query": "the Hebrew word for hope and immersion",
+      "target": "celebration-mishpakhah__hope-is-a-body-of-water"
+    },
+    {
+      "id": "T22",
+      "type": "topical",
+      "query": "meal train ending after week three",
+      "target": "celebration-mishpakhah__comfort-was-never-a-sentence"
+    },
+    {
+      "id": "T23",
+      "type": "topical",
+      "query": "a community meal missing the people it was built for",
+      "target": "celebration-mishpakhah__the-overlooked-got-the-ledger"
+    },
+    {
+      "id": "T24",
+      "type": "topical",
+      "query": "Elizabeth and Mary celebrating a promise with no evidence",
+      "target": "celebration-mishpakhah__he-danced-before-he-was-born"
+    },
+    {
+      "id": "T25",
+      "type": "topical",
+      "query": "a grandmother setting places for guests who are not there",
+      "target": "celebration-mishpakhah__a-feast-is-a-circle"
+    },
+    {
+      "id": "T26",
+      "type": "topical",
+      "query": "the plan finished before the builder arrived",
+      "target": "covenant-identity__the-plan-arrived-before-the-builder"
+    },
+    {
+      "id": "T27",
+      "type": "topical",
+      "query": "exile and having a covering taken off",
+      "target": "teshuvah-restoration__nothing-was-buried-only-uncovered"
+    },
+    {
+      "id": "T28",
+      "type": "topical",
+      "query": "the bird in the psalm whose name means liberty",
+      "target": "shalom-salvation__freedom-is-a-bird-that-nests"
+    },
+    {
+      "id": "T29",
+      "type": "topical",
+      "query": "a stork named faithful and a nation that will not return",
+      "target": "teshuvah-restoration__the-stork-is-named-faithful"
+    },
+    {
+      "id": "T30",
+      "type": "topical",
+      "query": "answered prayer that felt like nothing",
+      "target": "shalom-salvation__the-rescue-went-ahead-anyway"
+    },
+    {
+      "id": "C01",
+      "type": "conversational",
+      "query": "Why do I feel nothing after God answered my prayer?",
+      "target": "shalom-salvation__the-rescue-went-ahead-anyway"
+    },
+    {
+      "id": "C02",
+      "type": "conversational",
+      "query": "How do I forgive a brother I already forgave publicly?",
+      "target": "celebration-mishpakhah__he-wooed-his-own-brothers"
+    },
+    {
+      "id": "C03",
+      "type": "conversational",
+      "query": "Is it wrong to pray maybe instead of being certain?",
+      "target": "teshuvah-restoration__the-bravest-prayer-says-perhaps"
+    },
+    {
+      "id": "C04",
+      "type": "conversational",
+      "query": "What happens to my place in church if I walk away for years?",
+      "target": "teshuvah-restoration__your-name-stayed-on-the-list"
+    },
+    {
+      "id": "C05",
+      "type": "conversational",
+      "query": "How do I keep going when nothing is growing?",
+      "target": "torah-hebraic-insights__your-closed-years-are-making-fruit"
+    },
+    {
+      "id": "C06",
+      "type": "conversational",
+      "query": "Does God notice work that nobody ever sees?",
+      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw"
+    },
+    {
+      "id": "C07",
+      "type": "conversational",
+      "query": "What do I do when my job is being automated away?",
+      "target": "torah-hebraic-insights__the-carts-were-gods-idea"
+    },
+    {
+      "id": "C08",
+      "type": "conversational",
+      "query": "How do I know I belong if I am single and have no family here?",
+      "target": "celebration-mishpakhah__her-name-was-a-full-sentence"
+    },
+    {
+      "id": "C09",
+      "type": "conversational",
+      "query": "Why does nobody say my name anymore?",
+      "target": "covenant-identity__nobody-was-blessed-as-a-crowd"
+    },
+    {
+      "id": "C10",
+      "type": "conversational",
+      "query": "How should I treat an enemy who is completely at my mercy?",
+      "target": "shalom-salvation__one-meal-ended-the-war"
+    },
+    {
+      "id": "C11",
+      "type": "conversational",
+      "query": "What should I say first to someone who is lonely?",
+      "target": "shalom-salvation__he-asked-before-he-offered"
+    },
+    {
+      "id": "C12",
+      "type": "conversational",
+      "query": "Can I call something peace before anything has changed?",
+      "target": "shalom-salvation__he-named-it-before-it-was-true"
+    },
+    {
+      "id": "C13",
+      "type": "conversational",
+      "query": "Why do people stop showing up after the crisis passes?",
+      "target": "celebration-mishpakhah__comfort-was-never-a-sentence"
+    },
+    {
+      "id": "C14",
+      "type": "conversational",
+      "query": "How do I read the Bible so the point does not get lost?",
+      "target": "torah-hebraic-insights__the-middle-is-the-message"
+    },
+    {
+      "id": "C15",
+      "type": "conversational",
+      "query": "Why would God show favouritism when the law forbids judges to?",
+      "target": "torah-hebraic-insights__the-judge-who-plays-favorites"
+    },
+    {
+      "id": "C16",
+      "type": "conversational",
+      "query": "I keep waiting for care that never comes. Does that matter to God?",
+      "target": "shalom-salvation__even-the-ox-gets-water"
+    },
+    {
+      "id": "C17",
+      "type": "conversational",
+      "query": "What does it mean that my identity cannot be taken away?",
+      "target": "covenant-identity__the-seal-you-cannot-misplace"
+    },
+    {
+      "id": "C18",
+      "type": "conversational",
+      "query": "Why was I passed over again and again?",
+      "target": "covenant-identity__forward-looked-like-standing-still"
+    },
+    {
+      "id": "C19",
+      "type": "conversational",
+      "query": "How do I include people who keep getting left out?",
+      "target": "celebration-mishpakhah__the-overlooked-got-the-ledger"
+    },
+    {
+      "id": "C20",
+      "type": "conversational",
+      "query": "Why can I not bring myself to sign up for baptism?",
+      "target": "celebration-mishpakhah__hope-is-a-body-of-water"
+    },
+    {
+      "id": "P01",
+      "type": "paraphrase",
+      "query": "a cemetery that turns out to be a nursery",
+      "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+      "note": "shares no content word with the title or summary"
+    },
+    {
+      "id": "P02",
+      "type": "paraphrase",
+      "query": "credentials your employer never issued",
+      "target": "covenant-identity__the-seal-you-cannot-misplace"
+    },
+    {
+      "id": "P03",
+      "type": "paraphrase",
+      "query": "the empty seat nobody is allowed to take",
+      "target": "celebration-mishpakhah__nobody-moves-that-chair"
+    },
+    {
+      "id": "P04",
+      "type": "paraphrase",
+      "query": "counting an unbroken streak until it breaks",
+      "target": "teshuvah-restoration__the-ladder-was-never-required"
+    },
+    {
+      "id": "P05",
+      "type": "paraphrase",
+      "query": "labour with no monument to point at",
+      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw"
+    },
+    {
+      "id": "P06",
+      "type": "paraphrase",
+      "query": "standing still while moving forward",
+      "target": "covenant-identity__forward-looked-like-standing-still"
+    },
+    {
+      "id": "P07",
+      "type": "paraphrase",
+      "query": "one text message after nine years of silence",
+      "target": "teshuvah-restoration__the-packing-list-was-the-pardon"
+    },
+    {
+      "id": "P08",
+      "type": "paraphrase",
+      "query": "humming where you are told to be quiet",
+      "target": "shalom-salvation__the-quiet-was-not-the-point"
+    },
+    {
+      "id": "P09",
+      "type": "paraphrase",
+      "query": "a broadcast reaching the country that imprisoned your father",
+      "target": "teshuvah-restoration__the-last-word-is-a-question"
+    },
+    {
+      "id": "P10",
+      "type": "paraphrase",
+      "query": "twenty minutes to decide about your own entry",
+      "target": "celebration-mishpakhah__her-name-was-a-full-sentence"
+    },
+    {
+      "id": "X01",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "Holy Spirit breathing life into dry bones",
+      "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+      "note": "article uses Ruach HaKodesh; query uses the English register"
+    },
+    {
+      "id": "X02",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "Ruach HaKodesh and the seal on your identity",
+      "target": "covenant-identity__the-seal-you-cannot-misplace",
+      "note": "article uses Ruach HaKodesh; both directions must resolve"
+    },
+    {
+      "id": "X03",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "steadfast love toward someone passed over for years",
+      "target": "covenant-identity__forward-looked-like-standing-still",
+      "note": "article uses chesed"
+    },
+    {
+      "id": "X04",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "lovingkindness at a funeral nobody attends",
+      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+      "note": "article uses chesed"
+    },
+    {
+      "id": "X05",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "chesed shown to a boy in his third foster placement",
+      "target": "celebration-mishpakhah__nobody-moves-that-chair"
+    },
+    {
+      "id": "X06",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "chesed and a migrating bird named loyal",
+      "target": "teshuvah-restoration__the-stork-is-named-faithful"
+    },
+    {
+      "id": "X07",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "repentance and a name still on the roll",
+      "target": "teshuvah-restoration__your-name-stayed-on-the-list",
+      "note": "article uses teshuvah"
+    },
+    {
+      "id": "X08",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "teshuvah in the book of Jonah",
+      "target": "teshuvah-restoration__the-last-word-is-a-question"
+    },
+    {
+      "id": "X09",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "peace declared before the war is over",
+      "target": "shalom-salvation__he-named-it-before-it-was-true",
+      "note": "article uses shalom"
+    },
+    {
+      "id": "X10",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "shalom made by feeding an enemy",
+      "target": "shalom-salvation__one-meal-ended-the-war"
+    },
+    {
+      "id": "X11",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "family that sets a place for you anyway",
+      "target": "celebration-mishpakhah__comfort-was-never-a-sentence",
+      "note": "article uses mishpakhah"
+    },
+    {
+      "id": "X12",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "mishpakhah and belonging without a spouse",
+      "target": "celebration-mishpakhah__her-name-was-a-full-sentence"
+    },
+    {
+      "id": "X13",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "Adonai and a room held on thirty days notice",
+      "target": "covenant-identity__sons-do-not-hand-it-back"
+    },
+    {
+      "id": "X14",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "Adonai and liberty pictured as a nesting bird",
+      "target": "shalom-salvation__freedom-is-a-bird-that-nests"
+    },
+    {
+      "id": "X15",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "Jesus asking a woman for a drink",
+      "target": "shalom-salvation__he-asked-before-he-offered",
+      "note": "article uses Yeshua"
+    },
+    {
+      "id": "X16",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "the Lord's covering removed in exile",
+      "target": "teshuvah-restoration__nothing-was-buried-only-uncovered"
+    },
+    {
+      "id": "X17",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "Torah teaching about carts and doing less work",
+      "target": "torah-hebraic-insights__the-carts-were-gods-idea"
+    },
+    {
+      "id": "X18",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "Shabbat healing after eighteen years of waiting",
+      "target": "shalom-salvation__even-the-ox-gets-water"
+    },
+    {
+      "id": "X19",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "birkat kohanim and a judge lifting the face",
+      "target": "torah-hebraic-insights__the-judge-who-plays-favorites"
+    },
+    {
+      "id": "X20",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "marriage covenant written as a list of what is owed",
+      "target": "covenant-identity__every-rule-was-a-vow",
+      "note": "article uses ketubah"
+    },
+    {
+      "id": "N01",
+      "type": "navigational",
+      "query": "JubileeVerse",
+      "target": "__navigational__jubileeverse.com"
+    },
+    {
+      "id": "N02",
+      "type": "navigational",
+      "query": "KJubilee",
+      "target": "__navigational__kjubilee.com"
+    },
+    {
+      "id": "N03",
+      "type": "navigational",
+      "query": "Jubilee Inspire",
+      "target": "__navigational__jubileeinspire.com"
+    },
+    {
+      "id": "N04",
+      "type": "navigational",
+      "query": "Jubilee Bible Talks",
+      "target": "__navigational__jubileebibletalks.com"
+    },
+    {
+      "id": "N05",
+      "type": "navigational",
+      "query": "Born Again DNA",
+      "target": "__navigational__bornagaindna.com"
+    },
+    {
+      "id": "L01",
+      "type": "cross-language",
+      "lang": "ro->en",
+      "query": "Duhul Sfânt suflă viață în oasele uscate",
+      "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+      "note": "Romanian query, English article (X01's target); the article uses Ruach HaKodesh"
+    },
+    {
+      "id": "L02",
+      "type": "cross-language",
+      "lang": "ro->en",
+      "query": "pecetea Duhului pe identitatea ta",
+      "target": "covenant-identity__the-seal-you-cannot-misplace",
+      "note": "Romanian query, English article (X02's target)"
+    },
+    {
+      "id": "L03",
+      "type": "cross-language",
+      "lang": "ro->en",
+      "query": "pocăința și numele rămas pe listă",
+      "target": "teshuvah-restoration__your-name-stayed-on-the-list",
+      "note": "Romanian query, English article (X07's target); pocăință = teshuvah"
+    },
+    {
+      "id": "L04",
+      "type": "cross-language",
+      "lang": "ro->en",
+      "query": "Iona, mila și întrebarea de la sfârșitul cărții",
+      "target": "teshuvah-restoration__the-last-word-is-a-question",
+      "note": "Romanian query, English article (T05's target)"
+    },
+    {
+      "id": "L05",
+      "type": "cross-language",
+      "lang": "ro->en",
+      "query": "ketuba, contractul de căsătorie și poruncile",
+      "target": "covenant-identity__every-rule-was-a-vow",
+      "note": "Romanian query, English article (T03's target)"
+    },
+    {
+      "id": "L06",
+      "type": "cross-language",
+      "lang": "ro->en",
+      "query": "femeia de la fântână: cererea înainte de ofertă",
+      "target": "shalom-salvation__he-asked-before-he-offered",
+      "note": "Romanian query, English article (T07's target)"
+    },
+    {
+      "id": "L07",
+      "type": "cross-language",
+      "lang": "ro->en",
+      "query": "bunătate statornică față de cineva trecut cu vederea ani de zile",
+      "target": "covenant-identity__forward-looked-like-standing-still",
+      "note": "Romanian query, English article (X03's target); the article uses chesed"
+    },
+    {
+      "id": "L08",
+      "type": "cross-language",
+      "lang": "en->ro",
+      "query": "afraid I will change my mind and be publicly bound by a vow",
+      "target": "url:https://pocaintasibotez.com/message/si-daca-ma-razgandesc",
+      "note": "English query, Romanian article 'Și dacă mă răzgândesc' (2 Timotei 1:12)"
+    },
+    {
+      "id": "L09",
+      "type": "cross-language",
+      "lang": "en->ro",
+      "query": "the part of my testimony I do not want to say out loud",
+      "target": "url:https://pocaintasibotez.com/message/partea-pe-care-nu-vreau-sa-o-spun",
+      "note": "English query, Romanian article 'Partea pe care nu vreau să o spun' (Psalmul 32:5)"
+    },
+    {
+      "id": "L10",
+      "type": "cross-language",
+      "lang": "en->ro",
+      "query": "a new heart put inside you, Ezekiel 36, the Spirit given to keep the commandments",
+      "target": "url:https://pocaintasibotez.com/message/o-inima-noua-pusa-inauntru",
+      "note": "English query, Romanian article 'O inimă nouă pusă înăuntru' (Ezechiel 36:26-27)"
+    },
+    {
+      "id": "L11",
+      "type": "cross-language",
+      "lang": "en->ro",
+      "query": "putting off baptism until my life is in order",
+      "target": "url:https://pocaintasibotez.com/message/amanez-pana-imi-fac-ordine",
+      "note": "English query, Romanian article 'Amân până îmi fac ordine' (Fapte 8:36)"
+    },
+    {
+      "id": "L12",
+      "type": "cross-language",
+      "lang": "en->ro",
+      "query": "too far gone and too late, the years the locust has eaten",
+      "target": "url:https://pocaintasibotez.com/message/sunt-prea-departe-si-prea-tarziu",
+      "note": "English query, Romanian article 'Sunt prea departe și prea târziu' (Ioel 2:25)"
+    },
+    {
+      "id": "L13",
+      "type": "cross-language",
+      "lang": "en->ro",
+      "query": "three thousand baptized in a single day, Acts 2",
+      "target": "url:https://pocaintasibotez.com/message/trei-mii-intr-o-singura-zi",
+      "note": "English query, Romanian article 'Trei mii într-o singură zi' (Fapte 2:41)"
+    },
+    {
+      "id": "L14",
+      "type": "cross-language",
+      "lang": "en->ro",
+      "query": "repentance sounds like punishment, but the Hebrew word means turning back",
+      "target": "url:https://pocaintasibotez.com/message/pocainta-imi-suna-a-pedeapsa",
+      "note": "English query, Romanian article 'Pocăința îmi sună a pedeapsă' (Ezechiel 18:31-32)"
+    },
+    {
+      "id": "L15",
+      "type": "cross-language",
+      "lang": "en->ro",
+      "query": "I asked for power to live differently and was handed a rulebook",
+      "target": "url:https://pocaintasibotez.com/message/am-vrut-putere-si-am-primit-un-regulament",
+      "note": "English query, Romanian article 'Am vrut putere și am primit un regulament' (Fapte 1:8)"
+    }
   ],
-
   "negatives": {
     "note": "Not gold pairs. Queries that must NOT force a Zone A result once a working relevance gate exists. Kept alongside the gold set so gate tuning is measured on both at once. Classified by what the RESULT relates to, not by the query's wording.",
     "false_positive_expected": [
-      "best pizza recipe", "football scores", "python tutorial", "cheap flights to Rome",
-      "weather tomorrow", "how to change a tyre", "stock market forecast", "best laptop deals",
-      "the", "and", "office hours", "translation", "character", "status update",
-      "author bio", "marriage license", "quantum chromodynamics"
+      "best pizza recipe",
+      "football scores",
+      "python tutorial",
+      "cheap flights to Rome",
+      "weather tomorrow",
+      "how to change a tyre",
+      "stock market forecast",
+      "best laptop deals",
+      "the",
+      "and",
+      "office hours",
+      "translation",
+      "character",
+      "status update",
+      "author bio",
+      "marriage license",
+      "quantum chromodynamics"
     ],
     "honest_weak_match_expected": [
-      "car repair", "repair", "restoration", "covenant law", "velocity", "anchor",
-      "forgiveness in negotiation", "family therapy", "peace treaty", "identity theft",
-      "faith based investing", "grace period on a loan", "salvation army donation",
-      "word", "day", "name", "house", "water", "road"
+      "car repair",
+      "repair",
+      "restoration",
+      "covenant law",
+      "velocity",
+      "anchor",
+      "forgiveness in negotiation",
+      "family therapy",
+      "peace treaty",
+      "identity theft",
+      "faith based investing",
+      "grace period on a loan",
+      "salvation army donation",
+      "word",
+      "day",
+      "name",
+      "house",
+      "water",
+      "road"
     ]
   }
 }

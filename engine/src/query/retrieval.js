@@ -103,6 +103,7 @@ function buildQuery(zone, ctx) {
                ch.${embeddingColumn} <=> ${vecParam}::halfvec AS dist
         FROM chunks ch
         WHERE ch.tier ${tierPredicate} AND ch.${embeddingColumn} IS NOT NULL
+          AND NOT ch.boilerplate
         ORDER BY ch.${embeddingColumn} <=> ${vecParam}::halfvec
         LIMIT ${candidates}::int * 3
     )
