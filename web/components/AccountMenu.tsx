@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getSession, isAdmin, canView } from '@/lib/session';
+import AccountAvatar from './AccountAvatar';
 import styles from './AccountMenu.module.css';
 
 // Signed-in state in the results header.
@@ -27,8 +28,6 @@ export default async function AccountMenu({ next = '/' }: { next?: string }) {
     );
   }
 
-  const label = session.name ?? session.jubilee_id;
-
   return (
     <div className={styles.account}>
       {canView(session) && (
@@ -55,10 +54,11 @@ export default async function AccountMenu({ next = '/' }: { next?: string }) {
           {isAdmin(session) ? 'Admin' : 'Viewer'}
         </Link>
       )}
-      <Link href="/account" className={styles.who} title={session.email ?? session.jubilee_id}>
-        <span className={styles.avatar} aria-hidden="true">{label.charAt(0).toUpperCase()}</span>
-        <span className={styles.name}>{label}</span>
-      </Link>
+      {/* The initials disc and the menu beneath it (Profile settings, Sign
+          out). A client component because the menu opens and closes; the
+          session itself was read here, on the server, so the disc is right in
+          the first byte of HTML. */}
+      <AccountAvatar name={session.name} email={session.email} />
     </div>
   );
 }

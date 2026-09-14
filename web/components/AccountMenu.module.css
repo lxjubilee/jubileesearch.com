@@ -15,32 +15,102 @@
 
 .account { display: flex; align-items: center; gap: 8px; flex: none; }
 
-.who {
-  display: flex;
+/* The initials disc and the menu under it (AccountAvatar.tsx), ported from
+   kJubilee's public/css/account.css so the same person is the same disc on
+   both sites: blue, white initials, 26px like the language flag it sits beside
+   over there. */
+
+.avatarBox { position: relative; flex: none; }
+
+.avatarButton {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: #bdc1c6;
-  max-width: 190px;
+  justify-content: center;
+  cursor: pointer;
+  font-family: inherit;
+  background: none;
+  line-height: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
 }
-.who:hover { color: #f2f2f2; }
+.avatarButton:hover .avatar { filter: brightness(1.1); }
+.avatarButton:focus-visible { outline: 2px solid var(--accent, #3DA5FF); outline-offset: 2px; }
 
 .avatar {
-  width: 26px; height: 26px;
+  width: 28px; height: 28px;
   border-radius: 50%;
-  background: #303134;
-  color: #e8eaed;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 600;
+  background: var(--accent, #3DA5FF);
+  color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  /* Two letters in a small disc: pulled-in tracking keeps them centred with
+     air on both sides rather than touching the edge. */
+  font-size: 11px; font-weight: 700; letter-spacing: -0.02em;
   flex: none;
 }
 
-.name {
-  font-size: 13px;
+/* The name stays the button's accessible name; only the sighted rendering
+   drops it. */
+.srOnly {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
   overflow: hidden;
-  text-overflow: ellipsis;
+  clip: rect(0 0 0 0);
   white-space: nowrap;
+  border: 0;
 }
+
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 200;
+  min-width: 210px;
+  padding: 6px;
+  background: #1b1b1b;
+  border: 1px solid hsla(0, 0%, 100%, .1);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+}
+
+.who {
+  padding: 8px 10px 10px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid hsla(0, 0%, 100%, .1);
+}
+.fullName {
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.email {
+  margin-top: 1px;
+  color: #c9cad4;
+  font-size: 11.5px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* One rule for both: "Profile settings" is a link (it navigates) and "Sign
+   out" is a button (it acts) -- the difference is what they do, not how they
+   look in a menu. */
+.itemForm { margin: 0; }
+.item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: #e8eaed;
+  font: inherit;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.item:hover, .item:focus-visible { background: hsla(0, 0%, 100%, .08); outline: none; }
 
 /* A link to the admin console, styled as the rights badge it also is. It has to
    read as clickable -- the border alone said "status chip" and an operator had
@@ -80,8 +150,3 @@
   color: #f2f2f2;
 }
 
-@media (max-width: 768px) {
-  /* The header stacks at this width; the name is the first thing to give up. */
-  .name { display: none; }
-  .who { max-width: none; }
-}
