@@ -106,16 +106,24 @@ export function preferSite(results, host) {
  * Results below the floor are dropped individually as well, so a strong first
  * result is not followed by two that the reranker judged irrelevant.
  */
-export function crossEncoderGate(results, cfg) {
+export function crossEncoderGate(results, cfg, { lexiconHit = false } = {}) {
   const floor = Number(cfg.zone_a_cross_encoder_floor);
   if (!Number.isFinite(floor) || floor === -1) return { results, gated: false };
+  // A query the lexicon recognises is in the corpus's own vocabulary, so Zone A
+  // is on-topic by construction and the gate stands down. This is also where
+  // the cross-encoder is weakest: "ruach hakodesh" against English titles is
+  // the register bridge (R2) the product exists for, and measured on the
+  // network corpus the reranker scored all fifty on-topic candidates below the
+  // floor. Off-topic queries -- pizza, laptops, chromodynamics -- hit no
+  // concept, so they are still gated.
+  if (lexiconHit) return { results, gated: false };
   if (!results.some((r) => Number.isFinite(r.rerank_score))) return { results, gated: false };
   const kept = results.filter((r) => !Number.isFinite(r.rerank_score) || r.rerank_score >= floor);
   return { results: kept, gated: kept.length < results.length };
 }
 
-export function assembleZoneA(results, cfg, { preferHost = null } = {}) {
-  const gate = crossEncoderGate(results, cfg);
+export function assembleZoneA(results, cfg, { preferHost = null, lexiconHit = false } = {}) {
+  const gate = crossEncoderGate(results, cfg, { lexiconHit });
   const diverse = diversify(gate.results, cfg.zone_a_max_per_host);
   const { size, coverage } = zoneASize(diverse[0]?.score ?? null, cfg);
   return {

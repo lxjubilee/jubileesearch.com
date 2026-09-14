@@ -689,3 +689,41 @@ still roughly **13x** outside §12.2, on hardware that has no GPU to fix it with
 
 ---
 
+## 13. The T1 network is ingested by crawl, not source markdown (D5 still open)
+
+**Status 2026-09-14.** All 56 registered T1 domains are verified by
+authoritative list, `active` and Zone A eligible. Only jubileeverse.com has a
+source of markdown (the CDN importer); the other 55 have no `source_root`, D5 has
+no answer, and the tenant files in `InspireManna.com/tenants/` point at article
+roots on local J: drives with `status: planned`. So §9.1's fallback applies:
+`ingest_mode = hybrid` with no root crawls the live site.
+
+First pass (crawl fallback, T1 skips the safety gates by design):
+
+| | |
+| --- | ---: |
+| domains crawled | 50 live of 55 (5 down: 530/502/unreachable) |
+| pages indexed | 2,038 (600 CDN + 1,438 crawled), 25 hosts with content |
+| chunks embedded | 47,712, all `bge-m3@onnx-fp16` |
+| sitemaps found | 16 domains; the rest via link discovery |
+
+Extraction quality on the crawled sites is good: sampled pages are 1,600-2,300
+word articles with correct titles. `jubileeverse.com` is now `source_md` so the
+crawler skips it (its articles render client-side and came back `thin_content`).
+A daily crawl timer runs at 01:00 ahead of the 02:30 embed.
+
+Two crawler bugs surfaced only because a run finally completed on Postgres:
+link discovery refetched every unchanged page until the budget ran out
+(fixed: the frontier skips pages fetched inside the crawl interval), and
+`finishRun` typed one parameter as both int and text (fixed with
+`make_interval`).
+
+**Gate interaction, measured:** on the 2,038-page corpus the cross-encoder
+scored all fifty on-topic candidates for `ruach hakodesh` below the -6.5 floor
+-- a transliterated Hebrew query against English titles is the register bridge
+the reranker cannot see. The gate now stands down for any query the lexicon
+recognises (`coverage.js crossEncoderGate`, `lexiconHit`); off-topic queries hit
+no concept and are still gated.
+
+**Still open:** D5 (a markdown source per domain), and the 5 domains that were
+down at crawl time.

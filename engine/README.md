@@ -13,7 +13,7 @@ specification and the arbiter of anything this README and the code disagree on.
 | Phase (§18) | Deliverable | State |
 |---|---|---|
 | **1. Foundation** | Schema, migrations, domain registry, admin API, SSO auth | **built** |
-| **2. T1 ingest** | Source-markdown ingest, publish webhook, frontmatter mapping, dedupe, nightly reconciliation | **built** — blocked on **D5** to run |
+| **2. T1 ingest** | Source-markdown ingest, publish webhook, frontmatter mapping, dedupe, nightly reconciliation | **built** — jubileeverse.com via the CDN importer; the other 55 T1 domains via the §9.1 crawl fallback (daily timer) while **D5** stays open |
 | **3. Search v1** | Lexical search, lexicon expansion, best bets, two-zone assembly, public UI, impression and click logging | **built** — lexicon is a starter seed pending **D9** |
 | **4. Semantic** | Chunking, embedding service, pgvector HNSW, hybrid fusion, rerank, two-layer cache | **built** — served by the Inference API on the RTX PRO 6000 workstation (fp16, DirectML) |
 | **5. Intelligence** | Intent router with scripture card, click loop with position-bias correction, engagement scoring | **built** — cards need the JSV API, engagement needs Analytics |

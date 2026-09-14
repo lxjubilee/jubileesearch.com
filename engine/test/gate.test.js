@@ -36,6 +36,15 @@ describe('Zone A cross-encoder gate', () => {
     assert.equal(zone.empty_state, true);
   });
 
+  test('a query the lexicon recognises is never gated, whatever the reranker says', () => {
+    // "ruach hakodesh" against English titles: on-topic by construction, and
+    // exactly where the cross-encoder scores every candidate below the floor.
+    const results = [r('a', 0.04, -8.9), r('b', 0.03, -9.4)];
+    const zone = assembleZoneA(results, cfg, { lexiconHit: true });
+    assert.equal(zone.results.length, 2);
+    assert.notEqual(zone.coverage, 'none');
+  });
+
   test('a strong first result is not followed by pages the reranker rejected', () => {
     const results = [r('a', 0.04, 1.5), r('b', 0.035, -6.0), r('c', 0.03, -0.5)];
     const zone = assembleZoneA(results, cfg);

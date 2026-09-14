@@ -110,7 +110,12 @@ export async function search(params) {
   ]);
 
   // §14 widget mode: the host site leads Zone A, then the rest of the network.
-  const zoneA = assembleZoneA(rankedA, cfg, { preferHost: params.preferSite ?? null });
+  const zoneA = assembleZoneA(rankedA, cfg, {
+    preferHost: params.preferSite ?? null,
+    // The cross-encoder gate stands down for a query the lexicon recognises;
+    // see coverage.js crossEncoderGate for the measurement behind that.
+    lexiconHit: expansion.conceptKeys.length > 0,
+  });
   const zoneB = assembleZoneB(rankedB, cfg, { page: params.page ?? 1 });
 
   // Panels. The scripture card is fetched only for a scripture query, and only
