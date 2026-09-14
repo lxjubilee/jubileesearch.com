@@ -115,26 +115,34 @@
 /* A link to the admin console, styled as the rights badge it also is. It has to
    read as clickable -- the border alone said "status chip" and an operator had
    no reason to try it. */
+/* The Admin link, as kJubilee paints it (public/css/site-header.css
+   .nav-textlink--admin): a gold chip rather than another grey word, because
+   it leads somewhere not everyone can go and reading as a peer of the other
+   links would hide that difference. */
 .badge {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  color: var(--accent, #3DA5FF);
-  border: 1px solid rgba(61, 165, 255, 0.4);
-  border-radius: 3px;
-  padding: 1px 6px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  color: #ffbd59;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 189, 89, 0.45);
+  background: rgba(255, 189, 89, 0.12);
   flex: none;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.12s ease, border-color 0.12s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 .badge:hover {
-  background: rgba(61, 165, 255, 0.14);
-  border-color: rgba(61, 165, 255, 0.85);
+  color: #fff;
+  background: rgba(255, 189, 89, 0.28);
+  border-color: #ffbd59;
 }
 .badge:focus-visible {
-  outline: 2px solid var(--accent, #3DA5FF);
+  outline: 2px solid #ffbd59;
   outline-offset: 2px;
 }
 
