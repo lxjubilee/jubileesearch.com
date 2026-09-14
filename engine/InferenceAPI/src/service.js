@@ -125,15 +125,38 @@ export async function rerank({ query, documents, priority } = {}) {
  * writing the backend path. It does not mean making this function return
  * `{ safe_for_family: true }`.
  */
-export async function classifySafety() {
-  const e = new Error(
-    'family-safety classification is not implemented. Safety Gate 3 requires a real '
-    + 'classifier; an approximation here would admit unsafe pages while reporting that '
-    + 'it had checked them. With this unimplemented, P1 default-deny holds and every '
-    + 'crawled page stays in T0.');
-  e.status = 501;
-  e.code = 'safety_classifier_not_configured';
-  throw e;
+export async function classifySafety({ text, priority } = {}) {
+  if (typeof text !== 'string' || !text.trim()) {
+    const e = new Error('text is required'); e.status = 400; throw e;
+  }
+  const spec = env.models.safety;
+  if (!spec.repo || !spec.topicRepo) {
+    // Refuse rather than approximate. With this unconfigured, P1 default-deny
+    // holds on the search side and every crawled page stays in T0.
+    const e = new Error(
+      'family-safety classification is not configured: set SAFETY_MODEL_REPO (toxicity) '
+      + 'and SAFETY_TOPIC_MODEL_REPO (zero-shot topics). Safety Gate 3 requires both.');
+    e.status = 501;
+    e.code = 'safety_classifier_not_configured';
+    throw e;
+  }
+  // Pages are classified at batch priority by default: a crawl must never sit
+  // ahead of a search on the same GPU.
+  const prio = priorityOf(priority ?? 'bulk');
+  const q = queueFor('safety', async (batch) => {
+    const model = await models.get('safety');
+    return model.classify(batch);
+  });
+  const t0 = performance.now();
+  const raw = await q.submit(text, prio);
+  const ms = performance.now() - t0;
+  budget('inference.classify', ms, env.budgets.classifyMs, { model: spec.id });
+  const { verdict } = await import('./safety.js');
+  return {
+    model: spec.id,
+    took_ms: Math.round(ms),
+    ...verdict(raw.toxic, raw.topics, { unsafeTopicThreshold: spec.unsafeTopicThreshold }),
+  };
 }
 
 // ---------------------------------------------------------------------------

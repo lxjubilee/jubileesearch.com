@@ -193,6 +193,9 @@ async function maybeRerank(results, queryText, enabled, ctx) {
 
   const out = order.map(({ index, score }, newPosition) => {
     const r = results[index];
+    // Carried on the result so coverage.js can apply the cross-encoder floor;
+    // stripped from the public payload by assembly, like every internal field.
+    r.rerank_score = score;
     if (ctx.debug) {
       r.debug.rerank = {
         cross_encoder_score: score,

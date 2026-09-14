@@ -89,7 +89,7 @@ describe('/v1/classify/family-safety', () => {
     assert.equal(r.status, 501);
     const j = await r.json();
     assert.equal(j.code, 'safety_classifier_not_configured');
-    assert.match(j.error, /not implemented/);
+    assert.match(j.error, /not configured/);
     assert.doesNotMatch(JSON.stringify(j), /safe_for_family/,
       'a refusal must not contain a verdict field that a caller might read');
   });

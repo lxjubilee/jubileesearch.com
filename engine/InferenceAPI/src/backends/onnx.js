@@ -1,17 +1,16 @@
 // ONNX Runtime backend, via @huggingface/transformers.
 //
-// Runs on CPU today because this machine has no NVIDIA GPU — verified, not
-// assumed: nvidia-smi is absent and there are zero NVIDIA PnP devices. The same
-// file targets CUDA by setting INFERENCE_DEVICE=cuda, because transformers.js
-// passes `device` straight through to ONNX Runtime's execution provider. That is
-// the whole GPU migration for this backend.
+// CPU by default. On a machine with a GPU, INFERENCE_DEVICE selects the ONNX
+// execution provider: `dml` (DirectML, the provider onnxruntime-node ships for
+// Windows) or `cuda` (Linux builds). transformers.js passes `device` through.
 //
-// Measured here (Ryzen 9 6900HX, 8 cores, int8):
-//   bge-m3 embed, 500-word chunk    ~2,050 ms
-//   bge-m3 embed, one short query   ~180-300 ms
-//   cold load                       ~20-180 s depending on cache state
+// Measured on the JubileeSearch workstation (RTX PRO 6000 via DirectML, fp16):
+//   bge-m3 embed, 32 chunks              ~155 ms  (4.8 ms/text; CPU int8: 13 ms/text)
+//   bge-m3 embed, one warm query         ~8 ms    (CPU int8: ~17 ms)
+//   bge-reranker-base, 20 pairs          ~14 ms   (CPU int8: ~93 ms)
+//   first call after load                ~400 ms  (shape compilation, once)
 //
-// Those numbers are properties of the hardware, not of this file.
+// int8 weights run SLOWER on DirectML than on CPU; use fp16 on a GPU.
 
 import { env } from '../config.js';
 import { log } from '../log.js';
@@ -38,7 +37,18 @@ async function lib() {
   return transformers;
 }
 
-const deviceOpts = () => (env.device && env.device !== 'cpu' ? { device: env.device } : {});
+// The device, and for DirectML which adapter. ONNX Runtime's `deviceId` for
+// the DML provider is DirectML's enumeration, which need not match nvidia-smi:
+// on the JubileeSearch workstation the RTX PRO 6000 is nvidia-smi index 1 and
+// DML adapter 0. INFERENCE_DML_DEVICE_ID says which; unset means the default.
+const deviceOpts = () => {
+  if (!env.device || env.device === 'cpu') return {};
+  const opts = { device: env.device };
+  if (env.device === 'dml' && env.dmlDeviceId !== null) {
+    opts.session_options = { executionProviders: [{ name: 'dml', deviceId: env.dmlDeviceId }] };
+  }
+  return opts;
+};
 
 /** Mean-pooled, L2-normalised, padded to the declared width if narrower. */
 async function loadEmbedder(spec) {
@@ -160,12 +170,60 @@ export async function load(role, spec) {
     return spec.kind === 'bi-encoder' ? loadBiEncoderReranker(spec) : loadCrossEncoder(spec);
   }
   if (role === 'safety') {
-    // The slot exists; nothing fills it. See routes/safety.js — this refuses
-    // rather than approximating, on purpose.
-    throw new RoleUnsupported(role, name,
-      'no family-safety classifier is configured. A keyword list in this position '
-      + 'is a control that does not control anything: it would admit unsafe pages '
-      + 'while reporting that it had checked them.');
+    if (!spec.topicRepo) {
+      throw new RoleUnsupported(role, name,
+        'the family-safety classifier needs BOTH a toxicity model (SAFETY_MODEL_REPO) '
+        + 'and a zero-shot topic model (SAFETY_TOPIC_MODEL_REPO). A toxicity head alone '
+        + 'does not know what an escort ad or a casino is, and a control that admits '
+        + 'those while reporting that it checked is worse than none.');
+    }
+    return loadSafety(spec);
   }
   throw new ContractViolation(`unknown role '${role}'`);
+}
+
+/**
+ * Two pipelines behind one role: the toxicity heads and the zero-shot topic
+ * classifier. See src/safety.js for how their outputs become one verdict.
+ *
+ * The zero-shot model runs one NLI pass per label per text, so a page costs a
+ * dozen passes. Texts are truncated to `maxInputChars` and classification runs
+ * at batch priority, so that cost never sits on a search request.
+ */
+async function loadSafety(spec) {
+  const { pipeline } = await lib();
+  const t0 = performance.now();
+  const toxic = await pipeline('text-classification', spec.repo, { dtype: spec.dtype, ...deviceOpts() });
+  // int8 collapses DeBERTa's NLI head to noise (every label ~0.6); fp16 and
+  // fp32 agree with each other. Never quantise the topic model below fp16.
+  const topicDtype = ['int8', 'q8', 'q4', 'bnb4', 'q4f16'].includes(spec.dtype) ? 'fp32' : spec.dtype;
+  const topics = await pipeline('zero-shot-classification', spec.topicRepo, { dtype: topicDtype, ...deviceOpts() });
+  const loadMs = Math.round(performance.now() - t0);
+  const { ZERO_SHOT_LABELS } = await import('../safety.js');
+  log.info('backend.onnx.loaded', {
+    role: 'safety', model: spec.id, repo: spec.repo, topic_repo: spec.topicRepo,
+    dtype: spec.dtype, topic_dtype: topicDtype, device: env.device, load_ms: loadMs,
+    labels: ZERO_SHOT_LABELS.length,
+  });
+  return {
+    role: 'safety',
+    spec,
+    loadMs,
+    /** @returns {Promise<{toxic: {label: string, score: number}[], topics: {labels: string[], scores: number[]}}[]>} */
+    async classify(texts) {
+      const clipped = texts.map((t) => String(t ?? '').slice(0, spec.maxInputChars) || '(empty)');
+      const toxicOut = await toxic(clipped, { top_k: null });
+      const out = [];
+      for (let i = 0; i < clipped.length; i += 1) {
+        const topicOut = await topics(clipped[i], ZERO_SHOT_LABELS, { multi_label: false });
+        const heads = Array.isArray(toxicOut[i]) ? toxicOut[i] : [toxicOut[i]];
+        out.push({
+          toxic: heads.map((x) => ({ label: x.label, score: x.score })),
+          topics: { labels: topicOut.labels, scores: topicOut.scores },
+        });
+      }
+      return out;
+    },
+    async dispose() { await toxic.dispose?.(); await topics.dispose?.(); },
+  };
 }

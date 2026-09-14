@@ -66,10 +66,20 @@ export const env = {
     },
     safety: {
       id: process.env.SAFETY_MODEL_ID ?? '',
+      // The toxicity heads (hostility) ...
       repo: process.env.SAFETY_MODEL_REPO ?? '',
+      // ... and the zero-shot NLI model (what the text is about). Both are
+      // needed; see src/safety.js for why one is not enough.
+      topicRepo: process.env.SAFETY_TOPIC_MODEL_REPO ?? '',
       dtype: process.env.SAFETY_DTYPE ?? process.env.INFERENCE_DTYPE ?? 'int8',
+      maxInputChars: num(process.env.SAFETY_MAX_CHARS, 6000),
+      unsafeTopicThreshold: num(process.env.SAFETY_UNSAFE_TOPIC_THRESHOLD, 0.5),
     },
   },
+  // DirectML enumerates adapters in its own order (not nvidia-smi's). On a
+  // box with more than one GPU, this picks which one the ONNX sessions use.
+  dmlDeviceId: process.env.INFERENCE_DML_DEVICE_ID === undefined || process.env.INFERENCE_DML_DEVICE_ID === ''
+    ? null : Number(process.env.INFERENCE_DML_DEVICE_ID),
 
   // ---- batching and queueing (§12.2) ---------------------------------------
   // "Batches of 32 to 64 chunks per Inference API call." That is the CALLER's

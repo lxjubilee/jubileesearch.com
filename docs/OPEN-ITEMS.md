@@ -16,6 +16,18 @@ Ordered by what they cost.
 
 ## 0. No Jubilee Inference API exists — models run locally
 
+**Status 2026-09-14: RESOLVED for embeddings, reranking and safety.** The
+Inference API (`engine/InferenceAPI`) now runs on the RTX PRO 6000 workstation
+(DirectML adapter 0, fp16) and production reaches it over a reverse SSH tunnel
+on its own loopback (`127.0.0.1:4033`), authenticated by `INFERENCE_API_KEY`.
+Roles served: `bge-m3@onnx-fp16` (embed), `bge-reranker-base@onnx-fp16`
+(cross-encoder), `toxic-bert + nli-deberta-v3-base` (family safety, see
+`InferenceAPI/src/safety.js`). Measured on the GPU: 4.8 ms per chunk in batch,
+8 ms per warm query, 14 ms to rerank 20 pairs. The corpus (5,561 chunks) was
+re-embedded in 313 s. Still a deviation from §16 in one respect: the service
+runs on a workstation, not a hosted inference tier, and it is reachable only
+while that workstation is logged on (`InferenceAPI/ops/README.md`).
+
 **This is a deviation from the specification, not a dev shortcut that disappears
 on deploy.**
 
@@ -310,6 +322,18 @@ any serving path having seen it.
 
 ## 4. The Zone A relevance gate is off — cross-encoder needed
 
+**Status 2026-09-14: ON, conservatively.** The gate now runs on the
+cross-encoder's own scale (`coverage.js crossEncoderGate`), which is the fix the
+text below asks for. `rerank_zone_a = 1`, `zone_a_cross_encoder_floor = -6.5`.
+Calibrated on production against the gold set with `bge-reranker-base` scoring
+`title + snippet`: false-positive top scores p50 -5.6 (pizza -8.5, quantum
+chromodynamics -10.1, cheap flights -7.8), positive top scores p50 -4.0, p10 -7.0.
+At -6.5 the six clearest off-topic negatives return the empty state and roughly
+8% of positives lose a weak Zone A answer they would otherwise have shown. The
+distributions overlap because the reranker sees a snippet, not the chunk, and
+because `bge-reranker-base` is not `v2-m3`; both are the next things to change
+before tightening the floor.
+
 **Status:** wired and disabled. `zone_a_cross_encoder_floor = -1` (migration 025).
 **Cost:** roughly 15 of 35 measured negative queries return a genuine false
 positive. `best laptop deals` returns *"Sons Do Not Hand It Back"*.
@@ -448,6 +472,10 @@ gold pairs from search output instead of from articles. What the new set needs:
 ---
 
 ## 7. A MiniLM reranker reorders bge-m3 retrieval
+
+**Status 2026-09-14: RESOLVED.** The rerank slot is now a real cross-encoder,
+`Xenova/bge-reranker-base` (fp16, GPU). `bge-reranker-v2-m3` still ships no
+ONNX build; converting it is the upgrade path.
 
 **Status:** known mismatch, deliberate, resolves with the cross-encoder.
 
@@ -607,6 +635,12 @@ Why the three modes behave differently is the useful part:
 ---
 
 ## 11. Measured latency against the §13.10 budgets
+
+**Status 2026-09-14: within budget on production.** With the GPU inference
+service over the tunnel and Zone A rerank ON, cache-miss searches measured on
+the Contabo box: 288-469 ms (seven queries, 600 pages). §17's 500 ms p95 is
+met at this corpus size; the figures below are the laptop measurements that
+preceded it.
 
 Every figure below is measured on this machine: AMD Ryzen 9 6900HX, 8 cores,
 28.7 GB RAM with ~5.5 GB free, **no NVIDIA GPU** (`nvidia-smi` absent, zero

@@ -91,8 +91,32 @@ export function preferSite(results, host) {
  * coverage and shrink Zone A, when the network's actual best answer was strong.
  * The size is a fact about the query; the order is a fact about the caller.
  */
+/**
+ * The Zone A relevance gate on the cross-encoder's own scale (OPEN-ITEMS §4).
+ *
+ * The fused score is RRF, which is rank-derived and carries no magnitude, so
+ * no floor on it can tell "best of a good set" from "best of nothing". The
+ * cross-encoder score can: it is a judgement about THIS query and THIS page.
+ * When the reranker ran and `zone_a_cross_encoder_floor` is set (exactly -1 means
+ * off; cross-encoder logits are often negative, so anything else is a floor),
+ * a Zone A whose best page scores below the floor is emptied rather than
+ * padded. The honest empty state is the product decision (§13.5); this is the
+ * mechanism that finally lets it fire on an off-topic query.
+ *
+ * Results below the floor are dropped individually as well, so a strong first
+ * result is not followed by two that the reranker judged irrelevant.
+ */
+export function crossEncoderGate(results, cfg) {
+  const floor = Number(cfg.zone_a_cross_encoder_floor);
+  if (!Number.isFinite(floor) || floor === -1) return { results, gated: false };
+  if (!results.some((r) => Number.isFinite(r.rerank_score))) return { results, gated: false };
+  const kept = results.filter((r) => !Number.isFinite(r.rerank_score) || r.rerank_score >= floor);
+  return { results: kept, gated: kept.length < results.length };
+}
+
 export function assembleZoneA(results, cfg, { preferHost = null } = {}) {
-  const diverse = diversify(results, cfg.zone_a_max_per_host);
+  const gate = crossEncoderGate(results, cfg);
+  const diverse = diversify(gate.results, cfg.zone_a_max_per_host);
   const { size, coverage } = zoneASize(diverse[0]?.score ?? null, cfg);
   return {
     label: 'From Jubilee',
@@ -119,4 +143,6 @@ export function assembleZoneB(results, cfg, { page = 1 } = {}) {
   };
 }
 
-const withPosition = (r, i) => ({ ...r, position: i + 1 });
+// `rerank_score` is an internal signal for the gate above; the debug block
+// already carries the cross-encoder score for anyone entitled to see it.
+const withPosition = ({ rerank_score: _internal, ...r }, i) => ({ ...r, position: i + 1 });

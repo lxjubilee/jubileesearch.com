@@ -15,18 +15,13 @@ specification and the arbiter of anything this README and the code disagree on.
 | **1. Foundation** | Schema, migrations, domain registry, admin API, SSO auth | **built** |
 | **2. T1 ingest** | Source-markdown ingest, publish webhook, frontmatter mapping, dedupe, nightly reconciliation | **built** — blocked on **D5** to run |
 | **3. Search v1** | Lexical search, lexicon expansion, best bets, two-zone assembly, public UI, impression and click logging | **built** — lexicon is a starter seed pending **D9** |
-| **4. Semantic** | Chunking, embedding service, pgvector HNSW, hybrid fusion, rerank, two-layer cache | **built** — needs the Inference API wired up |
+| **4. Semantic** | Chunking, embedding service, pgvector HNSW, hybrid fusion, rerank, two-layer cache | **built** — served by the Inference API on the RTX PRO 6000 workstation (fp16, DirectML) |
 | **5. Intelligence** | Intent router with scripture card, click loop with position-bias correction, engagement scoring | **built** — cards need the JSV API, engagement needs Analytics |
-| **6. Whitelist and open web** | T2 approval workflow, trust-graph discovery, full safety pipeline, crawler, review queue, abuse reporting | **built** — the blocklist sources ship disabled pending verification |
+| **6. Whitelist and open web** | T2 approval workflow, trust-graph discovery, full safety pipeline, crawler, review queue, abuse reporting | **built** — Gate 3 classifier now served (`InferenceAPI/src/safety.js`); blocklist sources ship disabled pending verification |
 | **7. Distribution and panels** | Embeddable widget, entity panels, thread continuation, content-gap reporting | **built** — the JubileePedia sync needs a URL to pull from |
 
 Still not built:
 
-* **Parts of the admin console.** The ten screens exist in `web/app/(admin)/`,
-  but five of them are missing controls whose endpoints this API does not have:
-  domain bulk import / edit / pause / forced reingest, lexicon bulk import and
-  expansion preview, best-bet reorder and scheduling, analytics by position and
-  by concept, and per-page reindex, purge and re-embed.
 * **Headless rendering.** `render_js` is honoured to the extent that the fetcher
   refuses the page and says why, rather than indexing an empty shell. §9.4 wants
   it off by default anyway.

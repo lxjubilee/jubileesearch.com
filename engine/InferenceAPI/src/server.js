@@ -61,7 +61,7 @@ const ROUTES = [
   { method: 'GET', path: '/v1/models', handle: async () => service.models.state() },
   { method: 'POST', path: '/v1/embeddings', handle: (body) => service.embed(body) },
   { method: 'POST', path: '/v1/rerank', handle: (body) => service.rerank(body) },
-  { method: 'POST', path: '/v1/classify/family-safety', handle: () => service.classifySafety() },
+  { method: 'POST', path: '/v1/classify/family-safety', handle: (body) => service.classifySafety(body) },
 ];
 
 export function createInferenceServer() {
