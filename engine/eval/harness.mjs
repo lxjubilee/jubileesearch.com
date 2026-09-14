@@ -51,7 +51,7 @@ import { assembleZoneA } from '../src/query/coverage.js';
  *              a page found only lexically still arrives through the FULL OUTER
  *              JOIN, scoring 0, and would be counted as a semantic hit.
  */
-export async function rankZoneA(q, { mode = 'hybrid', rerank = null, column = 'live' } = {}) {
+export async function rankZoneA(q, { mode = 'hybrid', rerank = null, column = 'live', filters = {} } = {}) {
   const db = pool;
   const cfg = await ranking();
   const norm = normalize(q);
@@ -73,7 +73,7 @@ export async function rankZoneA(q, { mode = 'hybrid', rerank = null, column = 'l
 
   const ctx = {
     normalized: norm.normalized, lang, expansion, embedding, fusion, cfg,
-    filters: {}, debug: true, embeddingColumn: column,
+    filters, debug: true, embeddingColumn: column,
   };
 
   let results = await retrieve(db, 'A', ctx);

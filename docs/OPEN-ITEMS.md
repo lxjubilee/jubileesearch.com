@@ -744,3 +744,32 @@ Until then: no scripture card (the query is reported as topical), no entity
 panels, and Zone A ranks without the R8 engagement signal. None of these can
 be closed from the JubileeSearch side without inventing another product's API.
 
+## 15. Gold set at 100 pairs; recall measured on the network corpus
+
+**Status 2026-09-14.** Acceptance criterion 6 is met in form: 100 pairs, 20
+cross-register, 15 cross-language (`eval/gold-set.json`, `cross_language_status`).
+The Romanian content is pocaieste.com and pocaintasibotez.com (InspireManna
+tenants, `ro-RO`), registered as T1 and crawled: 214 pages.
+
+Three runs on production (bge-m3 fp16, cross-encoder rerank on, hybrid recall@10):
+
+| run | corpus | R@10 | semantic R@10 | notes |
+| --- | --- | ---: | ---: | --- |
+| `network-2026-09-14` | 2,038 pages, 55,338 chunks | 30 | 9 | before migration 036 |
+| `network-boilerplate-2026-09-14` | same, 16,776 live chunks | 38 | 17 | boilerplate flagged |
+| `network-jvonly-2026-09-14` | retrieval restricted to jubileeverse.com | 55 | 55 | `EVAL_SITE=jubileeverse.com` |
+
+The restricted run matches the 600-page baseline (57.6 on 85 pairs), so the
+drop on the whole network is mostly competition: the gold targets are one
+specific JubileeVerse article each, and the sibling sites publish articles on
+the same themes in the same voice. That is a property of the gold set, not a
+retrieval regression, and it is why `EVAL_SITE` exists. Cross-language: 3 of
+15 (the ro->en pairs L01-L07 resolve only through the lexicon, and only
+`pocăință`/`Duhul Sfânt` are in it -- the Romanian lexicon terms are the next
+lever, D9). Conversational remains the weakest type at every corpus size.
+
+Criteria 7 (85%), 8 and 10 still fail. What moves them, in order: Romanian and
+Hindi lexicon terms (D9); reranking on chunk text rather than title+snippet;
+`bge-reranker-v2-m3`; and gold targets that accept any of several relevant
+pages once the corpus has several.
+

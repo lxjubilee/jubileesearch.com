@@ -28,6 +28,11 @@ const models = await preflight({ column });
 // RERANK_API_URL explicitly and this records which provider actually served it.
 const rerankProvider = process.env.RERANK_API_URL || process.env.INFERENCE_API_URL;
 
+// EVAL_SITE=jubileeverse.com restricts retrieval to one host. The gold set was
+// authored against the 600-article CDN corpus; on the whole network its
+// targets compete with sibling sites' articles on the same themes, and this
+// is how to tell that competition apart from a retrieval loss.
+const siteFilter = process.env.EVAL_SITE ? { site: process.env.EVAL_SITE } : {};
 const MODES = ['hybrid', 'lexical', 'semantic'];
 const rows = [];
 
@@ -35,7 +40,7 @@ for (const pair of gold.pairs) {
   const row = { ...pair, modes: {} };
 
   for (const mode of MODES) {
-    const r = await rankZoneA(pair.query, { mode, column, rerank: rerankOverride });
+    const r = await rankZoneA(pair.query, { mode, column, rerank: rerankOverride, filters: siteFilter });
 
     if (pair.type === 'navigational') {
       // A navigational pair is answered by the panel (§13.4), not by Zone A. It
@@ -117,7 +122,7 @@ const summary = Object.fromEntries(MODES.map((m) => [m, summarise(m)]));
 const negatives = { false_positive_expected: [], honest_weak_match_expected: [] };
 for (const bucket of Object.keys(negatives)) {
   for (const q of gold.negatives[bucket]) {
-    const r = await rankZoneA(q, { column, rerank: rerankOverride });
+    const r = await rankZoneA(q, { column, rerank: rerankOverride, filters: siteFilter });
     negatives[bucket].push({
       q,
       shown: r.displayed.results.length,
