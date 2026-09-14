@@ -438,16 +438,6 @@ export default function JubileeIdDoor(
           <p className="door-helper">One Jubilee ID works across all our sites</p>
           <ErrorAlert message={error} />
 
-          {/* Kept from the sign-in page this replaces. §16 makes sign-in
-              optional and §17 records a signed-in search against a Jubilee ID;
-              matching kJubilee exactly would have quietly dropped that
-              disclosure from the one screen where it is the decision. */}
-          <ul className="door-ledger">
-            <li className="yes"><span className="mark">+</span><span>300 searches a minute instead of 60.</span></li>
-            <li className="yes"><span className="mark">+</span><span>Admin and review screens, if your Jubilee ID carries the right.</span></li>
-            <li className="cost"><span className="mark">−</span><span>Your searches are stored with your Jubilee ID instead of anonymously.</span></li>
-          </ul>
-
           <form onSubmit={handleEmailContinue} noValidate>
             <Field id="email" label="Email address" type="email" value={email}
                    onChange={setEmail} required maxLength={254}
