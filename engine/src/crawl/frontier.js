@@ -42,7 +42,28 @@ export async function enqueue(db, urls, domain, options = {}) {
   // Deduplicate within the batch before the insert: a page linking to the same
   // article twice would otherwise make ON CONFLICT fire against a row inserted
   // by the same statement, which Postgres refuses.
-  const unique = [...new Set(accepted)];
+  let unique = [...new Set(accepted)];
+
+  // A page fetched within the domain's crawl interval is not fetched again on
+  // link discovery. Completed queue rows are deleted, so without this every
+  // page's navigation re-enqueues its siblings after they complete and one run
+  // refetches the same unchanged pages until its budget runs out -- measured
+  // on the first network crawl: 2,000 pages indexed, then an hour of churn at
+  // a flat count. Manual (admin reindex) and webhook (publish push) requests
+  // are the two callers entitled to bypass the interval, and do.
+  if (source !== 'manual' && source !== 'webhook') {
+    const hours = Number(domain.crawl_interval_hours) > 0 ? Number(domain.crawl_interval_hours) : 24;
+    const { rows } = await db.query(
+      `SELECT url FROM pages
+        WHERE domain_id = $1 AND url = ANY($2::text[])
+          AND last_fetched_at > now() - ($3 || ' hours')::interval`,
+      [domain.id, unique, String(hours)]);
+    if (rows.length) {
+      const fresh = new Set(rows.map((r) => r.url));
+      unique = unique.filter((u) => !fresh.has(u));
+      if (unique.length === 0) return { queued: 0, refused, skipped_fresh: rows.length };
+    }
+  }
 
   // §8.3 max_pages. Counted against what is already indexed plus what is already
   // queued, so a cap of 500 means 500 pages rather than 500 per run.
