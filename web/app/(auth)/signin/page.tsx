@@ -27,7 +27,7 @@ export default async function Page(
 
   // Someone already signed in has no business on the email screen. The account
   // page is where the session is shown and ended.
-  if (await getSession()) redirect(params.returnUrl === '/' ? '/account' : params.returnUrl);
+  if (await getSession()) redirect(params.returnUrl);
 
   const missing = missingConfig();
 

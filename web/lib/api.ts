@@ -166,4 +166,37 @@ export async function mirrorUser(accessToken: string): Promise<boolean> {
   }
 }
 
+/**
+ * Is this address a member of THIS site?
+ *
+ * A Jubilee ID says who someone is; it does not say they have an account here.
+ * The door needs both facts to tell "welcome back" from "you have a Jubilee ID
+ * but are new here". Only the engine can answer this half — the web tier has no
+ * database — so it is asked over the internal endpoint, which is secret-gated
+ * because api.jubileesearch.com is public and an open membership check is an
+ * enumeration oracle.
+ *
+ * Returns null for "could not determine", which the caller must NOT flatten to
+ * false: answering "not a member" when the engine is simply unreachable would
+ * send an existing member into a sign-up they do not need.
+ */
+export async function localUserExists(email: string): Promise<boolean | null> {
+  const secret = process.env.INTERNAL_API_SECRET ?? '';
+  if (!secret) return null;
+  try {
+    const res = await fetch(`${ENGINE}/api/v1/users/lookup`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-internal-secret': secret },
+      body: JSON.stringify({ email }),
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      cache: 'no-store',
+    });
+    if (!res.ok) return null;
+    const body = await res.json();
+    return body?.exists === true;
+  } catch {
+    return null;
+  }
+}
+
 export const engineOrigin = () => ENGINE;

@@ -1,4 +1,5 @@
 import * as sso from '@/lib/sso';
+import { localUserExists } from '@/lib/api';
 import { json, readJson, normalizeEmail, respondSignedIn, UNAVAILABLE } from '@/lib/sso-door';
 import { ssoAuthLimiter } from '@/lib/rate-limit';
 
@@ -29,6 +30,10 @@ export async function POST(request: Request) {
   const email = normalizeEmail(body.email);
   const password = String(body.password ?? '');
   const rememberMe = body.rememberMe !== false;
+  // Sent ONLY by the create-account screen the redirect below opens. The
+  // password screen never sends it, so signing in cannot resurrect an account
+  // that was deliberately removed.
+  const provision = body.provision === true;
 
   if (!email || !password) {
     return json({ success: false, error: 'Email and password are required.' }, 400);
@@ -55,6 +60,35 @@ export async function POST(request: Request) {
   if (!user?.id) {
     console.error('[sso/login] authority returned no user');
     return json({ success: false, error: UNAVAILABLE }, 503);
+  }
+
+  // THE PASSWORD IS RIGHT. THAT IS NOT THE SAME AS BEING A MEMBER HERE.
+  //
+  // JubileeInspire's contract, followed exactly. A correct Jubilee ID password
+  // proves who someone is; this site then asks its own question — is there an
+  // account here? If not, the answer is neither an error nor a sign-in. It is
+  // `redirect: 'signup-existing'` carrying the profile the authority just
+  // returned, so the door opens a pre-filled create-account screen instead of
+  // dead-ending someone who typed their password correctly.
+  //
+  // NO AUTO-PROVISION ON A BARE SIGN-IN: creating the row here would bring a
+  // deliberately removed account back the moment its owner signed in again.
+  if (!provision) {
+    const local = await localUserExists(email);
+    if (local === null) {
+      console.error('[sso/login] local membership check unavailable');
+      return json({ success: false, error: UNAVAILABLE }, 503);
+    }
+    if (local === false) {
+      return json({
+        success: false,
+        redirect: 'signup-existing',
+        email,
+        first_name: user.first_name ?? '',
+        last_name: user.last_name ?? '',
+        date_of_birth: String(user.date_of_birth ?? '').slice(0, 10),
+      });
+    }
   }
 
   return respondSignedIn({ ...user, email: user.email || email }, result.data, rememberMe);

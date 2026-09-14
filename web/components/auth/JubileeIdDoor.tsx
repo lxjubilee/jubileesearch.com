@@ -249,7 +249,11 @@ function RememberRow(
   );
 }
 
-type Step = 'email' | 'welcome' | 'form' | 'success';
+// 'join' is Outcome B: a valid Jubilee ID with no account on THIS site. The
+// password has already been verified by the time it is reached, so what is left
+// is the person deciding to become a member here — a choice, rather than a side
+// effect of having signed in.
+type Step = 'email' | 'welcome' | 'join' | 'form' | 'success';
 
 // ── The door ─────────────────────────────────────────────────────────────
 // The query string is parsed on the server (lib/door-params.ts) and arrives as
@@ -331,12 +335,15 @@ export default function JubileeIdDoor(
   // to store here -- see lib/sso-door.ts for why this is the one place the port
   // diverges from kJubilee, which writes the token to localStorage.
   //
-  // router.refresh() before the push: the destination is a server component that
-  // has already been rendered signed-out in this router's cache, and without it
-  // the reader lands on a page still showing "Sign in".
+  // The destination is a server component that has already been rendered
+  // signed-out in this router's cache, so a refresh is needed or the reader
+  // lands on a page still showing "Sign in". Navigate first, then refresh:
+  // refreshing while still on /signin re-renders the door, which now sees a
+  // session and issues its own redirect, and that would win the race against
+  // the push. returnUrl defaults to "/", the search page.
   function signedIn() {
+    router.replace(returnUrl);
     router.refresh();
-    router.push(returnUrl);
   }
 
   // ── Screen 1 → look the email up, then route to A or C ────────────────
@@ -380,7 +387,40 @@ export default function JubileeIdDoor(
     setLoading(false);
 
     if (r.data.success) return signedIn();
+
+    // Outcome B. The password was RIGHT — the authority said so — and this site
+    // simply has no account for it yet. Not an error, so nothing red is shown:
+    // the profile the authority returned pre-fills a create-account screen and
+    // the person chooses to join. The password stays in state and is reused
+    // there, so it is typed once rather than twice.
+    if (r.data.redirect === 'signup-existing') {
+      if (r.data.first_name) setFirstName(String(r.data.first_name));
+      if (r.data.last_name) setLastName(String(r.data.last_name));
+      if (r.data.date_of_birth) setDob(String(r.data.date_of_birth));
+      return goto('join');
+    }
+
     return setError(String(r.data.error || 'That password does not match. Try again.'));
+  }
+
+  // ── Outcome B — join THIS site with an existing Jubilee ID ───────────
+  //
+  // Re-sends the password the authority already accepted, this time with
+  // `provision: true` — the one flag that allows a local account to be created.
+  // The password screen never sends it, so signing in can never quietly
+  // resurrect an account somebody deliberately removed.
+  async function handleJoin(e: React.FormEvent) {
+    e.preventDefault();
+    if (!firstName.trim() || !lastName.trim()) return setError('Please enter your first and last name.');
+    setError('');
+    setLoading(true);
+    const r = await postJson('/api/sso/login', {
+      email, password: existingPassword, rememberMe, provision: true,
+    });
+    setLoading(false);
+
+    if (r.data.success) return signedIn();
+    return setError(String(r.data.error || 'We could not create your account. Please try again.'));
   }
 
   // ── Outcome C — create the Jubilee ID ────────────────────────────────
@@ -471,6 +511,25 @@ export default function JubileeIdDoor(
                            autoComplete="current-password" autoFocus />
             <RememberRow checked={rememberMe} onChange={setRememberMe} />
             <SubmitButton loading={loading} busyLabel="Signing in…">Continue</SubmitButton>
+          </form>
+        </>
+      )}
+
+      {step === 'join' && (
+        <>
+          <h1 className="door-heading door-heading--caps">Create your JubileeSearch account</h1>
+          <p className="door-subtext">
+            Your Jubilee ID is confirmed. Add a few details to finish creating your account here.
+          </p>
+          <ErrorAlert message={error} />
+          <AccountRow email={email} onChangeEmail={useDifferentEmail} />
+          <form onSubmit={handleJoin} noValidate>
+            <NameFields firstName={firstName} lastName={lastName}
+                        setFirstName={edit(setFirstName)} setLastName={edit(setLastName)} />
+            <RememberRow checked={rememberMe} onChange={setRememberMe} />
+            <SubmitButton loading={loading} busyLabel="Creating your account…">
+              Create Account
+            </SubmitButton>
           </form>
         </>
       )}
