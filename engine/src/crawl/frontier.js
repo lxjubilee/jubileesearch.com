@@ -269,7 +269,7 @@ export async function finishRun(db, domain, { changed, failed }) {
     `UPDATE domains
         SET last_crawl_finished = now(),
             crawl_interval_hours = $2,
-            next_crawl_due = now() + ($2 || ' hours')::interval,
+            next_crawl_due = now() + make_interval(hours => $2::int),
             consecutive_unchanged_runs = $3,
             consecutive_failures = CASE WHEN $4 THEN consecutive_failures + 1 ELSE 0 END,
             status = CASE WHEN $4 AND consecutive_failures + 1 >= 3
