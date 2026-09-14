@@ -152,7 +152,9 @@ export async function contentRequest(
  * the authority has already approved must never fail because this did, so every
  * outcome resolves to a boolean and nothing throws.
  */
-export async function mirrorUser(accessToken: string): Promise<boolean> {
+export async function mirrorUser(
+  accessToken: string,
+): Promise<{ ok: boolean; rights: string[] }> {
   try {
     const res = await fetch(`${ENGINE}/api/v1/me`, {
       method: 'POST',
@@ -160,9 +162,15 @@ export async function mirrorUser(accessToken: string): Promise<boolean> {
       signal: AbortSignal.timeout(TIMEOUT_MS),
       cache: 'no-store',
     });
-    return res.ok;
+    if (!res.ok) return { ok: false, rights: [] };
+    // The engine answers with the rights IT grants this identity. The
+    // authority carries none (see engine/src/api/auth.js localRights), so
+    // this is the only place the web tier can learn who administers the site.
+    const body = (await res.json()) as { rights?: unknown };
+    const rights = Array.isArray(body.rights) ? body.rights.map(String) : [];
+    return { ok: true, rights };
   } catch {
-    return false;
+    return { ok: false, rights: [] };
   }
 }
 

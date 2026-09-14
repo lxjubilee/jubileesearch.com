@@ -102,13 +102,28 @@ export async function respondSignedIn(
     }, 503);
   }
 
+  // MIRROR THE IDENTITY into the engine's users table (migration 034) FIRST,
+  // because the answer carries the rights. The authority has no rights model
+  // (engine/src/api/auth.js localRights): search_admin and search_viewer are
+  // decided by the engine's SEARCH_ADMINS / SEARCH_VIEWERS allowlists, and the
+  // reply to this call is how the web tier learns them. Without it the admin
+  // console would refuse an operator the engine already admits.
+  //
+  // Sent from here because here is the only place the authority's token exists:
+  // it is sealed into an httpOnly cookie below and the browser can never read
+  // it. The token is the entire request, so this cannot write a row for anyone
+  // else. Best-effort on the mirror itself; a lost write is repaired by the
+  // next sign-in.
+  const mirrored = await mirrorUser(tokens.access_token);
+  const rights = Array.from(new Set([...rightsFrom(user), ...mirrored.rights]));
+
   await setSession({
     jubilee_id: user.id,
     name: displayName(user),
     first_name: user.first_name ?? null,
     last_name: user.last_name ?? null,
     email: user.email ?? null,
-    rights: rightsFrom(user),
+    rights,
     access_token: tokens.access_token,
     refresh_token: tokens.refresh_token ?? null,
     expires_at: expiresAt(tokens),
@@ -127,20 +142,6 @@ export async function respondSignedIn(
     // Signed in to JubileeSearch alone. That is the whole cost.
   }
 
-  // AND MIRROR THE IDENTITY into the engine's users table (migration 034), so
-  // this site holds a row per member the way the rest of the family does.
-  //
-  // Sent from here because here is the only place the authority's token exists:
-  // it is sealed into an httpOnly cookie above and the browser can never read
-  // it. The token is the entire request — the engine asks the authority whose
-  // it is and mirrors that answer, so this cannot write a row for anyone else.
-  //
-  // Best-effort, like the family session above. The mirror serves reporting and
-  // whatever per-user data comes later; a lost write is repaired by the next
-  // sign-in, whereas failing the sign-in over it would cost the person the one
-  // thing they came for.
-  await mirrorUser(tokens.access_token);
-
   return json({
     success: true,
     user: {
@@ -149,7 +150,7 @@ export async function respondSignedIn(
       first_name: user.first_name ?? '',
       last_name: user.last_name ?? '',
       name: displayName(user),
-      rights: rightsFrom(user),
+      rights,
     },
   });
 }
