@@ -199,4 +199,50 @@ export async function localUserExists(email: string): Promise<boolean | null> {
   }
 }
 
+/** The engine's mirrored row for the person behind this token, or null. */
+export interface MirroredUser {
+  jubilee_id: string;
+  email: string;
+  first_name: string | null;
+  last_name: string | null;
+  display_name: string;
+  email_verified: boolean;
+  first_seen_at: string;
+  last_seen_at: string;
+}
+
+export async function mirroredUser(accessToken: string): Promise<MirroredUser | null> {
+  try {
+    const res = await fetch(`${ENGINE}/api/v1/me`, {
+      headers: { authorization: `Bearer ${accessToken}` },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      cache: 'no-store',
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as MirroredUser;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Remove this person's row from the engine's mirror. The bearer is the whole
+ * request, as with mirrorUser: nobody can delete a row but their own. Returns
+ * false only when the engine refused or did not answer -- a row that was
+ * already gone counts as deleted.
+ */
+export async function deleteMirroredUser(accessToken: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${ENGINE}/api/v1/me`, {
+      method: 'DELETE',
+      headers: { authorization: `Bearer ${accessToken}` },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+      cache: 'no-store',
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 export const engineOrigin = () => ENGINE;

@@ -105,6 +105,8 @@ export async function respondSignedIn(
   await setSession({
     jubilee_id: user.id,
     name: displayName(user),
+    first_name: user.first_name ?? null,
+    last_name: user.last_name ?? null,
     email: user.email ?? null,
     rights: rightsFrom(user),
     access_token: tokens.access_token,

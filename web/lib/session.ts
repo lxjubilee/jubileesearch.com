@@ -26,6 +26,10 @@ export interface Session {
   /** `sub` from the ID token. This is the jubilee_id §7.7 stores. */
   jubilee_id: string;
   name: string | null;
+  /** The parts behind `name`, so the account page can offer them for editing.
+      Optional: a cookie sealed before these existed is still a session. */
+  first_name?: string | null;
+  last_name?: string | null;
   email: string | null;
   rights: string[];
   access_token: string;

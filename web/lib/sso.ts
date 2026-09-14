@@ -221,6 +221,23 @@ export const ssoRegister = async (input: {
 export const ssoOpenSession = (email: string) =>
   callSso<{ sessionToken: string }>('/api/auth/session/open', { email, site: SITE });
 
+/**
+ * Service-gated identity update BY EMAIL, as kJubilee's lib/sso.js does it.
+ * Only ever called with the address of the session that is asking, so a caller
+ * can change nobody's name but their own.
+ */
+export const ssoUpdateProfileByEmail = (
+  email: string, patch: { first_name: string; last_name: string | null },
+) => callSso<{ user?: SsoUser }>('/api/auth/service/profile', { email, ...patch });
+
+/**
+ * Set a new password on the identity behind a live session. The authority holds
+ * the credential (§14), so this is the only place a change can land; nothing is
+ * hashed or stored here.
+ */
+export const ssoChangePasswordByEmail = (email: string, newPassword: string) =>
+  callSso('/api/auth/service/password', { email, new_password: newPassword });
+
 /** End a family session (sign-out). Idempotent; an unknown token is not an error. */
 export const ssoRevokeSession = (sessionToken: string) =>
   callSso('/api/auth/session/revoke', { sessionToken });

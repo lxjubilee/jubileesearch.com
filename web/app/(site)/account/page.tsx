@@ -1,23 +1,29 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSession, isAdmin, canView } from '@/lib/session';
-import styles from '../legal.module.css';
+import { mirroredUser } from '@/lib/api';
+import AccountClient from './AccountClient';
+import './account.css';
 
-// The signed-in account page.
+// /account — profile settings.
 //
-// The door (/signin) is for people who are not signed in; this is what the
-// account chip in the header points at once they are. It exists to answer three
-// questions and nothing else: who am I signed in as, what does it change, and
-// how do I stop.
+// Ported from kJubilee's app/account: the identity strip, then four cards in
+// ascending order of consequence. A name is fixed by typing over it. The email
+// cannot be changed here at all: it is the join between this account and the
+// Jubilee ID. A password is set by typing the new one twice, and the change
+// reaches every Jubilee site. Deleting is irreversible, so it stays folded
+// shut until asked for and will not arm until DELETE has been typed out.
 //
-// There is nothing to edit here. §14 puts the identity at the Jubilee ID
-// authority — name, email and password all live there — so a form on this page
-// would either do nothing or quietly write to a user table this site must not
-// have.
+// Where kJubilee reads the session from localStorage after hydration and shows
+// "Loading your account…" first, this reads the httpOnly cookie on the server
+// and renders the settled page in the first byte of HTML. A signed-out visitor
+// is sent to the door rather than shown a dead form.
+//
+// THE GATE HERE IS NOT THE SECURITY: every route under /api/account reads the
+// session again before it answers.
 
 export const metadata: Metadata = {
-  title: 'Your account',
+  title: 'Profile settings',
   robots: { index: false, follow: false },
 };
 
@@ -25,81 +31,27 @@ export default async function AccountPage() {
   const session = await getSession();
   if (!session) redirect('/signin?next=%2Faccount');
 
-  const admin = isAdmin(session);
-  const viewer = canView(session);
+  // When this person first arrived and was last here, from the engine's
+  // mirror. Best effort: the page is complete without it.
+  const mirror = await mirroredUser(session.access_token);
+
+  // A cookie sealed before first/last were carried has only `name`; split it
+  // once so the fields are not blank for someone who signed in last week.
+  const parts = (session.name ?? '').trim().split(/\s+/).filter(Boolean);
+  const first = session.first_name ?? mirror?.first_name ?? parts[0] ?? '';
+  const last = session.last_name ?? mirror?.last_name ?? parts.slice(1).join(' ');
 
   return (
-    <main className={styles.page}>
-      <p className={styles.eyebrow}>JubileeSearch</p>
-      <h1 className={styles.title}>Your <span>account</span></h1>
-
-      <p className={styles.lead}>
-        You are signed in with your Jubilee ID. Search works without one — signing
-        in changes exactly one thing about what is recorded, and it is set out below.
-      </p>
-
-      <div className={styles.meta}>
-        <span><b>Signed in as</b> {session.name ?? session.jubilee_id}</span>
-        {session.email && <span><b>Email</b> {session.email}</span>}
-      </div>
-
-      <Section n="1" title="What this changes">
-        <ul>
-          <li><strong>300 searches a minute</strong> instead of 60.</li>
-          <li>
-            <strong>Your searches are stored with your Jubilee ID</strong> rather than
-            anonymously. That is the cost, and the{' '}
-            <Link href="/privacy">privacy notice</Link> says what it means and for
-            how long.
-          </li>
-          {viewer && (
-            <li>
-              Your Jubilee ID carries <code>{admin ? 'search_admin' : 'search_viewer'}</code>,
-              so the <Link href="/admin">admin console</Link> is open to you
-              {admin ? '.' : ' read-only.'}
-            </li>
-          )}
-        </ul>
-      </Section>
-
-      <Section n="2" title="Changing your name, email or password">
-        <p>
-          None of those live here. Your Jubilee ID is issued and held by the Jubilee
-          ID service, and it is the same identity on every Jubilee site — so a change
-          made there applies everywhere, including here, the next time you sign in.
-          JubileeSearch stores no password and has nothing to reset.
-        </p>
-      </Section>
-
-      <Section n="3" title="Signing out">
-        <p>
-          This stops new searches being recorded against your Jubilee ID immediately.
-          It does not delete what is already recorded; ask us for that, and the{' '}
-          <Link href="/privacy">privacy notice</Link> says how.
-        </p>
-        {/* POST, not a link: a GET sign-out can be triggered by any page that can
-            make a browser fetch a URL. */}
-        <form method="POST" action="/api/auth/signout" className={styles.signoutForm}>
-          <input type="hidden" name="next" value="/signin" />
-          <button type="submit" className={styles.signout}>Sign out</button>
-        </form>
-      </Section>
-
-      <nav className={styles.footerNav}>
-        <Link href="/">Search</Link>
-        <Link href="/privacy">Privacy notice</Link>
-        <Link href="/terms">Terms of use</Link>
-        {viewer && <Link href="/admin">Admin console</Link>}
-      </nav>
-    </main>
-  );
-}
-
-function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
-  return (
-    <section className={styles.section}>
-      <h2 id={`s${n}`}><em>{n}</em>{title}</h2>
-      {children}
-    </section>
+    <AccountClient
+      account={{
+        name: session.name,
+        first_name: first,
+        last_name: last,
+        email: session.email ?? '',
+        role: isAdmin(session) ? 'admin' : canView(session) ? 'viewer' : null,
+        first_seen_at: mirror?.first_seen_at ?? null,
+        last_seen_at: mirror?.last_seen_at ?? null,
+      }}
+    />
   );
 }

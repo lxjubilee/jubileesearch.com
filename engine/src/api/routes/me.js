@@ -23,6 +23,41 @@ const displayName = (p) =>
 
 export const routes = [
   {
+    // The mirrored row, read back for the account page: when this person first
+    // arrived and when they were last here. Nothing in it is secret to its
+    // owner, and only its owner can ask -- the bearer is the whole request.
+    method: 'GET', match: exact('/api/v1/me'),
+    handle: async ({ identity }) => {
+      if (!identity?.authenticated) {
+        return { status: 401, body: { error: 'a Jubilee ID is required' } };
+      }
+      const { rows } = await query(
+        `SELECT jubilee_id, email, first_name, last_name, display_name, email_verified,
+                first_seen_at, last_seen_at
+           FROM users WHERE jubilee_id = $1`,
+        [identity.jubilee_id],
+      );
+      if (!rows.length) return { status: 404, body: { error: 'not a member here' } };
+      return { status: 200, body: { ...rows[0], rights: identity.rights } };
+    },
+  },
+  {
+    // Ending the membership. Deletes THIS site's row and nothing else: the
+    // Jubilee ID is family-wide and this service has no business closing it.
+    // Idempotent -- deleting a row that is already gone is not an error, so a
+    // retried request after a lost reply does not fail the person who sent it.
+    method: 'DELETE', match: exact('/api/v1/me'),
+    handle: async ({ identity }) => {
+      if (!identity?.authenticated) {
+        return { status: 401, body: { error: 'a Jubilee ID is required' } };
+      }
+      const { rowCount } = await query(
+        'DELETE FROM users WHERE jubilee_id = $1', [identity.jubilee_id],
+      );
+      return { status: 200, body: { deleted: rowCount > 0, kept_jubilee_id: true } };
+    },
+  },
+  {
     // POST, not GET: it writes. The door calls it once per sign-in.
     method: 'POST', match: exact('/api/v1/me'),
     handle: async ({ identity }) => {
