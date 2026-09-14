@@ -72,14 +72,18 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         {/* The head of the sidebar, after JubileeInspire's admin console: the
             persona in a ringed disc, the console's name, the site as an
             eyebrow beneath it. */}
-        <Link href="/admin" className="brand">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/personas/jubilee.png" alt="" className="brandAvatar" width="44" height="44" />
-          <span className="brandText">
+        <div className="brand">
+          {/* The persona is the way home; the words beside it are the way back
+              to the dashboard. */}
+          <Link href="/" className="brandHome" aria-label="JubileeSearch home" title="Back to search">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/personas/jubilee.png" alt="" className="brandAvatar" width="44" height="44" />
+          </Link>
+          <Link href="/admin" className="brandText">
             <span className="brandTitle">Admin Console</span>
             <span className="brandTag">JubileeSearch</span>
-          </span>
-        </Link>
+          </Link>
+        </div>
 
         <AdminNav safetyQueue={safetyQueue} pendingDomains={pendingDomains} />
 
