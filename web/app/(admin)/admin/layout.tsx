@@ -13,6 +13,15 @@ import AdminNav from '@/components/admin/AdminNav';
 // Action is reachable by direct POST whether or not the UI ever drew a button
 // for it -- so a layout check alone would be decoration.
 
+// "Sandeep Agarwal" -> "SA", the same disc the site header shows.
+function initials(name: string | null, email: string | null): string {
+  const parts = (name ?? '').trim().split(/\s+/).filter(Boolean);
+  const first = parts[0]?.charAt(0) ?? '';
+  const last = parts.length >= 2 ? (parts[parts.length - 1]?.charAt(0) ?? '') : '';
+  if (first) return (first + last).toUpperCase();
+  return (email ?? '?').charAt(0).toUpperCase() || '?';
+}
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();
 
@@ -60,22 +69,33 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="shell">
       <nav className="side" aria-label="Admin sections">
+        {/* The head of the sidebar, after JubileeInspire's admin console: the
+            persona in a ringed disc, the console's name, the site as an
+            eyebrow beneath it. */}
         <Link href="/admin" className="brand">
-          Jubilee<span>Search</span>
-          <span className="brandTag">Admin console</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/personas/jubilee.png" alt="" className="brandAvatar" width="44" height="44" />
+          <span className="brandText">
+            <span className="brandTitle">Admin Console</span>
+            <span className="brandTag">JubileeSearch</span>
+          </span>
         </Link>
 
         <AdminNav safetyQueue={safetyQueue} pendingDomains={pendingDomains} />
 
+        {/* Who is here and what they may do, in words rather than the name of
+            the right: "Administrator" is what the person reading it holds. */}
         <div className="sideFoot">
-          <div className="who">{session.name ?? session.jubilee_id}</div>
-          <span className="rightTag" data-level={admin ? 'admin' : 'view'}>
-            {admin ? 'search_admin' : 'search_viewer'}
-          </span>
-          <div style={{ marginTop: 10 }}>
-            <Link href="/">Search</Link>
-            {' · '}
-            <Link href="/signin">Account</Link>
+          <div className="whoRow">
+            <span className="whoDisc" aria-hidden="true">{initials(session.name, session.email)}</span>
+            <div className="whoText">
+              <div className="who">{session.name ?? session.jubilee_id}</div>
+              <div className="whoRole">{admin ? 'Administrator' : 'Viewer'}</div>
+            </div>
+          </div>
+          <div className="sideLinks">
+            <Link href="/">Back to search</Link>
+            <Link href="/account">Account</Link>
           </div>
         </div>
       </nav>
