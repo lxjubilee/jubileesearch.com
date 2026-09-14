@@ -25,12 +25,14 @@ import { consume, LIMITS } from './ratelimit.js';
 import { routes as adminRoutes } from './routes/admin.js';
 import { routes as ingestRoutes } from './routes/ingest.js';
 import { routes as meRoutes } from './routes/me.js';
+import { routes as passwordResetRoutes } from './routes/password-resets.js';
 import { routes as publicRoutes } from './routes/public.js';
 import { routes as usersRoutes } from './routes/users.js';
 import { routes as widgetRoutes } from './routes/widget.js';
 
 const ROUTES = [
-  ...publicRoutes, ...ingestRoutes, ...meRoutes, ...usersRoutes, ...adminRoutes, ...widgetRoutes,
+  ...publicRoutes, ...ingestRoutes, ...meRoutes, ...usersRoutes, ...passwordResetRoutes,
+  ...adminRoutes, ...widgetRoutes,
 ];
 
 const server = createServer(async (req, res) => {

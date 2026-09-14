@@ -357,6 +357,8 @@ html { scrollbar-width: thin; scrollbar-color: #4a4a4a transparent; }
 
 /* ── Forgot / extras ── */
 .forgot-row { margin: -.55rem 0 1.35rem; text-align: right; font-size: .85rem; }
+/* "Back to sign in" under the reset screens (kJubilee's .back-link). */
+.back-link { text-align: center; margin-top: 1rem; font-size: .875rem; }
 .forgot-link { color: var(--kj-accent); text-decoration: none; font-weight: 500; }
 .forgot-link:hover { text-decoration: underline; }
 

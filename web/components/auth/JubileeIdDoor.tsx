@@ -509,6 +509,15 @@ export default function JubileeIdDoor(
             <PasswordField id="existingPassword" label="Password"
                            value={existingPassword} onChange={edit(setExistingPassword)}
                            autoComplete="current-password" autoFocus />
+            {/* The reset is JubileeSearch's own (app/(auth)/forgot-password): the
+                authority stores a reset code but does not email it, so the
+                requesting site owns the reset UX. The address is carried
+                across so nobody retypes it. */}
+            <div className="forgot-row">
+              <a className="forgot-link" href={`/forgot-password?email=${encodeURIComponent(email)}`}>
+                Forgot your password?
+              </a>
+            </div>
             <RememberRow checked={rememberMe} onChange={setRememberMe} />
             <SubmitButton loading={loading} busyLabel="Signing in…">Continue</SubmitButton>
           </form>
