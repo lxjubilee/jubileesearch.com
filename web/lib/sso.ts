@@ -143,23 +143,71 @@ export interface SsoTokens {
   expires_at?: string;
 }
 
+/**
+ * THE AUTHORITY DOES NOT SPEAK OAuth2, AND THIS IS WHERE THAT IS RECONCILED.
+ *
+ * `SsoTokens` above is the OAuth2 shape the rest of this door is written
+ * against. The Jubilee authority answers /api/auth/login and /api/auth/register
+ * with its own names instead:
+ *
+ *     { user, token, expiresAt }        not  { user, access_token, expires_at }
+ *
+ * Read straight through, `access_token` is therefore always undefined, and
+ * respondSignedIn's guard turns a CORRECT password into
+ * "Signed in, but no access token was issued" with a 503 — which is what every
+ * sign-in on this site did until this adapter existed. The authority had
+ * verified the password; only the field name was wrong.
+ *
+ * Normalising here, at the one place the authority's JSON enters, keeps that
+ * knowledge in a single function: every caller downstream keeps reading
+ * `access_token`, and if the authority ever grows real OAuth2 names this is the
+ * only thing to delete. The original keys are left in place so nothing that
+ * already reads `token` breaks.
+ *
+ * There is no refresh token: this authority issues none from these endpoints.
+ * The 90-day family session opened separately is what outlives the access
+ * token, not a refresh grant.
+ */
+type SsoUserTokens = { user: SsoUser } & SsoTokens;
+
+/** The authority's own field names, which arrive alongside the OAuth2 ones. */
+type JubileeTokenNames = { token?: string; expiresAt?: string };
+
+function adoptJubileeTokens(result: SsoResult<SsoUserTokens>): SsoResult<SsoUserTokens> {
+  if (!result.ok) return result;
+  const d = result.data as SsoUserTokens & JubileeTokenNames;
+  return {
+    ok: true,
+    data: {
+      ...d,
+      access_token: d.access_token ?? d.token ?? '',
+      expires_at: d.expires_at ?? d.expiresAt,
+      refresh_token: d.refresh_token ?? null,
+    },
+  };
+}
+
 /** Does this email have a Jubilee ID at all? */
 export const ssoLookup = (email: string) =>
   callSso<{ exists: boolean }>('/api/auth/lookup', { email });
 
 /** Verify { email, password } against the Jubilee ID authority. */
-export const ssoLogin = (email: string, password: string) =>
-  callSso<{ user: SsoUser } & SsoTokens>('/api/auth/login', { email, password, site: SITE });
+export const ssoLogin = async (email: string, password: string) =>
+  adoptJubileeTokens(
+    await callSso<{ user: SsoUser } & SsoTokens>('/api/auth/login', { email, password, site: SITE }),
+  );
 
 /** Create a brand-new Jubilee ID. 409 = the email already has one. */
-export const ssoRegister = (input: {
+export const ssoRegister = async (input: {
   first_name: string; last_name: string; email: string;
   date_of_birth?: string | null; password: string;
-}) => callSso<{ user: SsoUser } & SsoTokens>('/api/auth/register', {
-  ...input,
-  date_of_birth: input.date_of_birth || null,
-  site: SITE,
-});
+}) => adoptJubileeTokens(
+  await callSso<{ user: SsoUser } & SsoTokens>('/api/auth/register', {
+    ...input,
+    date_of_birth: input.date_of_birth || null,
+    site: SITE,
+  }),
+);
 
 /**
  * Open a 90-day family session for someone this site has already proven.
