@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getDashboard, getZoneCtr, num, AdminRequestFailed } from '@/lib/admin';
+import { getDashboard, getZoneCtr, getAnalyticsOverview, num, AdminRequestFailed } from '@/lib/admin';
 import { PageHead, Panel, Tile, Notice, LoadFailed, pct } from '@/components/admin/ui';
 
 // Screen 1: dashboard (§15).
@@ -29,6 +29,8 @@ export default async function DashboardPage() {
 
   let ctr = null;
   try { ctr = await getZoneCtr(); } catch { /* the tripwire is optional here */ }
+  let overview = null;
+  try { overview = await getAnalyticsOverview(7); } catch { /* top queries are an extra */ }
 
   if (!data) {
     return (
@@ -138,10 +140,10 @@ export default async function DashboardPage() {
           foot="24h"
         />
         <Tile
-          label="Zone A empty rate"
-          value={data.zone_a_empty_rate === null ? '—' : pct(emptyRate)}
+          label="Zone A coverage rate"
+          value={data.zone_a_empty_rate === null ? '—' : pct(1 - emptyRate)}
           state={emptyRate > 0.5 ? 'warn' : undefined}
-          foot="7d · searches the network could not answer"
+          foot={`7d · ${data.zone_a_empty_rate === null ? '—' : pct(emptyRate)} of searches found nothing from Jubilee`}
         />
         <Tile
           label="Zero-result searches"
@@ -178,6 +180,29 @@ export default async function DashboardPage() {
           <div className="empty">
             No impressions recorded yet. This fills in once searches are being clicked.
           </div>
+        )}
+      </Panel>
+
+      <Panel title="Top queries" note={<>last 7 days · <Link href="/admin/analytics">full analytics</Link></>}>
+        {overview && overview.top_queries.length > 0 ? (
+          <div className="scroll">
+            <table>
+              <thead>
+                <tr><th>Query</th><th className="numCell">Times</th><th className="numCell">Zone A empty</th></tr>
+              </thead>
+              <tbody>
+                {overview.top_queries.slice(0, 10).map((q) => (
+                  <tr key={q.normalized}>
+                    <td className="wrapCell mono"><strong>{q.normalized}</strong></td>
+                    <td className="numCell">{num(q.times).toLocaleString()}</td>
+                    <td className="numCell" style={{ color: num(q.zone_a_empty) > 0 ? 'var(--a-warn)' : undefined }}>{num(q.zone_a_empty)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="empty">No searches recorded in the last 7 days.</div>
         )}
       </Panel>
     </>
