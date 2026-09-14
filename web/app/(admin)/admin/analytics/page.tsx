@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getZoneCtr, getZeroResults, getAnalyticsOverview, num, AdminRequestFailed } from '@/lib/admin';
+import { getZoneCtr, getZeroResults, getAnalyticsOverview, getContentGap, getContentGapCsv, num, AdminRequestFailed } from '@/lib/admin';
 import { PageHead, Panel, Pill, Empty, Notice, LoadFailed, when, pct } from '@/components/admin/ui';
 
 // Screen 8: search analytics (§15).
@@ -32,6 +32,9 @@ export default async function AnalyticsPage(
 
   let overview = null; let overviewFailure = '';
   try { overview = await getAnalyticsOverview(days); } catch (err) { overviewFailure = err instanceof AdminRequestFailed ? err.message : String(err); }
+
+  let gap = null; let gapCsv = '';
+  try { gap = await getContentGap(days); gapCsv = (await getContentGapCsv(days)).csv; } catch { /* the report is an extra */ }
 
   const totalSearches = (overview?.by_intent ?? []).reduce((n, r) => n + num(r.searches), 0);
   const totalZero = (overview?.by_intent ?? []).reduce((n, r) => n + num(r.zero_results), 0);
@@ -196,6 +199,67 @@ export default async function AnalyticsPage(
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+        </Panel>
+
+        <Panel title="Content-gap report" note={<>§16 · the writing team&rsquo;s weekly export, live for the last {days} days {range}</>}>
+          {!gap ? <Empty>The report could not be built.</Empty> : (
+            <div className="panelBody" style={{ display: 'grid', gap: 14 }}>
+              <div className="sub" style={{ margin: 0 }}>
+                {num(gap.totals.searches).toLocaleString()} searches · {num(gap.totals.zero_result).toLocaleString()} found nothing · {num(gap.totals.zone_a_empty).toLocaleString()} found nothing from Jubilee.
+                Listed below: queries seen at least {gap.thresholds.min_times} times, and Zone A blocks shown at least {gap.thresholds.min_impressions} times with click-through under {pct(gap.thresholds.low_ctr_below)}.
+                A weekly file lands in the reports directory on the server (<span className="mono">content-gap-latest.csv</span>).
+              </div>
+              {([['Nothing at all came back', gap.zero_result], ['The wider web answered, Jubilee did not', gap.zone_a_empty]] as const).map(([title, rows]) => (
+                <div key={title}>
+                  <div style={{ fontWeight: 600, marginBottom: 6 }}>{title} <span className="sub">({rows.length})</span></div>
+                  {rows.length === 0 ? <div className="sub">None in this window.</div> : (
+                    <div className="scroll">
+                      <table>
+                        <thead><tr><th>Query</th><th>Lang</th><th>Intent</th><th className="numCell">Times</th><th>Last seen</th></tr></thead>
+                        <tbody>
+                          {rows.map((q, i) => (
+                            <tr key={`${q.query}-${i}`}>
+                              <td className="wrapCell mono"><strong>{q.query}</strong></td>
+                              <td>{q.lang ?? '—'}</td>
+                              <td>{q.intent ? <Pill>{q.intent}</Pill> : '—'}</td>
+                              <td className="numCell">{num(q.times)}</td>
+                              <td className="mono" style={{ fontSize: 11.5 }}>{when(q.last_seen)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              ))}
+              <div>
+                <div style={{ fontWeight: 600, marginBottom: 6 }}>Zone A shown, not clicked <span className="sub">({gap.low_ctr.length})</span></div>
+                {gap.low_ctr.length === 0 ? <div className="sub">None in this window.</div> : (
+                  <div className="scroll">
+                    <table>
+                      <thead><tr><th>Query</th><th className="numCell">Impressions</th><th className="numCell">Clicks</th><th className="numCell">CTR</th></tr></thead>
+                      <tbody>
+                        {gap.low_ctr.map((q) => (
+                          <tr key={q.query}>
+                            <td className="wrapCell mono"><strong>{q.query}</strong></td>
+                            <td className="numCell">{num(q.impressions).toLocaleString()}</td>
+                            <td className="numCell">{num(q.clicks).toLocaleString()}</td>
+                            <td className="numCell">{pct(num(q.ctr))}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+              {gapCsv && (
+                <details>
+                  <summary className="sub" style={{ cursor: 'pointer' }}>CSV, ready to copy</summary>
+                  <textarea readOnly value={gapCsv} rows={8} style={{ width: '100%', fontFamily: 'var(--a-mono)', fontSize: 11.5, marginTop: 8 }} />
+                </details>
+              )}
             </div>
           )}
         </Panel>

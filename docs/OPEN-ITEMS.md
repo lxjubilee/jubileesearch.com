@@ -773,3 +773,26 @@ Hindi lexicon terms (D9); reranking on chunk text rather than title+snippet;
 `bge-reranker-v2-m3`; and gold targets that accept any of several relevant
 pages once the corpus has several.
 
+## 16. Every job is scheduled; the content-gap report exists
+
+**Status 2026-09-14.** systemd timers on the Contabo box:
+
+| timer | when | job |
+| --- | --- | --- |
+| crawl | 01:00 daily | `crawl.js --tier=T1 --seed --max=20000` |
+| import-cdn | 02:00 daily | JubileeVerse CDN |
+| embed | 02:30 daily | marks boilerplate, then embeds |
+| engagement | 03:00 daily | no-op until `ANALYTICS_API_URL` (§14 above) |
+| entities | 03:15 daily | no-op until `JUBILEEPEDIA_API_URL` |
+| ctr-rollup | 03:30 daily | position-bias corrected CTR |
+| retention | Sun 04:00 | §17 purge, what makes the privacy notice true |
+| discover | Sun 05:00 | trust-graph nominations for T2 review |
+| content-gap | Mon 06:00 | `jobs/content-gap.js` |
+
+The content-gap report (§16, §10.3) is three lists -- nothing came back, the
+wider web answered but Jubilee did not, Zone A shown but not clicked -- as
+date-stamped JSON and CSV under `REPORTS_DIR` (`/var/lib/jubileesearch/reports`)
+with a `latest` copy, and live on the console's Search analytics screen from
+the same builder (`GET /api/v1/admin/reports/content-gap`). Delivery to the
+writing team is still a file on the server: nobody has said where it should go.
+

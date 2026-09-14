@@ -358,6 +358,19 @@ export const reembed = (target: { url?: string; host?: string }) =>
 export const indexLog = (url: string) =>
   call<IndexLog>(`/api/v1/admin/index/log?url=${encodeURIComponent(url)}`);
 
+export interface ContentGapReport {
+  generated_at: string; window_days: number;
+  thresholds: { min_times: number; min_impressions: number; low_ctr_below: number };
+  totals: { searches: Count; zero_result: Count; zone_a_empty: Count };
+  zero_result: { query: string; lang: string | null; intent: string | null; times: Count; last_seen: string }[];
+  zone_a_empty: { query: string; lang: string | null; intent: string | null; times: Count; last_seen: string }[];
+  low_ctr: { query: string; impressions: Count; clicks: Count; ctr: Count }[];
+}
+export const getContentGap = (days = 7) =>
+  call<ContentGapReport>(`/api/v1/admin/reports/content-gap?days=${days}`);
+export const getContentGapCsv = (days = 7) =>
+  call<{ csv: string; generated_at: string }>(`/api/v1/admin/reports/content-gap?days=${days}&format=csv`);
+
 export const getAnalyticsOverview = (days = 7) =>
   call<AnalyticsOverview>(`/api/v1/admin/analytics/overview?days=${days}`);
 

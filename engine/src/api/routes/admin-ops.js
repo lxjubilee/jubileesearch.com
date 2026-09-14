@@ -21,6 +21,7 @@
 //                POST /index/purge-page          purge one page
 //                POST /index/reembed             re-embed one page or a domain
 //                GET  /index/log?url=            the ingest and crawl history of a URL
+//   Reports      GET  /reports/content-gap       the weekly content-gap report, live
 //   Analytics    GET  /analytics/overview        volume by intent and language,
 //                                                 CTR by zone and position, concept hits,
 //                                                 top queries
@@ -32,6 +33,7 @@ import { normalize, detectLanguage } from '../../text/normalize.js';
 import { ranking } from '../../config.js';
 import { enqueue } from '../../crawl/frontier.js';
 import { newToken } from '../../crawl/verification.js';
+import { buildContentGapReport, reportToCsv } from '../../jobs/content-gap.js';
 
 const exact = (path) => (p) => p === path;
 const pattern = (re) => (p) => re.test(p);
@@ -563,6 +565,19 @@ export const routes = [
           top_queries: top.rows,
         },
       };
+    },
+  },
+  // -- the content-gap report (§16), served live so the console and the weekly
+  //    file (jobs/content-gap.js) come from one builder --------------------------
+  {
+    method: 'GET', match: exact('/api/v1/admin/reports/content-gap'), right: 'view',
+    handle: async ({ db, url }) => {
+      const days = Math.min(90, Math.max(1, Number(url.searchParams.get('days') ?? 7)));
+      const report = await buildContentGapReport(db, { days });
+      if (url.searchParams.get('format') === 'csv') {
+        return { status: 200, body: { csv: reportToCsv(report), generated_at: report.generated_at } };
+      }
+      return { status: 200, body: report };
     },
   },
 ];
