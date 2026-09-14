@@ -56,8 +56,8 @@ export async function enqueue(db, urls, domain, options = {}) {
     const { rows } = await db.query(
       `SELECT url FROM pages
         WHERE domain_id = $1 AND url = ANY($2::text[])
-          AND last_fetched_at > now() - ($3 || ' hours')::interval`,
-      [domain.id, unique, String(hours)]);
+          AND last_fetched_at > now() - make_interval(hours => $3::int)`,
+      [domain.id, unique, Math.round(hours)]);
     if (rows.length) {
       const fresh = new Set(rows.map((r) => r.url));
       unique = unique.filter((u) => !fresh.has(u));
