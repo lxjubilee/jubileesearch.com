@@ -1,0 +1,1346 @@
+{
+  "ran_at": "2026-09-10T07:17:20.218Z",
+  "column": "live",
+  "model": "bge-m3@onnx-int8",
+  "chunks": 5644,
+  "objective": "highest floor that loses no gold query; moderate/strong are terciles of the gold top-score distribution",
+  "n": {
+    "wanted": 80,
+    "negatives": 36
+  },
+  "chosen": {
+    "zone_a_relevance_floor": 0.011027,
+    "zone_a_moderate_threshold": 0.01856,
+    "zone_a_strong_threshold": 0.028603
+  },
+  "separability": {
+    "wanted": [
+      0.011026598736869786,
+      0.04216276222321425
+    ],
+    "negatives": [
+      0.011353001104345783,
+      0.04214735065764965
+    ],
+    "separable": false
+  },
+  "negatives_admitted_at_floor": 36,
+  "curve": [
+    {
+      "floor": 0.011027,
+      "wanted_kept": 80,
+      "wanted_lost": 0,
+      "negatives_admitted": 36,
+      "negatives_blocked": 0
+    },
+    {
+      "floor": 0.011178,
+      "wanted_kept": 79,
+      "wanted_lost": 1,
+      "negatives_admitted": 36,
+      "negatives_blocked": 0
+    },
+    {
+      "floor": 0.011353,
+      "wanted_kept": 78,
+      "wanted_lost": 2,
+      "negatives_admitted": 36,
+      "negatives_blocked": 0
+    },
+    {
+      "floor": 0.012762,
+      "wanted_kept": 78,
+      "wanted_lost": 2,
+      "negatives_admitted": 35,
+      "negatives_blocked": 1
+    },
+    {
+      "floor": 0.013688,
+      "wanted_kept": 77,
+      "wanted_lost": 3,
+      "negatives_admitted": 35,
+      "negatives_blocked": 1
+    },
+    {
+      "floor": 0.013823,
+      "wanted_kept": 77,
+      "wanted_lost": 3,
+      "negatives_admitted": 34,
+      "negatives_blocked": 2
+    },
+    {
+      "floor": 0.013978,
+      "wanted_kept": 76,
+      "wanted_lost": 4,
+      "negatives_admitted": 34,
+      "negatives_blocked": 2
+    },
+    {
+      "floor": 0.014126,
+      "wanted_kept": 75,
+      "wanted_lost": 5,
+      "negatives_admitted": 34,
+      "negatives_blocked": 2
+    },
+    {
+      "floor": 0.014283,
+      "wanted_kept": 74,
+      "wanted_lost": 6,
+      "negatives_admitted": 34,
+      "negatives_blocked": 2
+    },
+    {
+      "floor": 0.014619,
+      "wanted_kept": 74,
+      "wanted_lost": 6,
+      "negatives_admitted": 33,
+      "negatives_blocked": 3
+    },
+    {
+      "floor": 0.014776,
+      "wanted_kept": 74,
+      "wanted_lost": 6,
+      "negatives_admitted": 32,
+      "negatives_blocked": 4
+    },
+    {
+      "floor": 0.014776,
+      "wanted_kept": 73,
+      "wanted_lost": 7,
+      "negatives_admitted": 32,
+      "negatives_blocked": 4
+    },
+    {
+      "floor": 0.014789,
+      "wanted_kept": 72,
+      "wanted_lost": 8,
+      "negatives_admitted": 32,
+      "negatives_blocked": 4
+    },
+    {
+      "floor": 0.015312,
+      "wanted_kept": 72,
+      "wanted_lost": 8,
+      "negatives_admitted": 31,
+      "negatives_blocked": 5
+    },
+    {
+      "floor": 0.015318,
+      "wanted_kept": 72,
+      "wanted_lost": 8,
+      "negatives_admitted": 30,
+      "negatives_blocked": 6
+    },
+    {
+      "floor": 0.015496,
+      "wanted_kept": 72,
+      "wanted_lost": 8,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.01554,
+      "wanted_kept": 71,
+      "wanted_lost": 9,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.016075,
+      "wanted_kept": 70,
+      "wanted_lost": 10,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.016075,
+      "wanted_kept": 69,
+      "wanted_lost": 11,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.01629,
+      "wanted_kept": 68,
+      "wanted_lost": 12,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.016499,
+      "wanted_kept": 67,
+      "wanted_lost": 13,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.016914,
+      "wanted_kept": 66,
+      "wanted_lost": 14,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.016927,
+      "wanted_kept": 65,
+      "wanted_lost": 15,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.016933,
+      "wanted_kept": 64,
+      "wanted_lost": 16,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.016933,
+      "wanted_kept": 63,
+      "wanted_lost": 17,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.017278,
+      "wanted_kept": 62,
+      "wanted_lost": 18,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.017561,
+      "wanted_kept": 61,
+      "wanted_lost": 19,
+      "negatives_admitted": 29,
+      "negatives_blocked": 7
+    },
+    {
+      "floor": 0.017565,
+      "wanted_kept": 61,
+      "wanted_lost": 19,
+      "negatives_admitted": 28,
+      "negatives_blocked": 8
+    },
+    {
+      "floor": 0.017578,
+      "wanted_kept": 60,
+      "wanted_lost": 20,
+      "negatives_admitted": 28,
+      "negatives_blocked": 8
+    },
+    {
+      "floor": 0.017584,
+      "wanted_kept": 59,
+      "wanted_lost": 21,
+      "negatives_admitted": 28,
+      "negatives_blocked": 8
+    },
+    {
+      "floor": 0.017619,
+      "wanted_kept": 58,
+      "wanted_lost": 22,
+      "negatives_admitted": 28,
+      "negatives_blocked": 8
+    },
+    {
+      "floor": 0.017619,
+      "wanted_kept": 57,
+      "wanted_lost": 23,
+      "negatives_admitted": 28,
+      "negatives_blocked": 8
+    },
+    {
+      "floor": 0.017877,
+      "wanted_kept": 56,
+      "wanted_lost": 24,
+      "negatives_admitted": 28,
+      "negatives_blocked": 8
+    },
+    {
+      "floor": 0.018106,
+      "wanted_kept": 56,
+      "wanted_lost": 24,
+      "negatives_admitted": 27,
+      "negatives_blocked": 9
+    },
+    {
+      "floor": 0.018109,
+      "wanted_kept": 55,
+      "wanted_lost": 25,
+      "negatives_admitted": 27,
+      "negatives_blocked": 9
+    },
+    {
+      "floor": 0.018364,
+      "wanted_kept": 55,
+      "wanted_lost": 25,
+      "negatives_admitted": 26,
+      "negatives_blocked": 10
+    },
+    {
+      "floor": 0.018374,
+      "wanted_kept": 55,
+      "wanted_lost": 25,
+      "negatives_admitted": 25,
+      "negatives_blocked": 11
+    },
+    {
+      "floor": 0.018388,
+      "wanted_kept": 54,
+      "wanted_lost": 26,
+      "negatives_admitted": 25,
+      "negatives_blocked": 11
+    },
+    {
+      "floor": 0.01856,
+      "wanted_kept": 54,
+      "wanted_lost": 26,
+      "negatives_admitted": 24,
+      "negatives_blocked": 12
+    },
+    {
+      "floor": 0.01863,
+      "wanted_kept": 53,
+      "wanted_lost": 27,
+      "negatives_admitted": 24,
+      "negatives_blocked": 12
+    },
+    {
+      "floor": 0.018647,
+      "wanted_kept": 52,
+      "wanted_lost": 28,
+      "negatives_admitted": 24,
+      "negatives_blocked": 12
+    },
+    {
+      "floor": 0.018647,
+      "wanted_kept": 51,
+      "wanted_lost": 29,
+      "negatives_admitted": 24,
+      "negatives_blocked": 12
+    },
+    {
+      "floor": 0.018651,
+      "wanted_kept": 50,
+      "wanted_lost": 30,
+      "negatives_admitted": 24,
+      "negatives_blocked": 12
+    },
+    {
+      "floor": 0.018925,
+      "wanted_kept": 49,
+      "wanted_lost": 31,
+      "negatives_admitted": 24,
+      "negatives_blocked": 12
+    },
+    {
+      "floor": 0.019193,
+      "wanted_kept": 48,
+      "wanted_lost": 32,
+      "negatives_admitted": 24,
+      "negatives_blocked": 12
+    },
+    {
+      "floor": 0.019211,
+      "wanted_kept": 48,
+      "wanted_lost": 32,
+      "negatives_admitted": 23,
+      "negatives_blocked": 13
+    },
+    {
+      "floor": 0.019477,
+      "wanted_kept": 47,
+      "wanted_lost": 33,
+      "negatives_admitted": 23,
+      "negatives_blocked": 13
+    },
+    {
+      "floor": 0.019777,
+      "wanted_kept": 47,
+      "wanted_lost": 33,
+      "negatives_admitted": 22,
+      "negatives_blocked": 14
+    },
+    {
+      "floor": 0.019802,
+      "wanted_kept": 46,
+      "wanted_lost": 34,
+      "negatives_admitted": 22,
+      "negatives_blocked": 14
+    },
+    {
+      "floor": 0.020019,
+      "wanted_kept": 45,
+      "wanted_lost": 35,
+      "negatives_admitted": 22,
+      "negatives_blocked": 14
+    },
+    {
+      "floor": 0.020093,
+      "wanted_kept": 44,
+      "wanted_lost": 36,
+      "negatives_admitted": 22,
+      "negatives_blocked": 14
+    },
+    {
+      "floor": 0.020093,
+      "wanted_kept": 44,
+      "wanted_lost": 36,
+      "negatives_admitted": 21,
+      "negatives_blocked": 15
+    },
+    {
+      "floor": 0.020108,
+      "wanted_kept": 43,
+      "wanted_lost": 37,
+      "negatives_admitted": 21,
+      "negatives_blocked": 15
+    },
+    {
+      "floor": 0.020405,
+      "wanted_kept": 42,
+      "wanted_lost": 38,
+      "negatives_admitted": 21,
+      "negatives_blocked": 15
+    },
+    {
+      "floor": 0.020412,
+      "wanted_kept": 41,
+      "wanted_lost": 39,
+      "negatives_admitted": 21,
+      "negatives_blocked": 15
+    },
+    {
+      "floor": 0.020412,
+      "wanted_kept": 41,
+      "wanted_lost": 39,
+      "negatives_admitted": 20,
+      "negatives_blocked": 16
+    },
+    {
+      "floor": 0.020431,
+      "wanted_kept": 40,
+      "wanted_lost": 40,
+      "negatives_admitted": 20,
+      "negatives_blocked": 16
+    },
+    {
+      "floor": 0.020741,
+      "wanted_kept": 39,
+      "wanted_lost": 41,
+      "negatives_admitted": 20,
+      "negatives_blocked": 16
+    },
+    {
+      "floor": 0.020745,
+      "wanted_kept": 39,
+      "wanted_lost": 41,
+      "negatives_admitted": 19,
+      "negatives_blocked": 17
+    },
+    {
+      "floor": 0.020757,
+      "wanted_kept": 39,
+      "wanted_lost": 41,
+      "negatives_admitted": 18,
+      "negatives_blocked": 18
+    },
+    {
+      "floor": 0.021074,
+      "wanted_kept": 39,
+      "wanted_lost": 41,
+      "negatives_admitted": 17,
+      "negatives_blocked": 19
+    },
+    {
+      "floor": 0.021074,
+      "wanted_kept": 39,
+      "wanted_lost": 41,
+      "negatives_admitted": 16,
+      "negatives_blocked": 20
+    },
+    {
+      "floor": 0.021074,
+      "wanted_kept": 38,
+      "wanted_lost": 42,
+      "negatives_admitted": 16,
+      "negatives_blocked": 20
+    },
+    {
+      "floor": 0.021074,
+      "wanted_kept": 37,
+      "wanted_lost": 43,
+      "negatives_admitted": 16,
+      "negatives_blocked": 20
+    },
+    {
+      "floor": 0.021085,
+      "wanted_kept": 36,
+      "wanted_lost": 44,
+      "negatives_admitted": 16,
+      "negatives_blocked": 20
+    },
+    {
+      "floor": 0.021089,
+      "wanted_kept": 36,
+      "wanted_lost": 44,
+      "negatives_admitted": 15,
+      "negatives_blocked": 21
+    },
+    {
+      "floor": 0.021089,
+      "wanted_kept": 36,
+      "wanted_lost": 44,
+      "negatives_admitted": 14,
+      "negatives_blocked": 22
+    },
+    {
+      "floor": 0.021093,
+      "wanted_kept": 36,
+      "wanted_lost": 44,
+      "negatives_admitted": 13,
+      "negatives_blocked": 23
+    },
+    {
+      "floor": 0.021097,
+      "wanted_kept": 35,
+      "wanted_lost": 45,
+      "negatives_admitted": 13,
+      "negatives_blocked": 23
+    },
+    {
+      "floor": 0.021097,
+      "wanted_kept": 35,
+      "wanted_lost": 45,
+      "negatives_admitted": 12,
+      "negatives_blocked": 24
+    },
+    {
+      "floor": 0.021101,
+      "wanted_kept": 34,
+      "wanted_lost": 46,
+      "negatives_admitted": 12,
+      "negatives_blocked": 24
+    },
+    {
+      "floor": 0.021955,
+      "wanted_kept": 33,
+      "wanted_lost": 47,
+      "negatives_admitted": 12,
+      "negatives_blocked": 24
+    },
+    {
+      "floor": 0.025371,
+      "wanted_kept": 32,
+      "wanted_lost": 48,
+      "negatives_admitted": 12,
+      "negatives_blocked": 24
+    },
+    {
+      "floor": 0.026082,
+      "wanted_kept": 31,
+      "wanted_lost": 49,
+      "negatives_admitted": 12,
+      "negatives_blocked": 24
+    },
+    {
+      "floor": 0.026896,
+      "wanted_kept": 30,
+      "wanted_lost": 50,
+      "negatives_admitted": 12,
+      "negatives_blocked": 24
+    },
+    {
+      "floor": 0.027703,
+      "wanted_kept": 29,
+      "wanted_lost": 51,
+      "negatives_admitted": 12,
+      "negatives_blocked": 24
+    },
+    {
+      "floor": 0.028076,
+      "wanted_kept": 28,
+      "wanted_lost": 52,
+      "negatives_admitted": 12,
+      "negatives_blocked": 24
+    },
+    {
+      "floor": 0.028146,
+      "wanted_kept": 28,
+      "wanted_lost": 52,
+      "negatives_admitted": 11,
+      "negatives_blocked": 25
+    },
+    {
+      "floor": 0.028603,
+      "wanted_kept": 27,
+      "wanted_lost": 53,
+      "negatives_admitted": 11,
+      "negatives_blocked": 25
+    },
+    {
+      "floor": 0.028603,
+      "wanted_kept": 26,
+      "wanted_lost": 54,
+      "negatives_admitted": 11,
+      "negatives_blocked": 25
+    },
+    {
+      "floor": 0.028991,
+      "wanted_kept": 25,
+      "wanted_lost": 55,
+      "negatives_admitted": 11,
+      "negatives_blocked": 25
+    },
+    {
+      "floor": 0.029514,
+      "wanted_kept": 24,
+      "wanted_lost": 56,
+      "negatives_admitted": 11,
+      "negatives_blocked": 25
+    },
+    {
+      "floor": 0.029519,
+      "wanted_kept": 23,
+      "wanted_lost": 57,
+      "negatives_admitted": 11,
+      "negatives_blocked": 25
+    },
+    {
+      "floor": 0.029536,
+      "wanted_kept": 22,
+      "wanted_lost": 58,
+      "negatives_admitted": 11,
+      "negatives_blocked": 25
+    },
+    {
+      "floor": 0.029923,
+      "wanted_kept": 21,
+      "wanted_lost": 59,
+      "negatives_admitted": 11,
+      "negatives_blocked": 25
+    },
+    {
+      "floor": 0.030718,
+      "wanted_kept": 21,
+      "wanted_lost": 59,
+      "negatives_admitted": 10,
+      "negatives_blocked": 26
+    },
+    {
+      "floor": 0.031634,
+      "wanted_kept": 20,
+      "wanted_lost": 60,
+      "negatives_admitted": 10,
+      "negatives_blocked": 26
+    },
+    {
+      "floor": 0.032813,
+      "wanted_kept": 19,
+      "wanted_lost": 61,
+      "negatives_admitted": 10,
+      "negatives_blocked": 26
+    },
+    {
+      "floor": 0.035092,
+      "wanted_kept": 18,
+      "wanted_lost": 62,
+      "negatives_admitted": 10,
+      "negatives_blocked": 26
+    },
+    {
+      "floor": 0.035373,
+      "wanted_kept": 17,
+      "wanted_lost": 63,
+      "negatives_admitted": 10,
+      "negatives_blocked": 26
+    },
+    {
+      "floor": 0.035869,
+      "wanted_kept": 16,
+      "wanted_lost": 64,
+      "negatives_admitted": 10,
+      "negatives_blocked": 26
+    },
+    {
+      "floor": 0.036055,
+      "wanted_kept": 15,
+      "wanted_lost": 65,
+      "negatives_admitted": 10,
+      "negatives_blocked": 26
+    },
+    {
+      "floor": 0.036802,
+      "wanted_kept": 14,
+      "wanted_lost": 66,
+      "negatives_admitted": 10,
+      "negatives_blocked": 26
+    },
+    {
+      "floor": 0.036923,
+      "wanted_kept": 14,
+      "wanted_lost": 66,
+      "negatives_admitted": 9,
+      "negatives_blocked": 27
+    },
+    {
+      "floor": 0.037156,
+      "wanted_kept": 14,
+      "wanted_lost": 66,
+      "negatives_admitted": 8,
+      "negatives_blocked": 28
+    },
+    {
+      "floor": 0.038009,
+      "wanted_kept": 13,
+      "wanted_lost": 67,
+      "negatives_admitted": 8,
+      "negatives_blocked": 28
+    },
+    {
+      "floor": 0.038466,
+      "wanted_kept": 13,
+      "wanted_lost": 67,
+      "negatives_admitted": 7,
+      "negatives_blocked": 29
+    },
+    {
+      "floor": 0.038473,
+      "wanted_kept": 12,
+      "wanted_lost": 68,
+      "negatives_admitted": 7,
+      "negatives_blocked": 29
+    },
+    {
+      "floor": 0.038623,
+      "wanted_kept": 11,
+      "wanted_lost": 69,
+      "negatives_admitted": 7,
+      "negatives_blocked": 29
+    },
+    {
+      "floor": 0.038724,
+      "wanted_kept": 11,
+      "wanted_lost": 69,
+      "negatives_admitted": 6,
+      "negatives_blocked": 30
+    },
+    {
+      "floor": 0.039481,
+      "wanted_kept": 10,
+      "wanted_lost": 70,
+      "negatives_admitted": 6,
+      "negatives_blocked": 30
+    },
+    {
+      "floor": 0.03987,
+      "wanted_kept": 9,
+      "wanted_lost": 71,
+      "negatives_admitted": 6,
+      "negatives_blocked": 30
+    },
+    {
+      "floor": 0.03992,
+      "wanted_kept": 9,
+      "wanted_lost": 71,
+      "negatives_admitted": 5,
+      "negatives_blocked": 31
+    },
+    {
+      "floor": 0.040015,
+      "wanted_kept": 8,
+      "wanted_lost": 72,
+      "negatives_admitted": 5,
+      "negatives_blocked": 31
+    },
+    {
+      "floor": 0.040297,
+      "wanted_kept": 7,
+      "wanted_lost": 73,
+      "negatives_admitted": 5,
+      "negatives_blocked": 31
+    },
+    {
+      "floor": 0.040297,
+      "wanted_kept": 7,
+      "wanted_lost": 73,
+      "negatives_admitted": 4,
+      "negatives_blocked": 32
+    },
+    {
+      "floor": 0.040528,
+      "wanted_kept": 7,
+      "wanted_lost": 73,
+      "negatives_admitted": 3,
+      "negatives_blocked": 33
+    },
+    {
+      "floor": 0.040851,
+      "wanted_kept": 7,
+      "wanted_lost": 73,
+      "negatives_admitted": 2,
+      "negatives_blocked": 34
+    },
+    {
+      "floor": 0.041513,
+      "wanted_kept": 6,
+      "wanted_lost": 74,
+      "negatives_admitted": 2,
+      "negatives_blocked": 34
+    },
+    {
+      "floor": 0.04183,
+      "wanted_kept": 5,
+      "wanted_lost": 75,
+      "negatives_admitted": 2,
+      "negatives_blocked": 34
+    },
+    {
+      "floor": 0.041846,
+      "wanted_kept": 4,
+      "wanted_lost": 76,
+      "negatives_admitted": 2,
+      "negatives_blocked": 34
+    },
+    {
+      "floor": 0.041846,
+      "wanted_kept": 4,
+      "wanted_lost": 76,
+      "negatives_admitted": 1,
+      "negatives_blocked": 35
+    },
+    {
+      "floor": 0.041846,
+      "wanted_kept": 3,
+      "wanted_lost": 77,
+      "negatives_admitted": 1,
+      "negatives_blocked": 35
+    },
+    {
+      "floor": 0.041854,
+      "wanted_kept": 2,
+      "wanted_lost": 78,
+      "negatives_admitted": 1,
+      "negatives_blocked": 35
+    },
+    {
+      "floor": 0.042147,
+      "wanted_kept": 1,
+      "wanted_lost": 79,
+      "negatives_admitted": 1,
+      "negatives_blocked": 35
+    },
+    {
+      "floor": 0.042163,
+      "wanted_kept": 1,
+      "wanted_lost": 79,
+      "negatives_admitted": 0,
+      "negatives_blocked": 36
+    }
+  ],
+  "wanted": [
+    {
+      "q": "chiasm in Hebrew writing",
+      "score": 0.012762268784136681
+    },
+    {
+      "q": "Aaronic blessing lifting the face",
+      "score": 0.01607455440637801
+    },
+    {
+      "q": "ketubah marriage contract commandments",
+      "score": 0.040850521875261635
+    },
+    {
+      "q": "Ezekiel valley of dry bones",
+      "score": 0.04151327729513231
+    },
+    {
+      "q": "Jonah mercy and the book's final question",
+      "score": 0.0394813626201206
+    },
+    {
+      "q": "Gideon altar Yahuah-Shalom",
+      "score": 0.014775799772202034
+    },
+    {
+      "q": "woman at the well request before offer",
+      "score": 0.0371559364268786
+    },
+    {
+      "q": "feeding an enemy army instead of striking them",
+      "score": 0.04184581595310257
+    },
+    {
+      "q": "Joseph and his brothers speaking to the heart",
+      "score": 0.040014686165709454
+    },
+    {
+      "q": "Anna the prophetess belonging and singleness",
+      "score": 0.014126313885546622
+    },
+    {
+      "q": "Leviticus law about being fully covered",
+      "score": 0.02109691089560785
+    },
+    {
+      "q": "carts in Torah and automation at work",
+      "score": 0.017584016408596956
+    },
+    {
+      "q": "orchard fruit stripped for three years",
+      "score": 0.02009319219181775
+    },
+    {
+      "q": "a word spoken at the right time",
+      "score": 0.01693304674179448
+    },
+    {
+      "q": "Zephaniah perhaps the boldest intercessors",
+      "score": 0.016926797649307754
+    },
+    {
+      "q": "the most quoted line in Job written two ways",
+      "score": 0.015539538101654404
+    },
+    {
+      "q": "closed letter in Isaiah and the foundation stone",
+      "score": 0.019211193698782856
+    },
+    {
+      "q": "blessing spoken over one person not a crowd",
+      "score": 0.020430951970479724
+    },
+    {
+      "q": "Ezekiel property law about a borrowed room",
+      "score": 0.03586915719325572
+    },
+    {
+      "q": "healing on Shabbat and watering an ox",
+      "score": 0.038473403017520065
+    },
+    {
+      "q": "the Hebrew word for hope and immersion",
+      "score": 0.0418458142276146
+    },
+    {
+      "q": "meal train ending after week three",
+      "score": 0.013822521658686474
+    },
+    {
+      "q": "a community meal missing the people it was built for",
+      "score": 0.021073680495339694
+    },
+    {
+      "q": "Elizabeth and Mary celebrating a promise with no evidence",
+      "score": 0.018647445254875723
+    },
+    {
+      "q": "a grandmother setting places for guests who are not there",
+      "score": 0.01810555638393327
+    },
+    {
+      "q": "the plan finished before the builder arrived",
+      "score": 0.04216276222321425
+    },
+    {
+      "q": "exile and having a covering taken off",
+      "score": 0.01649886537888661
+    },
+    {
+      "q": "the bird in the psalm whose name means liberty",
+      "score": 0.017577509676382608
+    },
+    {
+      "q": "a stork named faithful and a nation that will not return",
+      "score": 0.04185354671036529
+    },
+    {
+      "q": "answered prayer that felt like nothing",
+      "score": 0.018630354877358493
+    },
+    {
+      "q": "Why do I feel nothing after God answered my prayer?",
+      "score": 0.02951393317136962
+    },
+    {
+      "q": "How do I forgive a brother I already forgave publicly?",
+      "score": 0.026082496661963606
+    },
+    {
+      "q": "Is it wrong to pray maybe instead of being certain?",
+      "score": 0.019776838071078866
+    },
+    {
+      "q": "What happens to my place in church if I walk away for years?",
+      "score": 0.011178212784617374
+    },
+    {
+      "q": "How do I keep going when nothing is growing?",
+      "score": 0.020018622834446227
+    },
+    {
+      "q": "Does God notice work that nobody ever sees?",
+      "score": 0.02195548647667996
+    },
+    {
+      "q": "What do I do when my job is being automated away?",
+      "score": 0.02814598653416195
+    },
+    {
+      "q": "How do I know I belong if I am single and have no family here?",
+      "score": 0.028603330963620763
+    },
+    {
+      "q": "Why does nobody say my name anymore?",
+      "score": 0.02770277000542707
+    },
+    {
+      "q": "How should I treat an enemy who is completely at my mercy?",
+      "score": 0.011026598736869786
+    },
+    {
+      "q": "What should I say first to someone who is lonely?",
+      "score": 0.02689566913568551
+    },
+    {
+      "q": "Can I call something peace before anything has changed?",
+      "score": 0.030717525403468976
+    },
+    {
+      "q": "Why do people stop showing up after the crisis passes?",
+      "score": 0.01856030770243075
+    },
+    {
+      "q": "How do I read the Bible so the point does not get lost?",
+      "score": 0.025371029493372027
+    },
+    {
+      "q": "Why would God show favouritism when the law forbids judges to?",
+      "score": 0.035092256764190616
+    },
+    {
+      "q": "I keep waiting for care that never comes. Does that matter to God?",
+      "score": 0.016290017927833363
+    },
+    {
+      "q": "What does it mean that my identity cannot be taken away?",
+      "score": 0.029535671741638268
+    },
+    {
+      "q": "Why was I passed over again and again?",
+      "score": 0.03281349756973602
+    },
+    {
+      "q": "How do I include people who keep getting left out?",
+      "score": 0.02951934403037846
+    },
+    {
+      "q": "Why can I not bring myself to sign up for baptism?",
+      "score": 0.028603329729255594
+    },
+    {
+      "q": "a cemetery that turns out to be a nursery",
+      "score": 0.020107990532765036
+    },
+    {
+      "q": "credentials your employer never issued",
+      "score": 0.018925167509791386
+    },
+    {
+      "q": "the empty seat nobody is allowed to take",
+      "score": 0.03605549503633056
+    },
+    {
+      "q": "counting an unbroken streak until it breaks",
+      "score": 0.02041212902723658
+    },
+    {
+      "q": "labour with no monument to point at",
+      "score": 0.01397787092000736
+    },
+    {
+      "q": "standing still while moving forward",
+      "score": 0.041830405940490895
+    },
+    {
+      "q": "one text message after nine years of silence",
+      "score": 0.02109300954066969
+    },
+    {
+      "q": "humming where you are told to be quiet",
+      "score": 0.020404672413247348
+    },
+    {
+      "q": "a broadcast reaching the country that imprisoned your father",
+      "score": 0.01837428495234107
+    },
+    {
+      "q": "twenty minutes to decide about your own entry",
+      "score": 0.01980230454635084
+    },
+    {
+      "q": "Holy Spirit breathing life into dry bones",
+      "score": 0.021073677862104002
+    },
+    {
+      "q": "Ruach HaKodesh and the seal on your identity",
+      "score": 0.01864744287874182
+    },
+    {
+      "q": "steadfast love toward someone passed over for years",
+      "score": 0.017619177122480043
+    },
+    {
+      "q": "lovingkindness at a funeral nobody attends",
+      "score": 0.03846632475610264
+    },
+    {
+      "q": "chesed shown to a boy in his third foster placement",
+      "score": 0.017564602242549757
+    },
+    {
+      "q": "chesed and a migrating bird named loyal",
+      "score": 0.03163357005187076
+    },
+    {
+      "q": "repentance and a name still on the roll",
+      "score": 0.02899085951296039
+    },
+    {
+      "q": "teshuvah in the book of Jonah",
+      "score": 0.03872380217145947
+    },
+    {
+      "q": "peace declared before the war is over",
+      "score": 0.03537339124217425
+    },
+    {
+      "q": "shalom made by feeding an enemy",
+      "score": 0.01477579666909151
+    },
+    {
+      "q": "family that sets a place for you anyway",
+      "score": 0.016074550669772845
+    },
+    {
+      "q": "mishpakhah and belonging without a spouse",
+      "score": 0.016914398696926694
+    },
+    {
+      "q": "Adonai and a room held on thirty days notice",
+      "score": 0.015496384167479591
+    },
+    {
+      "q": "Adonai and liberty pictured as a nesting bird",
+      "score": 0.018650888308273543
+    },
+    {
+      "q": "Jesus asking a woman for a drink",
+      "score": 0.017619176384766726
+    },
+    {
+      "q": "the Lord's covering removed in exile",
+      "score": 0.017278148967102242
+    },
+    {
+      "q": "Torah teaching about carts and doing less work",
+      "score": 0.021100815047765675
+    },
+    {
+      "q": "Shabbat healing after eighteen years of waiting",
+      "score": 0.016933043078566256
+    },
+    {
+      "q": "birkat kohanim and a judge lifting the face",
+      "score": 0.02107367654699906
+    },
+    {
+      "q": "marriage covenant written as a list of what is owed",
+      "score": 0.03992026007605925
+    }
+  ],
+  "negatives": [
+    {
+      "q": "best pizza recipe",
+      "kind": "false_positive",
+      "score": 0.01947718580592837
+    },
+    {
+      "q": "football scores",
+      "kind": "false_positive",
+      "score": 0.01461859472468266
+    },
+    {
+      "q": "python tutorial",
+      "kind": "false_positive",
+      "score": 0.02009318756229338
+    },
+    {
+      "q": "cheap flights to Rome",
+      "kind": "false_positive",
+      "score": 0.021085243318600018
+    },
+    {
+      "q": "weather tomorrow",
+      "kind": "false_positive",
+      "score": 0.021089120106327526
+    },
+    {
+      "q": "how to change a tyre",
+      "kind": "false_positive",
+      "score": 0.011353001104345783
+    },
+    {
+      "q": "stock market forecast",
+      "kind": "false_positive",
+      "score": 0.015311902751962857
+    },
+    {
+      "q": "best laptop deals",
+      "kind": "false_positive",
+      "score": 0.020745158524940376
+    },
+    {
+      "q": "the",
+      "kind": "false_positive",
+      "score": 0.013688015418455986
+    },
+    {
+      "q": "and",
+      "kind": "false_positive",
+      "score": 0.014283269263765733
+    },
+    {
+      "q": "office hours",
+      "kind": "false_positive",
+      "score": 0.018387852419612175
+    },
+    {
+      "q": "translation",
+      "kind": "false_positive",
+      "score": 0.017877078683601597
+    },
+    {
+      "q": "character",
+      "kind": "false_positive",
+      "score": 0.0210736757759182
+    },
+    {
+      "q": "status update",
+      "kind": "false_positive",
+      "score": 0.015317540830976275
+    },
+    {
+      "q": "author bio",
+      "kind": "false_positive",
+      "score": 0.014789349720389837
+    },
+    {
+      "q": "marriage license",
+      "kind": "false_positive",
+      "score": 0.02075663240731222
+    },
+    {
+      "q": "quantum chromodynamics",
+      "kind": "false_positive",
+      "score": 0.01810885575520646
+    },
+    {
+      "q": "car repair",
+      "kind": "weak_match",
+      "score": 0.038623261137250925
+    },
+    {
+      "q": "repair",
+      "kind": "weak_match",
+      "score": 0.040527659546013485
+    },
+    {
+      "q": "restoration",
+      "kind": "weak_match",
+      "score": 0.04214735065764965
+    },
+    {
+      "q": "covenant law",
+      "kind": "weak_match",
+      "score": 0.03680245466766814
+    },
+    {
+      "q": "velocity",
+      "kind": "weak_match",
+      "score": 0.019193491558453242
+    },
+    {
+      "q": "anchor",
+      "kind": "weak_match",
+      "score": 0.021089119007820022
+    },
+    {
+      "q": "forgiveness in negotiation",
+      "kind": "weak_match",
+      "score": 0.01756139590280663
+    },
+    {
+      "q": "family therapy",
+      "kind": "weak_match",
+      "score": 0.01836420252559396
+    },
+    {
+      "q": "peace treaty",
+      "kind": "weak_match",
+      "score": 0.03800892303797949
+    },
+    {
+      "q": "identity theft",
+      "kind": "weak_match",
+      "score": 0.02109690437450851
+    },
+    {
+      "q": "faith based investing",
+      "kind": "weak_match",
+      "score": 0.04184580255074403
+    },
+    {
+      "q": "grace period on a loan",
+      "kind": "weak_match",
+      "score": 0.02074135334441373
+    },
+    {
+      "q": "salvation army donation",
+      "kind": "weak_match",
+      "score": 0.03692349107841832
+    },
+    {
+      "q": "word",
+      "kind": "weak_match",
+      "score": 0.028076082950860382
+    },
+    {
+      "q": "day",
+      "kind": "weak_match",
+      "score": 0.020412125288858194
+    },
+    {
+      "q": "name",
+      "kind": "weak_match",
+      "score": 0.04029708564499104
+    },
+    {
+      "q": "house",
+      "kind": "weak_match",
+      "score": 0.029922635974852455
+    },
+    {
+      "q": "water",
+      "kind": "weak_match",
+      "score": 0.04029708533580447
+    },
+    {
+      "q": "road",
+      "kind": "weak_match",
+      "score": 0.03986995179860481
+    }
+  ]
+}

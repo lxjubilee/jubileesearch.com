@@ -3,6 +3,7 @@ import {
   json, readJson, normalizeEmail, str, validateDob, respondSignedIn,
   EMAIL_RE, UNAVAILABLE,
 } from '@/lib/sso-door';
+import { ssoAuthLimiter } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -19,6 +20,11 @@ export const dynamic = 'force-dynamic';
 // gate here: a request crafted by hand skips the form entirely.
 
 export async function POST(request: Request) {
+  // Creating identities is the most expensive thing the door can be made to do,
+  // and it is done at the authority rather than here.
+  const limited = ssoAuthLimiter(request);
+  if (limited) return limited;
+
   const body = await readJson(request);
   const email = normalizeEmail(body.email);
   const first_name = str(body.first_name, 50);

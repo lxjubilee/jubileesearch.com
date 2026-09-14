@@ -91,18 +91,70 @@ describe('schema', () => {
     assert.ok(Number(rows[0].n) >= 25, `only ${rows[0].n} tables`);
   });
 
-  test('the chunk embedding column is halfvec(1024)', async () => {
+  test('there is exactly one chunk embedding column, halfvec(1024)', async () => {
+    // Migration 031 dropped the retired column, so there is one again. Asserting
+    // the SET rather than a named column is the point: a spare column left behind
+    // by an unfinished §12.3 migration fails here, and any spare a future one adds
+    // must match this type exactly -- widened or narrowed it would not degrade,
+    // every insert would fail halfway through a backfill.
     const { rows } = await pool.query(
-      `SELECT format_type(atttypid, atttypmod) AS t FROM pg_attribute
-        WHERE attrelid = 'chunks'::regclass AND attname = 'embedding'`);
-    assert.equal(rows[0].t, 'halfvec(1024)');
+      `SELECT attname, format_type(atttypid, atttypmod) AS t FROM pg_attribute
+        WHERE attrelid = 'chunks'::regclass AND attname LIKE 'embedding%'
+          AND NOT attisdropped ORDER BY attname`);
+    assert.deepEqual(rows, [{ attname: 'embedding', t: 'halfvec(1024)' }]);
   });
 
-  test('the HNSW index is split by zone', async () => {
+  test('the HNSW indexes are split by zone', async () => {
+    // T0 is indexed by none of them, which is the point: quarantine is never
+    // searched, so it should not cost graph memory either.
     const { rows } = await pool.query(
       `SELECT indexname FROM pg_indexes WHERE indexname LIKE 'chunks_embedding%' ORDER BY indexname`);
-    assert.deepEqual(rows.map((r) => r.indexname),
-      ['chunks_embedding_zone_a', 'chunks_embedding_zone_b']);
+    assert.deepEqual(rows.map((r) => r.indexname), [
+      'chunks_embedding_zone_a', 'chunks_embedding_zone_b',
+    ]);
+  });
+
+  test('nothing outside the two expected files touches the retired column', async () => {
+    // embedding_prev exists only for a §12.3 rolling migration. If anything on a
+    // serving path reads it, a half-finished backfill becomes a half-broken
+    // index: the rows not yet embedded are simply absent from the results.
+    //
+    // This scans ALL of src/ and bin/, not a list of folders. An earlier version
+    // checked src/query, src/api and src/jobs, which reads like full coverage and
+    // is not -- src/ingest, src/crawl, src/inference and the db modules all touch
+    // chunks too, and bin/ holds the admin CLI and the index tooling. Enumerating
+    // the safe places is the wrong shape for this test; enumerating the two
+    // exceptions is the right one, because that list is short and every addition
+    // to it is a decision someone has to make on purpose.
+    const { readFile, readdir } = await import('node:fs/promises');
+    const ALLOWED = new Set([
+      'src/query/retrieval.js',   // names it once, behind ctx.embeddingColumn
+      'src/jobs/embed.js',        // writes it, behind an explicit target
+    ]);
+    const offenders = [];
+    for (const dir of ['src', 'bin']) {
+      for (const f of await readdir(new URL(`../${dir}/`, import.meta.url), { recursive: true })) {
+        const rel = `${dir}/${String(f).replace(/\\/g, '/')}`;
+        if (!/\.(js|mjs)$/.test(rel)) continue;
+        const src = await readFile(new URL(`../${rel}`, import.meta.url), 'utf8');
+        if (src.includes('embedding_prev') && !ALLOWED.has(rel)) offenders.push(rel);
+      }
+    }
+    assert.deepEqual(offenders, [],
+      'a serving path now reads embedding_prev; if that is deliberate, add it to ALLOWED and say why');
+  });
+
+  test('the retired column is invisible to health and admin output', async () => {
+    // Narrower and more direct than the scan above: the two endpoints that
+    // report on the index must not start reporting a column that is mid-backfill,
+    // because "5,644 embedded" would silently become ambiguous about which model.
+    const { readFile } = await import('node:fs/promises');
+    // /api/v1/health lives in public.js, not a health.js -- named explicitly so
+    // this does not silently pass by looking for a file that is not there.
+    for (const f of ['src/api/routes/admin.js', 'src/api/routes/public.js']) {
+      const src = await readFile(new URL(`../${f}`, import.meta.url), 'utf8');
+      assert.ok(!src.includes('embedding_prev'), `${f} reports the candidate column`);
+    }
   });
 
   test('the doubled-article constraint rejects at write time', async () => {
@@ -709,8 +761,17 @@ describe('ranking config drift', () => {
   ];
 
   /** Replay the migration files to find the last value each key is given. */
-  async function seededValues() {
-    const files = (await readdir(migrationsDir)).filter((f) => f.endsWith('.sql')).sort();
+  /**
+   * Replay the migrations to find the value each key holds.
+   *
+   * @param {string} [upTo]  stop after this filename, inclusive. Omit for the
+   *   final value. Passing it is what lets a migration's prose be checked against
+   *   the value in force when IT ran, rather than against a value a later
+   *   migration set — see the test below for why that distinction matters.
+   */
+  async function seededValues(upTo) {
+    const all = (await readdir(migrationsDir)).filter((f) => f.endsWith('.sql')).sort();
+    const files = upTo ? all.slice(0, all.indexOf(upTo) + 1) : all;
     const seeded = new Map();
     for (const file of files) {
       const sql = await readFile(join(migrationsDir, file), 'utf8');
@@ -771,25 +832,60 @@ describe('ranking config drift', () => {
     }
   });
 
-  test('a migration never names a value in prose that its SQL does not set', async () => {
+  test('a migration never names a value in prose that was not true when it ran', async () => {
     // The shipped bug: 026's comment said 0.0080, and on a fresh database the
     // value was 0.0150, because only a later migration set it.
-    const seeded = await seededValues();
+    //
+    // AS OF ITS OWN POSITION, not as of the end of the list. An earlier version
+    // compared every migration's prose against the FINAL seeded value, which made
+    // any legitimate retune retroactively turn a truthful migration into a
+    // failure: 030 re-derived the floor for bge-m3, and 026 -- which had described
+    // the value correctly for the model in use at the time -- started failing.
+    //
+    // That is the wrong thing to assert. An applied migration is history and must
+    // not be edited to track later values; what it says has to be true of the
+    // moment it ran. Comparing against the value in force at its own position
+    // keeps the original bug caught (a migration whose prose its own SQL, and
+    // every SQL before it, does not support) without punishing supersession.
+    // One known-wrong migration, named rather than silently skipped.
+    //
+    // 026 is the defect this whole test was written for: it documents
+    // zone_a_relevance_floor = 0.0080 while, at its own position, the value was
+    // still 0.0150 from 022 — 027 set 0.0080 afterwards. The test is right and
+    // the migration is wrong.
+    //
+    // It is not fixed by editing 026. An applied migration is history, and
+    // rewriting its prose to make a test pass would destroy the only record that
+    // this happened — which is the record that justifies the test existing. The
+    // stale COMMENT it wrote into the database is corrected by a later migration
+    // instead, where a correction belongs.
+    //
+    // Anything added to this set needs the same treatment: a reason, and a fix
+    // somewhere real. An empty excuse here is how a test stops meaning anything.
+    const KNOWN_HISTORICAL = new Map([
+      ['026_relevance_floor_note.sql',
+        'documented 0.0080 before 027 set it; the original config-drift bug. '
+        + 'Its database COMMENT is superseded by a later migration.'],
+    ]);
+
     const files = (await readdir(migrationsDir)).filter((f) => f.endsWith('.sql')).sort();
 
     for (const file of files) {
+      if (KNOWN_HISTORICAL.has(file)) continue;
       const sql = await readFile(join(migrationsDir, file), 'utf8');
+      const asOf = await seededValues(file);      // inclusive of this file
       for (const key of ZONE_A) {
         // "zone_a_relevance_floor = 0.0080" or "zone_a_relevance_floor is set to 0.0080"
         for (const m of sql.matchAll(
           new RegExp(key + "\\s*(?:=|is set to)\\s*`?(-?[0-9.]+)`?", 'g'),
         )) {
           const claimed = Number(m[1]);
-          const actual = seeded.get(key)?.value;
-          assert.ok(actual !== undefined, `${file} names ${key} but no migration sets it`);
+          const actual = asOf.get(key)?.value;
+          assert.ok(actual !== undefined,
+            `${file} names ${key} but no migration up to and including it sets a value`);
           assert.ok(Math.abs(claimed - actual) < 1e-9,
-            `${file} says ${key} = ${claimed}, but the migrations leave it at ${actual} `
-            + `(set in ${seeded.get(key).file}). Documentation and configuration disagree.`);
+            `${file} says ${key} = ${claimed}, but as of that migration the value is ${actual} `
+            + `(set in ${asOf.get(key).file}). Documentation and configuration disagree.`);
         }
       }
     }

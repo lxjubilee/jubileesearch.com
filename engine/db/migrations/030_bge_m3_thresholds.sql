@@ -1,0 +1,51 @@
+-- 030 — Zone A coverage thresholds re-derived from the bge-m3 distribution.
+--
+-- Migration 027's values (0.0080 / 0.0180 / 0.0370) were measured against MiniLM
+-- vectors. The cutover in 029 changed the score distribution, so carrying them
+-- across would have left three numbers that looked deliberate and described a
+-- model no longer in use. The strong threshold in particular moves a long way:
+-- 0.0370 -> 0.0286, a 23% drop, which on the old value would have shrunk Zone A
+-- from five results to three on a large part of the gold set for no stated reason.
+--
+-- Derived by `npm run eval:thresholds`, which is committed
+-- (eval/derive-thresholds.mjs) and states its objective above the code that
+-- applies it. That is the fix for the problem 027 had: its values were in version
+-- control and its derivation was in a temp directory.
+--
+--   floor      0.011027   highest value that loses no gold query (80 of 80)
+--   moderate   0.018560   lower tercile of the gold top-score distribution -> 3
+--   strong     0.028603   upper tercile                                    -> 5
+--
+-- ---------------------------------------------------------------------------
+-- THE FLOOR IS STILL A NO-OP, AND STILL DELIBERATELY SO
+-- ---------------------------------------------------------------------------
+--
+-- Measured on this index, over 80 gold queries and 36 negatives:
+--
+--   gold top scores       0.0110 .. 0.0422
+--   negative top scores   0.0114 .. 0.0421
+--
+-- The two ranges are the same range. At the chosen floor all 36 negatives are
+-- admitted; the first value that blocks even one negative already loses three
+-- gold queries. There is no knee, because there is nothing to find a knee in.
+--
+-- This is the SECOND model to produce that result, which settles what was
+-- previously an inference: it is not a property of MiniLM. The fused score is
+-- RRF -- 1/(k + rank) -- derived from RANK, so it carries no magnitude at all. A
+-- rank-1 result scores identically whether the match is excellent or absurd, and
+-- no threshold on such a score can separate one from the other.
+--
+-- Zone A precision belongs to `zone_a_cross_encoder_floor` (migration 025,
+-- currently -1 and disabled), whose score has magnitude and is comparable across
+-- queries. Raising this floor to make the gate "work" would trade real recall for
+-- the appearance of precision.
+--
+-- Note for whoever re-derives these after the network import: the negative set is
+-- scoped to a faith-only corpus and about half of it stops being negative once
+-- Inspired Daily Recipes and Inspired Car Care are indexed (OPEN-ITEMS item 6).
+-- The overlap conclusion above is structural and will survive that; the specific
+-- negative counts will not.
+
+UPDATE ranking_config SET value = 0.011027 WHERE key = 'zone_a_relevance_floor';
+UPDATE ranking_config SET value = 0.018560 WHERE key = 'zone_a_moderate_threshold';
+UPDATE ranking_config SET value = 0.028603 WHERE key = 'zone_a_strong_threshold';

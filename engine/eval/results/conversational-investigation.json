@@ -1,0 +1,507 @@
+{
+  "ran_at": "2026-09-10T08:27:06.264Z",
+  "pairs": [
+    {
+      "id": "C01",
+      "query": "Why do I feel nothing after God answered my prayer?",
+      "target": "shalom-salvation__the-rescue-went-ahead-anyway",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [
+        "elohim",
+        "tefillah"
+      ],
+      "final_rank": null,
+      "pre_rerank_rank": null,
+      "rerank_delta": null,
+      "deep_fusion_rank": 146,
+      "deep_pool": 370,
+      "lex_rank": 116,
+      "sem_rank": null,
+      "cosine": null,
+      "top3": [
+        "teshuvah-restoration__fix-the-altar-first",
+        "teshuvah-restoration__your-how-was-once-his-where",
+        "torah-hebraic-insights__checking-him-was-always-allowed"
+      ]
+    },
+    {
+      "id": "C02",
+      "query": "How do I forgive a brother I already forgave publicly?",
+      "target": "celebration-mishpakhah__he-wooed-his-own-brothers",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [],
+      "final_rank": 1,
+      "pre_rerank_rank": 1,
+      "rerank_delta": 0,
+      "deep_fusion_rank": 34,
+      "deep_pool": 34,
+      "lex_rank": 1,
+      "sem_rank": null,
+      "cosine": null,
+      "top3": [
+        "teshuvah-restoration__confession-is-a-thanking-word",
+        "covenant-identity__a-father-lifts-what-he-forgives",
+        "celebration-mishpakhah__not-finished-until-dinner"
+      ]
+    },
+    {
+      "id": "C03",
+      "query": "Is it wrong to pray maybe instead of being certain?",
+      "target": "teshuvah-restoration__the-bravest-prayer-says-perhaps",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [],
+      "final_rank": 14,
+      "pre_rerank_rank": 1,
+      "rerank_delta": -13,
+      "deep_fusion_rank": 1,
+      "deep_pool": 45,
+      "lex_rank": null,
+      "sem_rank": 1,
+      "cosine": 0.7711359579643511,
+      "top3": [
+        "teshuvah-restoration__the-bravest-prayer-says-perhaps",
+        "celebration-mishpakhah__faith-does-not-wear-a-mask",
+        "torah-hebraic-insights__he-prayed-for-a-coincidence"
+      ]
+    },
+    {
+      "id": "C04",
+      "query": "What happens to my place in church if I walk away for years?",
+      "target": "teshuvah-restoration__your-name-stayed-on-the-list",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [
+        "halakhah"
+      ],
+      "final_rank": 18,
+      "pre_rerank_rank": 26,
+      "rerank_delta": 8,
+      "deep_fusion_rank": 26,
+      "deep_pool": 116,
+      "lex_rank": null,
+      "sem_rank": 22,
+      "cosine": 0.7417215848896076,
+      "top3": [
+        "teshuvah-restoration__pray-for-the-middle-years",
+        "covenant-identity__you-are-steered-into-staying",
+        "torah-hebraic-insights__the-priest-walks-out-to-you"
+      ]
+    },
+    {
+      "id": "C05",
+      "query": "How do I keep going when nothing is growing?",
+      "target": "torah-hebraic-insights__your-closed-years-are-making-fruit",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [],
+      "final_rank": 22,
+      "pre_rerank_rank": 8,
+      "rerank_delta": -14,
+      "deep_fusion_rank": 8,
+      "deep_pool": 115,
+      "lex_rank": 9,
+      "sem_rank": 37,
+      "cosine": 0.7107601386630881,
+      "top3": [
+        "celebration-mishpakhah__the-marker-that-kept-growing",
+        "covenant-identity__your-foundation-is-also-a-seed",
+        "celebration-mishpakhah__growing-up-is-a-feast-day"
+      ]
+    },
+    {
+      "id": "C06",
+      "query": "Does God notice work that nobody ever sees?",
+      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [
+        "elohim"
+      ],
+      "final_rank": 24,
+      "pre_rerank_rank": 23,
+      "rerank_delta": -1,
+      "deep_fusion_rank": 22,
+      "deep_pool": 381,
+      "lex_rank": 320,
+      "sem_rank": 16,
+      "cosine": 0.700992375465135,
+      "top3": [
+        "torah-hebraic-insights__the-shovel-was-a-holy-object",
+        "shalom-salvation__the-rescue-went-ahead-anyway",
+        "teshuvah-restoration__he-opened-her-eyes-first"
+      ]
+    },
+    {
+      "id": "C07",
+      "query": "What do I do when my job is being automated away?",
+      "target": "torah-hebraic-insights__the-carts-were-gods-idea",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [],
+      "final_rank": 7,
+      "pre_rerank_rank": 4,
+      "rerank_delta": -3,
+      "deep_fusion_rank": 4,
+      "deep_pool": 46,
+      "lex_rank": 4,
+      "sem_rank": 11,
+      "cosine": 0.7676761431925689,
+      "top3": [
+        "celebration-mishpakhah__you-were-sent-not-hired",
+        "teshuvah-restoration__nothing-is-where-he-speaks-first",
+        "teshuvah-restoration__the-wilderness-is-made-of-words"
+      ]
+    },
+    {
+      "id": "C08",
+      "query": "How do I know I belong if I am single and have no family here?",
+      "target": "celebration-mishpakhah__her-name-was-a-full-sentence",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [
+        "mishpachah"
+      ],
+      "final_rank": 28,
+      "pre_rerank_rank": 1,
+      "rerank_delta": -27,
+      "deep_fusion_rank": 1,
+      "deep_pool": 275,
+      "lex_rank": 2,
+      "sem_rank": 17,
+      "cosine": 0.719914045886485,
+      "top3": [
+        "celebration-mishpakhah__her-name-was-a-full-sentence",
+        "celebration-mishpakhah__home-is-a-direction",
+        "covenant-identity__born-there-before-you-arrived"
+      ]
+    },
+    {
+      "id": "C09",
+      "query": "Why does nobody say my name anymore?",
+      "target": "covenant-identity__nobody-was-blessed-as-a-crowd",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [],
+      "final_rank": null,
+      "pre_rerank_rank": null,
+      "rerank_delta": null,
+      "deep_fusion_rank": null,
+      "deep_pool": 144,
+      "lex_rank": null,
+      "sem_rank": null,
+      "cosine": null,
+      "top3": [
+        "covenant-identity__your-new-name-is-older",
+        "teshuvah-restoration__the-name-forget-was-remembered",
+        "shalom-salvation__halfway-was-never-half-healed"
+      ]
+    },
+    {
+      "id": "C10",
+      "query": "How should I treat an enemy who is completely at my mercy?",
+      "target": "shalom-salvation__one-meal-ended-the-war",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [
+        "chesed"
+      ],
+      "final_rank": 12,
+      "pre_rerank_rank": 5,
+      "rerank_delta": -7,
+      "deep_fusion_rank": 5,
+      "deep_pool": 48,
+      "lex_rank": null,
+      "sem_rank": 5,
+      "cosine": 0.7371826731670343,
+      "top3": [
+        "shalom-salvation__the-collision-that-made-peace",
+        "celebration-mishpakhah__the-old-enemy-paid-for-dinner",
+        "torah-hebraic-insights__the-avenger-is-called-redeemer"
+      ]
+    },
+    {
+      "id": "C11",
+      "query": "What should I say first to someone who is lonely?",
+      "target": "shalom-salvation__he-asked-before-he-offered",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [],
+      "final_rank": 6,
+      "pre_rerank_rank": 5,
+      "rerank_delta": -1,
+      "deep_fusion_rank": 5,
+      "deep_pool": 43,
+      "lex_rank": null,
+      "sem_rank": 1,
+      "cosine": 0.7645198412497679,
+      "top3": [
+        "teshuvah-restoration__ready-comes-after-the-door",
+        "shalom-salvation__alone-was-never-your-whole-name",
+        "celebration-mishpakhah__home-is-a-direction"
+      ]
+    },
+    {
+      "id": "C12",
+      "query": "Can I call something peace before anything has changed?",
+      "target": "shalom-salvation__he-named-it-before-it-was-true",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [
+        "shalom"
+      ],
+      "final_rank": 7,
+      "pre_rerank_rank": 6,
+      "rerank_delta": -1,
+      "deep_fusion_rank": 6,
+      "deep_pool": 594,
+      "lex_rank": 36,
+      "sem_rank": 13,
+      "cosine": 0.7365989720870239,
+      "top3": [
+        "shalom-salvation__the-collision-that-made-peace",
+        "shalom-salvation__peace-is-set-on-the-fire",
+        "shalom-salvation__the-letter-that-is-broken"
+      ]
+    },
+    {
+      "id": "C13",
+      "query": "Why do people stop showing up after the crisis passes?",
+      "target": "celebration-mishpakhah__comfort-was-never-a-sentence",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [],
+      "final_rank": null,
+      "pre_rerank_rank": null,
+      "rerank_delta": null,
+      "deep_fusion_rank": null,
+      "deep_pool": 50,
+      "lex_rank": null,
+      "sem_rank": null,
+      "cosine": null,
+      "top3": [
+        "covenant-identity__he-deleted-one-word",
+        "teshuvah-restoration__the-next-line-catches-you",
+        "teshuvah-restoration__she-ate-before-anything-changed"
+      ]
+    },
+    {
+      "id": "C14",
+      "query": "How do I read the Bible so the point does not get lost?",
+      "target": "torah-hebraic-insights__the-middle-is-the-message",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [
+        "scripture"
+      ],
+      "final_rank": 28,
+      "pre_rerank_rank": 4,
+      "rerank_delta": -24,
+      "deep_fusion_rank": 4,
+      "deep_pool": 390,
+      "lex_rank": 69,
+      "sem_rank": 4,
+      "cosine": 0.7485710397117996,
+      "top3": [
+        "torah-hebraic-insights__the-names-you-skip-are-speaking",
+        "torah-hebraic-insights__they-knew-him-at-the-table",
+        "torah-hebraic-insights__even-the-pauses-were-copied"
+      ]
+    },
+    {
+      "id": "C15",
+      "query": "Why would God show favouritism when the law forbids judges to?",
+      "target": "torah-hebraic-insights__the-judge-who-plays-favorites",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [
+        "elohim",
+        "torah"
+      ],
+      "final_rank": 1,
+      "pre_rerank_rank": 3,
+      "rerank_delta": 2,
+      "deep_fusion_rank": 3,
+      "deep_pool": 492,
+      "lex_rank": 85,
+      "sem_rank": 1,
+      "cosine": 0.7508852101150436,
+      "top3": [
+        "torah-hebraic-insights__checking-him-was-always-allowed",
+        "torah-hebraic-insights__the-law-waits-for-your-voice",
+        "torah-hebraic-insights__the-judge-who-plays-favorites"
+      ]
+    },
+    {
+      "id": "C16",
+      "query": "I keep waiting for care that never comes. Does that matter to God?",
+      "target": "shalom-salvation__even-the-ox-gets-water",
+      "intent": "topical",
+      "fusion": {
+        "lexical": 1,
+        "semantic": 1
+      },
+      "concepts": [
+        "elohim"
+      ],
+      "final_rank": null,
+      "pre_rerank_rank": null,
+      "rerank_delta": null,
+      "deep_fusion_rank": null,
+      "deep_pool": 377,
+      "lex_rank": null,
+      "sem_rank": null,
+      "cosine": null,
+      "top3": [
+        "teshuvah-restoration__his-heart-turned-over-first",
+        "teshuvah-restoration__fix-the-altar-first",
+        "torah-hebraic-insights__checking-him-was-always-allowed"
+      ]
+    },
+    {
+      "id": "C17",
+      "query": "What does it mean that my identity cannot be taken away?",
+      "target": "covenant-identity__the-seal-you-cannot-misplace",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [],
+      "final_rank": null,
+      "pre_rerank_rank": null,
+      "rerank_delta": null,
+      "deep_fusion_rank": 65,
+      "deep_pool": 66,
+      "lex_rank": 29,
+      "sem_rank": null,
+      "cosine": null,
+      "top3": [
+        "shalom-salvation__justice-is-a-rescue-word",
+        "covenant-identity__someone-already-claimed-you",
+        "covenant-identity__he-keeps-you-where-he-walks"
+      ]
+    },
+    {
+      "id": "C18",
+      "query": "Why was I passed over again and again?",
+      "target": "covenant-identity__forward-looked-like-standing-still",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [],
+      "final_rank": 43,
+      "pre_rerank_rank": 48,
+      "rerank_delta": 5,
+      "deep_fusion_rank": 48,
+      "deep_pool": 209,
+      "lex_rank": 12,
+      "sem_rank": null,
+      "cosine": null,
+      "top3": [
+        "teshuvah-restoration__your-name-stayed-on-the-list",
+        "torah-hebraic-insights__he-covers-you-while-he-passes",
+        "teshuvah-restoration__the-whistle-was-looking-for-you"
+      ]
+    },
+    {
+      "id": "C19",
+      "query": "How do I include people who keep getting left out?",
+      "target": "celebration-mishpakhah__the-overlooked-got-the-ledger",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [],
+      "final_rank": 35,
+      "pre_rerank_rank": 39,
+      "rerank_delta": 4,
+      "deep_fusion_rank": 39,
+      "deep_pool": 132,
+      "lex_rank": null,
+      "sem_rank": 39,
+      "cosine": 0.7249534717238364,
+      "top3": [
+        "covenant-identity__he-deleted-one-word",
+        "celebration-mishpakhah__named-for-what-was-left-over",
+        "teshuvah-restoration__the-name-forget-was-remembered"
+      ]
+    },
+    {
+      "id": "C20",
+      "query": "Why can I not bring myself to sign up for baptism?",
+      "target": "celebration-mishpakhah__hope-is-a-body-of-water",
+      "intent": "conversational",
+      "fusion": {
+        "lexical": 0.6,
+        "semantic": 1.4
+      },
+      "concepts": [
+        "baptism"
+      ],
+      "final_rank": 23,
+      "pre_rerank_rank": 2,
+      "rerank_delta": -21,
+      "deep_fusion_rank": 2,
+      "deep_pool": 43,
+      "lex_rank": 1,
+      "sem_rank": 12,
+      "cosine": 0.6904555018260261,
+      "top3": [
+        "teshuvah-restoration__water-you-did-not-carry",
+        "celebration-mishpakhah__hope-is-a-body-of-water",
+        "celebration-mishpakhah__a-blessing-holds-water"
+      ]
+    }
+  ]
+}

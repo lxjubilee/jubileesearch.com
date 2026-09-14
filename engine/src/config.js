@@ -10,6 +10,11 @@ import { query } from './db.js';
 export const env = {
   port: Number(process.env.PORT ?? 4038),          // api.jubileesearch.com, per ops/config
   inferenceUrl: process.env.INFERENCE_API_URL ?? '',
+  // Normally the same service — §16 makes one API the sole provider. Split only
+  // when two providers must run at once: a §12.3 A/B needs the candidate
+  // embedder without also swapping the reranker, or the comparison moves two
+  // variables at once and the delta belongs to neither of them.
+  rerankUrl: process.env.RERANK_API_URL || process.env.INFERENCE_API_URL || '',
   inferenceKey: process.env.INFERENCE_API_KEY ?? '',
   embeddingModel: process.env.EMBEDDING_MODEL ?? 'bge-m3@v1',
   rerankModel: process.env.RERANK_MODEL ?? 'bge-reranker-v2-m3@v1',

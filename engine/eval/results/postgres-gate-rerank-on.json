@@ -1,0 +1,5314 @@
+{
+  "label": "postgres-gate-rerank-on",
+  "ran_at": "2026-09-10T15:05:05.666Z",
+  "column": "live",
+  "model_id": {
+    "model_id": "bge-m3@onnx-int8",
+    "chunks": 5561,
+    "column": "embedding"
+  },
+  "rerank_enabled": true,
+  "rerank_source": "--rerank= override",
+  "rerank_provider": "http://127.0.0.1:4032",
+  "rerank_timeout_ms": 120000,
+  "config": {
+    "w_quality": 0.15,
+    "w_engage": 0.2,
+    "w_ctr": 0.25,
+    "w_lang": 0.2,
+    "w_fresh": 0.08,
+    "w_tier2": 0.1,
+    "w_safety": 0.05,
+    "zone_a_strong_threshold": 0.028603,
+    "zone_a_moderate_threshold": 0.01856,
+    "zone_a_weak_threshold": 0.015,
+    "zone_a_relevance_floor": 0.011027,
+    "zone_a_max_results": 5,
+    "zone_a_max_per_host": 3,
+    "rerank_zone_a": 0,
+    "rerank_zone_b": 1,
+    "rerank_candidates": 50,
+    "retrieval_candidates": 100,
+    "rrf_k": 60,
+    "zone_a_cross_encoder_floor": -1
+  },
+  "gold_set_version": "1.0",
+  "summary": {
+    "hybrid": {
+      "n": 85,
+      "recall@1": 32.9,
+      "recall@3": 38.8,
+      "recall@5": 44.7,
+      "recall@10": 57.6,
+      "mrr": 0.4013,
+      "not_retrieved_at_all": 16,
+      "median_rank_when_found": 4,
+      "by_type": {
+        "topical": {
+          "n": 30,
+          "recall@1": 46.7,
+          "recall@3": 50,
+          "recall@5": 66.7,
+          "recall@10": 80,
+          "misses": [
+            "T01",
+            "T02",
+            "T06",
+            "T24",
+            "T25",
+            "T30"
+          ]
+        },
+        "conversational": {
+          "n": 20,
+          "recall@1": 5,
+          "recall@3": 10,
+          "recall@5": 10,
+          "recall@10": 20,
+          "misses": [
+            "C01",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C13",
+            "C14",
+            "C16",
+            "C17",
+            "C18",
+            "C19",
+            "C20"
+          ]
+        },
+        "paraphrase": {
+          "n": 10,
+          "recall@1": 30,
+          "recall@3": 40,
+          "recall@5": 40,
+          "recall@10": 60,
+          "misses": [
+            "P02",
+            "P05",
+            "P09",
+            "P10"
+          ]
+        },
+        "cross-register": {
+          "n": 20,
+          "recall@1": 35,
+          "recall@3": 45,
+          "recall@5": 45,
+          "recall@10": 60,
+          "misses": [
+            "X01",
+            "X03",
+            "X05",
+            "X07",
+            "X09",
+            "X11",
+            "X12",
+            "X13"
+          ]
+        },
+        "navigational": {
+          "n": 5,
+          "recall@1": 60,
+          "recall@3": 60,
+          "recall@5": 60,
+          "recall@10": 60,
+          "misses": [
+            "N04",
+            "N05"
+          ]
+        }
+      }
+    },
+    "lexical": {
+      "n": 85,
+      "recall@1": 34.1,
+      "recall@3": 38.8,
+      "recall@5": 43.5,
+      "recall@10": 47.1,
+      "mrr": 0.386,
+      "not_retrieved_at_all": 37,
+      "median_rank_when_found": 1,
+      "by_type": {
+        "topical": {
+          "n": 30,
+          "recall@1": 53.3,
+          "recall@3": 60,
+          "recall@5": 63.3,
+          "recall@10": 63.3,
+          "misses": [
+            "T01",
+            "T02",
+            "T06",
+            "T12",
+            "T13",
+            "T16",
+            "T18",
+            "T24",
+            "T25",
+            "T28",
+            "T30"
+          ]
+        },
+        "conversational": {
+          "n": 20,
+          "recall@1": 5,
+          "recall@3": 5,
+          "recall@5": 15,
+          "recall@10": 25,
+          "misses": [
+            "C01",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C18",
+            "C19"
+          ]
+        },
+        "paraphrase": {
+          "n": 10,
+          "recall@1": 30,
+          "recall@3": 40,
+          "recall@5": 40,
+          "recall@10": 40,
+          "misses": [
+            "P01",
+            "P05",
+            "P07",
+            "P08",
+            "P09",
+            "P10"
+          ]
+        },
+        "cross-register": {
+          "n": 20,
+          "recall@1": 30,
+          "recall@3": 35,
+          "recall@5": 40,
+          "recall@10": 45,
+          "misses": [
+            "X03",
+            "X05",
+            "X06",
+            "X09",
+            "X10",
+            "X11",
+            "X12",
+            "X14",
+            "X16",
+            "X17",
+            "X19"
+          ]
+        },
+        "navigational": {
+          "n": 5,
+          "recall@1": 60,
+          "recall@3": 60,
+          "recall@5": 60,
+          "recall@10": 60,
+          "misses": [
+            "N04",
+            "N05"
+          ]
+        }
+      }
+    },
+    "semantic": {
+      "n": 85,
+      "recall@1": 32.9,
+      "recall@3": 38.8,
+      "recall@5": 45.9,
+      "recall@10": 58.8,
+      "mrr": 0.3974,
+      "not_retrieved_at_all": 23,
+      "median_rank_when_found": 2,
+      "by_type": {
+        "topical": {
+          "n": 30,
+          "recall@1": 43.3,
+          "recall@3": 50,
+          "recall@5": 66.7,
+          "recall@10": 76.7,
+          "misses": [
+            "T01",
+            "T02",
+            "T06",
+            "T11",
+            "T24",
+            "T25",
+            "T30"
+          ]
+        },
+        "conversational": {
+          "n": 20,
+          "recall@1": 5,
+          "recall@3": 10,
+          "recall@5": 10,
+          "recall@10": 30,
+          "misses": [
+            "C01",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C13",
+            "C14",
+            "C16",
+            "C17",
+            "C18",
+            "C19",
+            "C20"
+          ]
+        },
+        "paraphrase": {
+          "n": 10,
+          "recall@1": 40,
+          "recall@3": 40,
+          "recall@5": 50,
+          "recall@10": 60,
+          "misses": [
+            "P02",
+            "P05",
+            "P09",
+            "P10"
+          ]
+        },
+        "cross-register": {
+          "n": 20,
+          "recall@1": 35,
+          "recall@3": 45,
+          "recall@5": 45,
+          "recall@10": 60,
+          "misses": [
+            "X01",
+            "X03",
+            "X05",
+            "X07",
+            "X09",
+            "X11",
+            "X12",
+            "X13"
+          ]
+        },
+        "navigational": {
+          "n": 5,
+          "recall@1": 60,
+          "recall@3": 60,
+          "recall@5": 60,
+          "recall@10": 60,
+          "misses": [
+            "N04",
+            "N05"
+          ]
+        }
+      }
+    }
+  },
+  "criteria": {
+    "7_recall_at_10_85pct": {
+      "got": 57.6,
+      "pass": false
+    },
+    "8_cross_register_zero_failures": {
+      "n": 20,
+      "failures": 8,
+      "pass": false
+    },
+    "10_paraphrase_top_5": {
+      "got": "4/10",
+      "pass": false
+    }
+  },
+  "negatives_summary": {
+    "false_positives_shown": 17,
+    "false_positives_total": 17,
+    "weak_matches_shown": 19,
+    "weak_matches_total": 19
+  },
+  "negatives": {
+    "false_positive_expected": [
+      {
+        "q": "best pizza recipe",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "Commanded to Enjoy It",
+          "score": 0.019185
+        }
+      },
+      {
+        "q": "football scores",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "One Piece Says Two Things",
+          "score": 0.013685
+        }
+      },
+      {
+        "q": "python tutorial",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "The Quiver Is Not Storage",
+          "score": 0.020092
+        }
+      },
+      {
+        "q": "cheap flights to Rome",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "Sons Do Not Hand It Back",
+          "score": 0.021084
+        }
+      },
+      {
+        "q": "weather tomorrow",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "He Sat Down Too",
+          "score": 0.021088
+        }
+      },
+      {
+        "q": "how to change a tyre",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "The Packing List Was the Pardon",
+          "score": 0.011352
+        }
+      },
+      {
+        "q": "stock market forecast",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "No Prophet, and Sent Anyway",
+          "score": 0.014451
+        }
+      },
+      {
+        "q": "best laptop deals",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "Sons Do Not Hand It Back",
+          "score": 0.021084
+        }
+      },
+      {
+        "q": "the",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "Somebody Wants the Burnt Piece",
+          "score": 0.013839
+        }
+      },
+      {
+        "q": "and",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "The Kindest Word Is Therefore",
+          "score": 0.01429
+        }
+      },
+      {
+        "q": "office hours",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "Somebody Hunted for Your Bread",
+          "score": 0.018387
+        }
+      },
+      {
+        "q": "translation",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "Ready Comes After the Door",
+          "score": 0.017876
+        }
+      },
+      {
+        "q": "character",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "Even the Ox Gets Water",
+          "score": 0.016492
+        }
+      },
+      {
+        "q": "status update",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "Delivered Is Not Yet Home",
+          "score": 0.01569
+        }
+      },
+      {
+        "q": "author bio",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "Transferred, Not Torn Up",
+          "score": 0.013685
+        }
+      },
+      {
+        "q": "marriage license",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "Your Silence Was Only a Sabbath",
+          "score": 0.021096
+        }
+      },
+      {
+        "q": "quantum chromodynamics",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "The Dye That Would Not Hold",
+          "score": 0.017612
+        }
+      }
+    ],
+    "honest_weak_match_expected": [
+      {
+        "q": "car repair",
+        "shown": 3,
+        "coverage": "strong",
+        "top": {
+          "title": "Repair Does Not Require a Villain",
+          "score": 0.037246
+        }
+      },
+      {
+        "q": "repair",
+        "shown": 3,
+        "coverage": "strong",
+        "top": {
+          "title": "Repair Does Not Require a Villain",
+          "score": 0.039597
+        }
+      },
+      {
+        "q": "restoration",
+        "shown": 3,
+        "coverage": "strong",
+        "top": {
+          "title": "Restore Is an Accounting Word",
+          "score": 0.042145
+        }
+      },
+      {
+        "q": "covenant law",
+        "shown": 3,
+        "coverage": "strong",
+        "top": {
+          "title": "A Covenant Is Cut, Not Signed",
+          "score": 0.0368
+        }
+      },
+      {
+        "q": "velocity",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "Your Slow Walk Is Leading",
+          "score": 0.013977
+        }
+      },
+      {
+        "q": "anchor",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "The Tent Pegs Had Names",
+          "score": 0.021088
+        }
+      },
+      {
+        "q": "forgiveness in negotiation",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "Forgiveness Is Not Finished Until Dinner",
+          "score": 0.01756
+        }
+      },
+      {
+        "q": "family therapy",
+        "shown": 2,
+        "coverage": "weak",
+        "top": {
+          "title": "Slowly Is Still Toward",
+          "score": 0.017608
+        }
+      },
+      {
+        "q": "peace treaty",
+        "shown": 3,
+        "coverage": "strong",
+        "top": {
+          "title": "Peace Is Set on the Fire",
+          "score": 0.038007
+        }
+      },
+      {
+        "q": "identity theft",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "Someone Already Claimed You",
+          "score": 0.021096
+        }
+      },
+      {
+        "q": "faith based investing",
+        "shown": 3,
+        "coverage": "strong",
+        "top": {
+          "title": "Faith Does Not Wear a Mask",
+          "score": 0.041514
+        }
+      },
+      {
+        "q": "grace period on a loan",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "The Bite Has a Release Date",
+          "score": 0.021076
+        }
+      },
+      {
+        "q": "salvation army donation",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "He Called It a Good Eye",
+          "score": 0.020103
+        }
+      },
+      {
+        "q": "word",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "The Kindest Word Is Therefore",
+          "score": 0.028405
+        }
+      },
+      {
+        "q": "day",
+        "shown": 3,
+        "coverage": "moderate",
+        "top": {
+          "title": "Fast Days Become Feast Days",
+          "score": 0.020411
+        }
+      },
+      {
+        "q": "name",
+        "shown": 3,
+        "coverage": "strong",
+        "top": {
+          "title": "Your Name Is a Title",
+          "score": 0.040295
+        }
+      },
+      {
+        "q": "house",
+        "shown": 3,
+        "coverage": "strong",
+        "top": {
+          "title": "The Tenant Proves the Title",
+          "score": 0.028773
+        }
+      },
+      {
+        "q": "water",
+        "shown": 3,
+        "coverage": "strong",
+        "top": {
+          "title": "Water Comes Looking Like People",
+          "score": 0.040295
+        }
+      },
+      {
+        "q": "road",
+        "shown": 3,
+        "coverage": "strong",
+        "top": {
+          "title": "The Empty Road Was the Assignment",
+          "score": 0.038968
+        }
+      }
+    ]
+  },
+  "drift_guard": [
+    {
+      "q": "Why do I feel far from God?",
+      "harness": 136,
+      "api": 136,
+      "agree": true,
+      "excused": false
+    },
+    {
+      "q": "chiasm in Hebrew writing",
+      "harness": 237,
+      "api": 237,
+      "agree": true,
+      "excused": false
+    },
+    {
+      "q": "Ruach HaKodesh and the seal on your identity",
+      "harness": 101,
+      "api": 101,
+      "agree": true,
+      "excused": false
+    }
+  ],
+  "pairs": [
+    {
+      "id": "T01",
+      "type": "topical",
+      "query": "chiasm in Hebrew writing",
+      "target": "torah-hebraic-insights__the-middle-is-the-message",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 35,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__a-sealed-letter-an-open-kingdom",
+            "title": "A Sealed Letter, an Open Kingdom"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 0,
+          "coverage": "none",
+          "intent": "topical",
+          "top": null,
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 35,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__a-sealed-letter-an-open-kingdom",
+            "title": "A Sealed Letter, an Open Kingdom"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "T02",
+      "type": "topical",
+      "query": "Aaronic blessing lifting the face",
+      "target": "torah-hebraic-insights__the-judge-who-plays-favorites",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 38,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-joy-knows-the-way-back",
+            "title": "The Joy Knows the Way Back"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 1,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-fire-you-cannot-light",
+            "title": "The Fire You Cannot Light"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-joy-knows-the-way-back",
+            "title": "The Joy Knows the Way Back"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "T03",
+      "type": "topical",
+      "query": "ketubah marriage contract commandments",
+      "target": "covenant-identity__every-rule-was-a-vow",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 33,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__every-rule-was-a-vow",
+            "title": "Every Rule Was a Vow"
+          },
+          "lex_rank": 5,
+          "sem_rank": 1,
+          "cosine": 0.7426048935575441,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 5,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__every-rule-was-a-vow",
+            "title": "Every Rule Was a Vow"
+          },
+          "lex_rank": 5,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 5,
+          "rerank_delta": 4
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 29,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__every-rule-was-a-vow",
+            "title": "Every Rule Was a Vow"
+          },
+          "lex_rank": 5,
+          "sem_rank": 1,
+          "cosine": 0.7426048935575441,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "T04",
+      "type": "topical",
+      "query": "Ezekiel valley of dry bones",
+      "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 34,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+            "title": "The Valley Was Never a Graveyard"
+          },
+          "lex_rank": 2,
+          "sem_rank": 4,
+          "cosine": 0.6977169438037025,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 2,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+            "title": "The Valley Was Never a Graveyard"
+          },
+          "lex_rank": 2,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 2,
+          "rerank_delta": 1
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 33,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+            "title": "The Valley Was Never a Graveyard"
+          },
+          "lex_rank": 2,
+          "sem_rank": 4,
+          "cosine": 0.6977169438037025,
+          "fusion_position": 4,
+          "rerank_delta": 3
+        }
+      }
+    },
+    {
+      "id": "T05",
+      "type": "topical",
+      "query": "Jonah mercy and the book's final question",
+      "target": "teshuvah-restoration__the-last-word-is-a-question",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 41,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-last-word-is-a-question",
+            "title": "The Last Word Is a Question"
+          },
+          "lex_rank": 10,
+          "sem_rank": 1,
+          "cosine": 0.7932777333139952,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 11,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-last-word-is-a-question",
+            "title": "The Last Word Is a Question"
+          },
+          "lex_rank": 10,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 10,
+          "rerank_delta": 9
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 33,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-last-word-is-a-question",
+            "title": "The Last Word Is a Question"
+          },
+          "lex_rank": 10,
+          "sem_rank": 1,
+          "cosine": 0.7932777333139952,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "T06",
+      "type": "topical",
+      "query": "Gideon altar Yahuah-Shalom",
+      "target": "shalom-salvation__he-named-it-before-it-was-true",
+      "modes": {
+        "hybrid": {
+          "rank": 41,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__the-first-altar-was-a-voice",
+            "title": "The First Altar Was a Voice"
+          },
+          "lex_rank": 21,
+          "sem_rank": 1,
+          "cosine": 0.723307693456644,
+          "fusion_position": 2,
+          "rerank_delta": -39
+        },
+        "lexical": {
+          "rank": 38,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__bring-everything-but-the-sword",
+            "title": "Bring Everything but the Sword"
+          },
+          "lex_rank": 21,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 21,
+          "rerank_delta": -17
+        },
+        "semantic": {
+          "rank": 32,
+          "displayed_rank": null,
+          "candidates": 34,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__the-first-altar-was-a-voice",
+            "title": "The First Altar Was a Voice"
+          },
+          "lex_rank": 21,
+          "sem_rank": 1,
+          "cosine": 0.723307693456644,
+          "fusion_position": 1,
+          "rerank_delta": -31
+        }
+      }
+    },
+    {
+      "id": "T07",
+      "type": "topical",
+      "query": "woman at the well request before offer",
+      "target": "shalom-salvation__he-asked-before-he-offered",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 39,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__he-asked-before-he-offered",
+            "title": "He Asked Before He Offered"
+          },
+          "lex_rank": 1,
+          "sem_rank": 17,
+          "cosine": 0.6869577119180501,
+          "fusion_position": 2,
+          "rerank_delta": 1
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 9,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__he-asked-before-he-offered",
+            "title": "He Asked Before He Offered"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 32,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__he-asked-before-he-offered",
+            "title": "He Asked Before He Offered"
+          },
+          "lex_rank": 1,
+          "sem_rank": 17,
+          "cosine": 0.6869577119180501,
+          "fusion_position": 17,
+          "rerank_delta": 16
+        }
+      }
+    },
+    {
+      "id": "T08",
+      "type": "topical",
+      "query": "feeding an enemy army instead of striking them",
+      "target": "shalom-salvation__one-meal-ended-the-war",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 31,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__one-meal-ended-the-war",
+            "title": "One Meal Ended the War"
+          },
+          "lex_rank": 1,
+          "sem_rank": 2,
+          "cosine": 0.7515867204854242,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 1,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__one-meal-ended-the-war",
+            "title": "One Meal Ended the War"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 31,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__one-meal-ended-the-war",
+            "title": "One Meal Ended the War"
+          },
+          "lex_rank": 1,
+          "sem_rank": 2,
+          "cosine": 0.7515867204854242,
+          "fusion_position": 2,
+          "rerank_delta": 1
+        }
+      }
+    },
+    {
+      "id": "T09",
+      "type": "topical",
+      "query": "Joseph and his brothers speaking to the heart",
+      "target": "celebration-mishpakhah__he-wooed-his-own-brothers",
+      "modes": {
+        "hybrid": {
+          "rank": 4,
+          "displayed_rank": null,
+          "candidates": 31,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-author-was-in-the-room",
+            "title": "The Author Was in the Room"
+          },
+          "lex_rank": 3,
+          "sem_rank": 1,
+          "cosine": 0.7657457860978245,
+          "fusion_position": 2,
+          "rerank_delta": -2
+        },
+        "lexical": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 4,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-author-was-in-the-room",
+            "title": "The Author Was in the Room"
+          },
+          "lex_rank": 3,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 3,
+          "rerank_delta": 1
+        },
+        "semantic": {
+          "rank": 4,
+          "displayed_rank": null,
+          "candidates": 31,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-author-was-in-the-room",
+            "title": "The Author Was in the Room"
+          },
+          "lex_rank": 3,
+          "sem_rank": 1,
+          "cosine": 0.7657457860978245,
+          "fusion_position": 1,
+          "rerank_delta": -3
+        }
+      }
+    },
+    {
+      "id": "T10",
+      "type": "topical",
+      "query": "Anna the prophetess belonging and singleness",
+      "target": "celebration-mishpakhah__her-name-was-a-full-sentence",
+      "modes": {
+        "hybrid": {
+          "rank": 4,
+          "displayed_rank": null,
+          "candidates": 39,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__she-saved-the-truth-for-him",
+            "title": "She Saved the Truth for Him"
+          },
+          "lex_rank": 1,
+          "sem_rank": 7,
+          "cosine": 0.6838807660882633,
+          "fusion_position": 1,
+          "rerank_delta": -3
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 1,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__her-name-was-a-full-sentence",
+            "title": "Her Name Was a Full Sentence"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 4,
+          "displayed_rank": null,
+          "candidates": 39,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__she-saved-the-truth-for-him",
+            "title": "She Saved the Truth for Him"
+          },
+          "lex_rank": 1,
+          "sem_rank": 7,
+          "cosine": 0.6838807660882633,
+          "fusion_position": 7,
+          "rerank_delta": 3
+        }
+      }
+    },
+    {
+      "id": "T11",
+      "type": "topical",
+      "query": "Leviticus law about being fully covered",
+      "target": "torah-hebraic-insights__all-of-it-came-back-clean",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 36,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__all-of-it-came-back-clean",
+            "title": "All of It Came Back Clean"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 1,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__all-of-it-came-back-clean",
+            "title": "All of It Came Back Clean"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 35,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__one-loaf-two-hands",
+            "title": "One Loaf, Two Hands"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "T12",
+      "type": "topical",
+      "query": "carts in Torah and automation at work",
+      "target": "torah-hebraic-insights__the-carts-were-gods-idea",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-carts-were-gods-idea",
+            "title": "The Carts Were God's Idea"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7550735449775359,
+          "fusion_position": 2,
+          "rerank_delta": 1
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "none",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__rest-before-the-work-is-done",
+            "title": "Rest Before the Work Is Done"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 35,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-carts-were-gods-idea",
+            "title": "The Carts Were God's Idea"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7550735449775359,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "T13",
+      "type": "topical",
+      "query": "orchard fruit stripped for three years",
+      "target": "torah-hebraic-insights__your-closed-years-are-making-fruit",
+      "modes": {
+        "hybrid": {
+          "rank": 6,
+          "displayed_rank": null,
+          "candidates": 26,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-orchard-outranks-the-siege",
+            "title": "The Orchard Outranks the Siege"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7479318272542943,
+          "fusion_position": 1,
+          "rerank_delta": -5
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 1,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__you-are-eating-someones-patience",
+            "title": "You Are Eating Someone's Patience"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 5,
+          "displayed_rank": null,
+          "candidates": 25,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-orchard-outranks-the-siege",
+            "title": "The Orchard Outranks the Siege"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7479318272542943,
+          "fusion_position": 1,
+          "rerank_delta": -4
+        }
+      }
+    },
+    {
+      "id": "T14",
+      "type": "topical",
+      "query": "a word spoken at the right time",
+      "target": "torah-hebraic-insights__a-word-has-wheels",
+      "modes": {
+        "hybrid": {
+          "rank": 5,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__you-have-a-speaking-part",
+            "title": "You Have a Speaking Part"
+          },
+          "lex_rank": 22,
+          "sem_rank": 2,
+          "cosine": 0.7501923710402494,
+          "fusion_position": 2,
+          "rerank_delta": -3
+        },
+        "lexical": {
+          "rank": 5,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__you-have-a-speaking-part",
+            "title": "You Have a Speaking Part"
+          },
+          "lex_rank": 22,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 22,
+          "rerank_delta": 17
+        },
+        "semantic": {
+          "rank": 3,
+          "displayed_rank": null,
+          "candidates": 35,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__this-hour-is-spoken-for",
+            "title": "This Hour Is Spoken For"
+          },
+          "lex_rank": 22,
+          "sem_rank": 2,
+          "cosine": 0.7501923710402494,
+          "fusion_position": 2,
+          "rerank_delta": -1
+        }
+      }
+    },
+    {
+      "id": "T15",
+      "type": "topical",
+      "query": "Zephaniah perhaps the boldest intercessors",
+      "target": "teshuvah-restoration__the-bravest-prayer-says-perhaps",
+      "modes": {
+        "hybrid": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 40,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__the-name-took-a-year",
+            "title": "The Name Took a Year"
+          },
+          "lex_rank": 1,
+          "sem_rank": 1,
+          "cosine": 0.7128469776264003,
+          "fusion_position": 1,
+          "rerank_delta": -1
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 1,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-bravest-prayer-says-perhaps",
+            "title": "The Bravest Prayer Says Perhaps"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 40,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__the-name-took-a-year",
+            "title": "The Name Took a Year"
+          },
+          "lex_rank": 1,
+          "sem_rank": 1,
+          "cosine": 0.7128469776264003,
+          "fusion_position": 1,
+          "rerank_delta": -1
+        }
+      }
+    },
+    {
+      "id": "T16",
+      "type": "topical",
+      "query": "the most quoted line in Job written two ways",
+      "target": "teshuvah-restoration__one-sound-carries-both-answers",
+      "modes": {
+        "hybrid": {
+          "rank": 4,
+          "displayed_rank": null,
+          "candidates": 36,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__let-the-blessing-do-the-reaching",
+            "title": "Let the Blessing Do the Reaching"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7565869399400693,
+          "fusion_position": 1,
+          "rerank_delta": -3
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 0,
+          "coverage": "none",
+          "intent": "topical",
+          "top": null,
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 4,
+          "displayed_rank": null,
+          "candidates": 36,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__let-the-blessing-do-the-reaching",
+            "title": "Let the Blessing Do the Reaching"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7565869399400693,
+          "fusion_position": 1,
+          "rerank_delta": -3
+        }
+      }
+    },
+    {
+      "id": "T17",
+      "type": "topical",
+      "query": "closed letter in Isaiah and the foundation stone",
+      "target": "covenant-identity__a-sealed-letter-an-open-kingdom",
+      "modes": {
+        "hybrid": {
+          "rank": 8,
+          "displayed_rank": null,
+          "candidates": 34,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__nothing-is-where-he-speaks-first",
+            "title": "Nothing Is Where He Speaks First"
+          },
+          "lex_rank": 1,
+          "sem_rank": 6,
+          "cosine": 0.7109986669464144,
+          "fusion_position": 1,
+          "rerank_delta": -7
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 1,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__a-sealed-letter-an-open-kingdom",
+            "title": "A Sealed Letter, an Open Kingdom"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 8,
+          "displayed_rank": null,
+          "candidates": 34,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__nothing-is-where-he-speaks-first",
+            "title": "Nothing Is Where He Speaks First"
+          },
+          "lex_rank": 1,
+          "sem_rank": 6,
+          "cosine": 0.7109986669464144,
+          "fusion_position": 6,
+          "rerank_delta": -2
+        }
+      }
+    },
+    {
+      "id": "T18",
+      "type": "topical",
+      "query": "blessing spoken over one person not a crowd",
+      "target": "covenant-identity__nobody-was-blessed-as-a-crowd",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 40,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__nobody-was-blessed-as-a-crowd",
+            "title": "Nobody Was Blessed as a Crowd"
+          },
+          "lex_rank": null,
+          "sem_rank": 4,
+          "cosine": 0.741816825706663,
+          "fusion_position": 7,
+          "rerank_delta": 6
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 5,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__moses-blessed-them-with-alone",
+            "title": "Moses Blessed Them With Alone"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 37,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__nobody-was-blessed-as-a-crowd",
+            "title": "Nobody Was Blessed as a Crowd"
+          },
+          "lex_rank": null,
+          "sem_rank": 4,
+          "cosine": 0.741816825706663,
+          "fusion_position": 4,
+          "rerank_delta": 3
+        }
+      }
+    },
+    {
+      "id": "T19",
+      "type": "topical",
+      "query": "Ezekiel property law about a borrowed room",
+      "target": "covenant-identity__sons-do-not-hand-it-back",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 36,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__sons-do-not-hand-it-back",
+            "title": "Sons Do Not Hand It Back"
+          },
+          "lex_rank": 1,
+          "sem_rank": 24,
+          "cosine": 0.7146236296961139,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 1,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__sons-do-not-hand-it-back",
+            "title": "Sons Do Not Hand It Back"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 36,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__sons-do-not-hand-it-back",
+            "title": "Sons Do Not Hand It Back"
+          },
+          "lex_rank": 1,
+          "sem_rank": 24,
+          "cosine": 0.7146236296961139,
+          "fusion_position": 24,
+          "rerank_delta": 23
+        }
+      }
+    },
+    {
+      "id": "T20",
+      "type": "topical",
+      "query": "healing on Shabbat and watering an ox",
+      "target": "shalom-salvation__even-the-ox-gets-water",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 41,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__even-the-ox-gets-water",
+            "title": "Even the Ox Gets Water"
+          },
+          "lex_rank": 14,
+          "sem_rank": 1,
+          "cosine": 0.7601998577540634,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 14,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__even-the-ox-gets-water",
+            "title": "Even the Ox Gets Water"
+          },
+          "lex_rank": 14,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 14,
+          "rerank_delta": 13
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 29,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__even-the-ox-gets-water",
+            "title": "Even the Ox Gets Water"
+          },
+          "lex_rank": 14,
+          "sem_rank": 1,
+          "cosine": 0.7601998577540634,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "T21",
+      "type": "topical",
+      "query": "the Hebrew word for hope and immersion",
+      "target": "celebration-mishpakhah__hope-is-a-body-of-water",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 41,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__hope-is-a-body-of-water",
+            "title": "Hope Is a Body of Water"
+          },
+          "lex_rank": 2,
+          "sem_rank": 1,
+          "cosine": 0.810394163276246,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 10,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__hope-is-a-body-of-water",
+            "title": "Hope Is a Body of Water"
+          },
+          "lex_rank": 2,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 2,
+          "rerank_delta": 1
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 33,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__hope-is-a-body-of-water",
+            "title": "Hope Is a Body of Water"
+          },
+          "lex_rank": 2,
+          "sem_rank": 1,
+          "cosine": 0.810394163276246,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "T22",
+      "type": "topical",
+      "query": "meal train ending after week three",
+      "target": "celebration-mishpakhah__comfort-was-never-a-sentence",
+      "modes": {
+        "hybrid": {
+          "rank": 8,
+          "displayed_rank": null,
+          "candidates": 45,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__the-beds-arrived-before-the-words",
+            "title": "The Beds Arrived Before the Words"
+          },
+          "lex_rank": 1,
+          "sem_rank": 2,
+          "cosine": 0.7180970939424131,
+          "fusion_position": 1,
+          "rerank_delta": -7
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 9,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__comfort-was-never-a-sentence",
+            "title": "Comfort Was Never a Sentence"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 8,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__the-beds-arrived-before-the-words",
+            "title": "The Beds Arrived Before the Words"
+          },
+          "lex_rank": 1,
+          "sem_rank": 2,
+          "cosine": 0.7180970939424131,
+          "fusion_position": 2,
+          "rerank_delta": -6
+        }
+      }
+    },
+    {
+      "id": "T23",
+      "type": "topical",
+      "query": "a community meal missing the people it was built for",
+      "target": "celebration-mishpakhah__the-overlooked-got-the-ledger",
+      "modes": {
+        "hybrid": {
+          "rank": 4,
+          "displayed_rank": null,
+          "candidates": 39,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__the-guest-list-was-written-down",
+            "title": "The Guest List Was Written Down"
+          },
+          "lex_rank": 1,
+          "sem_rank": 23,
+          "cosine": 0.7329548923870716,
+          "fusion_position": 4,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 4,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__the-overlooked-got-the-ledger",
+            "title": "The Overlooked Got the Ledger"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 4,
+          "displayed_rank": null,
+          "candidates": 39,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__the-guest-list-was-written-down",
+            "title": "The Guest List Was Written Down"
+          },
+          "lex_rank": 1,
+          "sem_rank": 23,
+          "cosine": 0.7329548923870716,
+          "fusion_position": 23,
+          "rerank_delta": 19
+        }
+      }
+    },
+    {
+      "id": "T24",
+      "type": "topical",
+      "query": "Elizabeth and Mary celebrating a promise with no evidence",
+      "target": "celebration-mishpakhah__he-danced-before-he-was-born",
+      "modes": {
+        "hybrid": {
+          "rank": 23,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__still-two-already-one",
+            "title": "Still Two, Already One"
+          },
+          "lex_rank": null,
+          "sem_rank": 35,
+          "cosine": 0.6868554774743458,
+          "fusion_position": 35,
+          "rerank_delta": 12
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 0,
+          "coverage": "none",
+          "intent": "topical",
+          "top": null,
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 23,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__still-two-already-one",
+            "title": "Still Two, Already One"
+          },
+          "lex_rank": null,
+          "sem_rank": 35,
+          "cosine": 0.6868554774743458,
+          "fusion_position": 35,
+          "rerank_delta": 12
+        }
+      }
+    },
+    {
+      "id": "T25",
+      "type": "topical",
+      "query": "a grandmother setting places for guests who are not there",
+      "target": "celebration-mishpakhah__a-feast-is-a-circle",
+      "modes": {
+        "hybrid": {
+          "rank": 39,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__you-are-already-being-called",
+            "title": "You Are Already Being Called"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 3,
+          "rerank_delta": -36
+        },
+        "lexical": {
+          "rank": 14,
+          "displayed_rank": null,
+          "candidates": 20,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__you-are-already-being-called",
+            "title": "You Are Already Being Called"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": -13
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 36,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__a-party-you-can-hear-outside",
+            "title": "A Party You Can Hear Outside"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "T26",
+      "type": "topical",
+      "query": "the plan finished before the builder arrived",
+      "target": "covenant-identity__the-plan-arrived-before-the-builder",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 37,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__the-plan-arrived-before-the-builder",
+            "title": "The Plan Arrived Before the Builder"
+          },
+          "lex_rank": 1,
+          "sem_rank": 1,
+          "cosine": 0.7964664762126951,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 8,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__the-plan-arrived-before-the-builder",
+            "title": "The Plan Arrived Before the Builder"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 32,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__the-plan-arrived-before-the-builder",
+            "title": "The Plan Arrived Before the Builder"
+          },
+          "lex_rank": 1,
+          "sem_rank": 1,
+          "cosine": 0.7964664762126951,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "T27",
+      "type": "topical",
+      "query": "exile and having a covering taken off",
+      "target": "teshuvah-restoration__nothing-was-buried-only-uncovered",
+      "modes": {
+        "hybrid": {
+          "rank": 9,
+          "displayed_rank": null,
+          "candidates": 33,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__he-covers-you-while-he-passes",
+            "title": "He Covers You While He Passes"
+          },
+          "lex_rank": 4,
+          "sem_rank": 7,
+          "cosine": 0.7247052996131651,
+          "fusion_position": 2,
+          "rerank_delta": -7
+        },
+        "lexical": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 5,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__he-promised-us-noisy-streets",
+            "title": "He Promised Us Noisy Streets"
+          },
+          "lex_rank": 4,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 4,
+          "rerank_delta": 2
+        },
+        "semantic": {
+          "rank": 8,
+          "displayed_rank": null,
+          "candidates": 30,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__he-covers-you-while-he-passes",
+            "title": "He Covers You While He Passes"
+          },
+          "lex_rank": 4,
+          "sem_rank": 7,
+          "cosine": 0.7247052996131651,
+          "fusion_position": 7,
+          "rerank_delta": -1
+        }
+      }
+    },
+    {
+      "id": "T28",
+      "type": "topical",
+      "query": "the bird in the psalm whose name means liberty",
+      "target": "shalom-salvation__freedom-is-a-bird-that-nests",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 26,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__freedom-is-a-bird-that-nests",
+            "title": "Freedom Is a Bird That Nests"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7759164042900919,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 0,
+          "coverage": "none",
+          "intent": "topical",
+          "top": null,
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 26,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__freedom-is-a-bird-that-nests",
+            "title": "Freedom Is a Bird That Nests"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7759164042900919,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "T29",
+      "type": "topical",
+      "query": "a stork named faithful and a nation that will not return",
+      "target": "teshuvah-restoration__the-stork-is-named-faithful",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 37,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-stork-is-named-faithful",
+            "title": "The Stork Is Named Faithful"
+          },
+          "lex_rank": 1,
+          "sem_rank": 1,
+          "cosine": 0.7915642624442255,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 1,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-stork-is-named-faithful",
+            "title": "The Stork Is Named Faithful"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 37,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-stork-is-named-faithful",
+            "title": "The Stork Is Named Faithful"
+          },
+          "lex_rank": 1,
+          "sem_rank": 1,
+          "cosine": 0.7915642624442255,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "T30",
+      "type": "topical",
+      "query": "answered prayer that felt like nothing",
+      "target": "shalom-salvation__the-rescue-went-ahead-anyway",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-wilderness-is-made-of-words",
+            "title": "The Wilderness Is Made of Words"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-wilderness-is-made-of-words",
+            "title": "The Wilderness Is Made of Words"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__fathers-come-home-too",
+            "title": "Fathers Come Home Too"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "C01",
+      "type": "conversational",
+      "query": "Why do I feel nothing after God answered my prayer?",
+      "target": "shalom-salvation__the-rescue-went-ahead-anyway",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__halfway-was-never-half-healed",
+            "title": "Halfway Was Never Half Healed"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__his-heart-turned-over-first",
+            "title": "His Heart Turned Over First"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 39,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__halfway-was-never-half-healed",
+            "title": "Halfway Was Never Half Healed"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "C02",
+      "type": "conversational",
+      "query": "How do I forgive a brother I already forgave publicly?",
+      "target": "celebration-mishpakhah__he-wooed-his-own-brothers",
+      "modes": {
+        "hybrid": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 34,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__he-pays-back-the-years",
+            "title": "He Pays Back the Years"
+          },
+          "lex_rank": 1,
+          "sem_rank": 24,
+          "cosine": 0.7206350805071334,
+          "fusion_position": 1,
+          "rerank_delta": -1
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 1,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "celebration-mishpakhah__he-wooed-his-own-brothers",
+            "title": "He Wooed His Own Brothers"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 34,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__he-pays-back-the-years",
+            "title": "He Pays Back the Years"
+          },
+          "lex_rank": 1,
+          "sem_rank": 24,
+          "cosine": 0.7206350805071334,
+          "fusion_position": 24,
+          "rerank_delta": 22
+        }
+      }
+    },
+    {
+      "id": "C03",
+      "type": "conversational",
+      "query": "Is it wrong to pray maybe instead of being certain?",
+      "target": "teshuvah-restoration__the-bravest-prayer-says-perhaps",
+      "modes": {
+        "hybrid": {
+          "rank": 13,
+          "displayed_rank": null,
+          "candidates": 46,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__he-left-it-behind-on-purpose",
+            "title": "He Left It Behind on Purpose"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.761226881291493,
+          "fusion_position": 1,
+          "rerank_delta": -12
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 13,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__the-party-was-already-planned",
+            "title": "The Party Was Already Planned"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 10,
+          "displayed_rank": null,
+          "candidates": 33,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__he-left-it-behind-on-purpose",
+            "title": "He Left It Behind on Purpose"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.761226881291493,
+          "fusion_position": 1,
+          "rerank_delta": -9
+        }
+      }
+    },
+    {
+      "id": "C04",
+      "type": "conversational",
+      "query": "What happens to my place in church if I walk away for years?",
+      "target": "teshuvah-restoration__your-name-stayed-on-the-list",
+      "modes": {
+        "hybrid": {
+          "rank": 17,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__your-inheritance-is-a-riverbed",
+            "title": "Your Inheritance Is a Riverbed"
+          },
+          "lex_rank": null,
+          "sem_rank": 36,
+          "cosine": 0.7331658067861194,
+          "fusion_position": 36,
+          "rerank_delta": 19
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__your-inheritance-is-a-riverbed",
+            "title": "Your Inheritance Is a Riverbed"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 13,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__the-priest-walks-out-to-you",
+            "title": "The Priest Walks Out to You"
+          },
+          "lex_rank": null,
+          "sem_rank": 36,
+          "cosine": 0.7331658067861194,
+          "fusion_position": 36,
+          "rerank_delta": 23
+        }
+      }
+    },
+    {
+      "id": "C05",
+      "type": "conversational",
+      "query": "How do I keep going when nothing is growing?",
+      "target": "torah-hebraic-insights__your-closed-years-are-making-fruit",
+      "modes": {
+        "hybrid": {
+          "rank": 23,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__your-wandering-already-points-home",
+            "title": "Your Wandering Already Points Home"
+          },
+          "lex_rank": 9,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 47,
+          "rerank_delta": 24
+        },
+        "lexical": {
+          "rank": 11,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__the-name-took-a-year",
+            "title": "The Name Took a Year"
+          },
+          "lex_rank": 9,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 9,
+          "rerank_delta": -2
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 39,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__your-wandering-already-points-home",
+            "title": "Your Wandering Already Points Home"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "C06",
+      "type": "conversational",
+      "query": "Does God notice work that nobody ever sees?",
+      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+      "modes": {
+        "hybrid": {
+          "rank": 23,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__he-said-when-not-if",
+            "title": "He Said When, Not If"
+          },
+          "lex_rank": null,
+          "sem_rank": 31,
+          "cosine": 0.6941975167200698,
+          "fusion_position": 33,
+          "rerank_delta": 10
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "covenant-identity__found-is-a-place",
+            "title": "Found Is a Place"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 20,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__he-said-when-not-if",
+            "title": "He Said When, Not If"
+          },
+          "lex_rank": null,
+          "sem_rank": 31,
+          "cosine": 0.6941975167200698,
+          "fusion_position": 31,
+          "rerank_delta": 11
+        }
+      }
+    },
+    {
+      "id": "C07",
+      "type": "conversational",
+      "query": "What do I do when my job is being automated away?",
+      "target": "torah-hebraic-insights__the-carts-were-gods-idea",
+      "modes": {
+        "hybrid": {
+          "rank": 30,
+          "displayed_rank": null,
+          "candidates": 46,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "celebration-mishpakhah__this-hour-is-spoken-for",
+            "title": "This Hour Is Spoken For"
+          },
+          "lex_rank": 4,
+          "sem_rank": 7,
+          "cosine": 0.7740881570953936,
+          "fusion_position": 3,
+          "rerank_delta": -27
+        },
+        "lexical": {
+          "rank": 7,
+          "displayed_rank": null,
+          "candidates": 12,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__the-wilderness-is-made-of-words",
+            "title": "The Wilderness Is Made of Words"
+          },
+          "lex_rank": 4,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 4,
+          "rerank_delta": -3
+        },
+        "semantic": {
+          "rank": 28,
+          "displayed_rank": null,
+          "candidates": 40,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "celebration-mishpakhah__this-hour-is-spoken-for",
+            "title": "This Hour Is Spoken For"
+          },
+          "lex_rank": 4,
+          "sem_rank": 7,
+          "cosine": 0.7740881570953936,
+          "fusion_position": 7,
+          "rerank_delta": -21
+        }
+      }
+    },
+    {
+      "id": "C08",
+      "type": "conversational",
+      "query": "How do I know I belong if I am single and have no family here?",
+      "target": "celebration-mishpakhah__her-name-was-a-full-sentence",
+      "modes": {
+        "hybrid": {
+          "rank": 26,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "covenant-identity__nobody-was-blessed-as-a-crowd",
+            "title": "Nobody Was Blessed as a Crowd"
+          },
+          "lex_rank": 2,
+          "sem_rank": 31,
+          "cosine": 0.7107921969263733,
+          "fusion_position": 2,
+          "rerank_delta": -24
+        },
+        "lexical": {
+          "rank": 14,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__the-one-chasing-you-is-family",
+            "title": "The One Chasing You Is Family"
+          },
+          "lex_rank": 2,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 2,
+          "rerank_delta": -12
+        },
+        "semantic": {
+          "rank": 24,
+          "displayed_rank": null,
+          "candidates": 39,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "covenant-identity__nobody-was-blessed-as-a-crowd",
+            "title": "Nobody Was Blessed as a Crowd"
+          },
+          "lex_rank": 2,
+          "sem_rank": 31,
+          "cosine": 0.7107921969263733,
+          "fusion_position": 31,
+          "rerank_delta": 7
+        }
+      }
+    },
+    {
+      "id": "C09",
+      "type": "conversational",
+      "query": "Why does nobody say my name anymore?",
+      "target": "covenant-identity__nobody-was-blessed-as-a-crowd",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__your-name-stayed-on-the-list",
+            "title": "Your Name Stayed on the List"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__the-name-took-a-year",
+            "title": "The Name Took a Year"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 34,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__your-name-stayed-on-the-list",
+            "title": "Your Name Stayed on the List"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "C10",
+      "type": "conversational",
+      "query": "How should I treat an enemy who is completely at my mercy?",
+      "target": "shalom-salvation__one-meal-ended-the-war",
+      "modes": {
+        "hybrid": {
+          "rank": 12,
+          "displayed_rank": null,
+          "candidates": 46,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__he-will-argue-my-argument",
+            "title": "He Will Argue My Argument"
+          },
+          "lex_rank": null,
+          "sem_rank": 11,
+          "cosine": 0.7286596387084939,
+          "fusion_position": 11,
+          "rerank_delta": -1
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 12,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__he-will-argue-my-argument",
+            "title": "He Will Argue My Argument"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 7,
+          "displayed_rank": null,
+          "candidates": 35,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__the-avenger-is-called-redeemer",
+            "title": "The Avenger Is Called Redeemer"
+          },
+          "lex_rank": null,
+          "sem_rank": 11,
+          "cosine": 0.7286596387084939,
+          "fusion_position": 11,
+          "rerank_delta": 4
+        }
+      }
+    },
+    {
+      "id": "C11",
+      "type": "conversational",
+      "query": "What should I say first to someone who is lonely?",
+      "target": "shalom-salvation__he-asked-before-he-offered",
+      "modes": {
+        "hybrid": {
+          "rank": 6,
+          "displayed_rank": null,
+          "candidates": 44,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__moses-blessed-them-with-alone",
+            "title": "Moses Blessed Them With Alone"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7664401830740742,
+          "fusion_position": 5,
+          "rerank_delta": -1
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 8,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__alone-was-never-your-whole-name",
+            "title": "Alone Was Never Your Whole Name"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 6,
+          "displayed_rank": null,
+          "candidates": 40,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__moses-blessed-them-with-alone",
+            "title": "Moses Blessed Them With Alone"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7664401830740742,
+          "fusion_position": 1,
+          "rerank_delta": -5
+        }
+      }
+    },
+    {
+      "id": "C12",
+      "type": "conversational",
+      "query": "Can I call something peace before anything has changed?",
+      "target": "shalom-salvation__he-named-it-before-it-was-true",
+      "modes": {
+        "hybrid": {
+          "rank": 9,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__he-left-it-behind-on-purpose",
+            "title": "He Left It Behind on Purpose"
+          },
+          "lex_rank": 36,
+          "sem_rank": 9,
+          "cosine": 0.740110265895836,
+          "fusion_position": 6,
+          "rerank_delta": -3
+        },
+        "lexical": {
+          "rank": 6,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__peace-was-never-graded",
+            "title": "Peace Was Never Graded"
+          },
+          "lex_rank": 36,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 36,
+          "rerank_delta": 30
+        },
+        "semantic": {
+          "rank": 8,
+          "displayed_rank": null,
+          "candidates": 33,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__he-left-it-behind-on-purpose",
+            "title": "He Left It Behind on Purpose"
+          },
+          "lex_rank": 36,
+          "sem_rank": 9,
+          "cosine": 0.740110265895836,
+          "fusion_position": 9,
+          "rerank_delta": 1
+        }
+      }
+    },
+    {
+      "id": "C13",
+      "type": "conversational",
+      "query": "Why do people stop showing up after the crisis passes?",
+      "target": "celebration-mishpakhah__comfort-was-never-a-sentence",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__the-rescue-went-ahead-anyway",
+            "title": "The Rescue Went Ahead Anyway"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 10,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__your-leak-has-a-name",
+            "title": "Your Leak Has a Name"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 40,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__the-rescue-went-ahead-anyway",
+            "title": "The Rescue Went Ahead Anyway"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "C14",
+      "type": "conversational",
+      "query": "How do I read the Bible so the point does not get lost?",
+      "target": "torah-hebraic-insights__the-middle-is-the-message",
+      "modes": {
+        "hybrid": {
+          "rank": 29,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__one-small-letter-says-your-name",
+            "title": "One Small Letter Says Your Name"
+          },
+          "lex_rank": 66,
+          "sem_rank": 3,
+          "cosine": 0.7539610830453236,
+          "fusion_position": 4,
+          "rerank_delta": -25
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "covenant-identity__the-password-was-a-harvest",
+            "title": "The Password Was a Harvest"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 25,
+          "displayed_rank": null,
+          "candidates": 32,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__one-small-letter-says-your-name",
+            "title": "One Small Letter Says Your Name"
+          },
+          "lex_rank": 66,
+          "sem_rank": 3,
+          "cosine": 0.7539610830453236,
+          "fusion_position": 3,
+          "rerank_delta": -22
+        }
+      }
+    },
+    {
+      "id": "C15",
+      "type": "conversational",
+      "query": "Why would God show favouritism when the law forbids judges to?",
+      "target": "torah-hebraic-insights__the-judge-who-plays-favorites",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__the-judge-who-plays-favorites",
+            "title": "The Judge Who Plays Favorites"
+          },
+          "lex_rank": 85,
+          "sem_rank": 1,
+          "cosine": 0.7490486786527747,
+          "fusion_position": 4,
+          "rerank_delta": 3
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__his-strangest-rules-became-songs",
+            "title": "His Strangest Rules Became Songs"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 35,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__the-judge-who-plays-favorites",
+            "title": "The Judge Who Plays Favorites"
+          },
+          "lex_rank": 85,
+          "sem_rank": 1,
+          "cosine": 0.7490486786527747,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "C16",
+      "type": "conversational",
+      "query": "I keep waiting for care that never comes. Does that matter to God?",
+      "target": "shalom-salvation__even-the-ox-gets-water",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__home-is-not-a-distance",
+            "title": "Home Is Not a Distance"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__home-is-not-a-distance",
+            "title": "Home Is Not a Distance"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 40,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__he-says-it-twice",
+            "title": "He Says It Twice"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "C17",
+      "type": "conversational",
+      "query": "What does it mean that my identity cannot be taken away?",
+      "target": "covenant-identity__the-seal-you-cannot-misplace",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "covenant-identity__someone-already-claimed-you",
+            "title": "Someone Already Claimed You"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": 5,
+          "displayed_rank": null,
+          "candidates": 30,
+          "coverage": "weak",
+          "intent": "conversational",
+          "top": {
+            "target": "covenant-identity__your-calling-is-older-than-you",
+            "title": "Your Calling Is Older Than You"
+          },
+          "lex_rank": 29,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 29,
+          "rerank_delta": 24
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "covenant-identity__someone-already-claimed-you",
+            "title": "Someone Already Claimed You"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "C18",
+      "type": "conversational",
+      "query": "Why was I passed over again and again?",
+      "target": "covenant-identity__forward-looked-like-standing-still",
+      "modes": {
+        "hybrid": {
+          "rank": 42,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__checking-him-was-always-allowed",
+            "title": "Checking Him Was Always Allowed"
+          },
+          "lex_rank": 15,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 50,
+          "rerank_delta": 8
+        },
+        "lexical": {
+          "rank": 37,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__through-is-the-better-rescue",
+            "title": "Through Is the Better Rescue"
+          },
+          "lex_rank": 15,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 15,
+          "rerank_delta": -22
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "torah-hebraic-insights__checking-him-was-always-allowed",
+            "title": "Checking Him Was Always Allowed"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "C19",
+      "type": "conversational",
+      "query": "How do I include people who keep getting left out?",
+      "target": "celebration-mishpakhah__the-overlooked-got-the-ledger",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__your-name-stayed-on-the-list",
+            "title": "Your Name Stayed on the List"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "celebration-mishpakhah__walk-them-out-to-the-road",
+            "title": "Walk Them Out to the Road"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 40,
+          "coverage": "strong",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__your-name-stayed-on-the-list",
+            "title": "Your Name Stayed on the List"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "C20",
+      "type": "conversational",
+      "query": "Why can I not bring myself to sign up for baptism?",
+      "target": "celebration-mishpakhah__hope-is-a-body-of-water",
+      "modes": {
+        "hybrid": {
+          "rank": 27,
+          "displayed_rank": null,
+          "candidates": 43,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__deep-water-needs-a-bucket",
+            "title": "Deep Water Needs a Bucket"
+          },
+          "lex_rank": 1,
+          "sem_rank": 12,
+          "cosine": 0.693428801385711,
+          "fusion_position": 2,
+          "rerank_delta": -25
+        },
+        "lexical": {
+          "rank": 4,
+          "displayed_rank": null,
+          "candidates": 10,
+          "coverage": "none",
+          "intent": "conversational",
+          "top": {
+            "target": "shalom-salvation__rescue-came-with-paperwork",
+            "title": "Rescue Came With Paperwork"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": -3
+        },
+        "semantic": {
+          "rank": 25,
+          "displayed_rank": null,
+          "candidates": 35,
+          "coverage": "moderate",
+          "intent": "conversational",
+          "top": {
+            "target": "teshuvah-restoration__deep-water-needs-a-bucket",
+            "title": "Deep Water Needs a Bucket"
+          },
+          "lex_rank": 1,
+          "sem_rank": 12,
+          "cosine": 0.693428801385711,
+          "fusion_position": 12,
+          "rerank_delta": -13
+        }
+      }
+    },
+    {
+      "id": "P01",
+      "type": "paraphrase",
+      "query": "a cemetery that turns out to be a nursery",
+      "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+      "note": "shares no content word with the title or summary",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 36,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+            "title": "The Valley Was Never a Graveyard"
+          },
+          "lex_rank": null,
+          "sem_rank": 3,
+          "cosine": 0.7261872807993422,
+          "fusion_position": 3,
+          "rerank_delta": 2
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 0,
+          "coverage": "none",
+          "intent": "topical",
+          "top": null,
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 36,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+            "title": "The Valley Was Never a Graveyard"
+          },
+          "lex_rank": null,
+          "sem_rank": 3,
+          "cosine": 0.7261872807993422,
+          "fusion_position": 3,
+          "rerank_delta": 2
+        }
+      }
+    },
+    {
+      "id": "P02",
+      "type": "paraphrase",
+      "query": "credentials your employer never issued",
+      "target": "covenant-identity__the-seal-you-cannot-misplace",
+      "modes": {
+        "hybrid": {
+          "rank": 27,
+          "displayed_rank": null,
+          "candidates": 40,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__someone-already-claimed-you",
+            "title": "Someone Already Claimed You"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 2,
+          "rerank_delta": -25
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 1,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__the-seal-you-cannot-misplace",
+            "title": "The Seal You Cannot Misplace"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 39,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__someone-already-claimed-you",
+            "title": "Someone Already Claimed You"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "P03",
+      "type": "paraphrase",
+      "query": "the empty seat nobody is allowed to take",
+      "target": "celebration-mishpakhah__nobody-moves-that-chair",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__nobody-moves-that-chair",
+            "title": "Nobody Moves That Chair"
+          },
+          "lex_rank": 19,
+          "sem_rank": 5,
+          "cosine": 0.749062110123386,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 32,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__nobody-moves-that-chair",
+            "title": "Nobody Moves That Chair"
+          },
+          "lex_rank": 19,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 19,
+          "rerank_delta": 18
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 34,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__nobody-moves-that-chair",
+            "title": "Nobody Moves That Chair"
+          },
+          "lex_rank": 19,
+          "sem_rank": 5,
+          "cosine": 0.749062110123386,
+          "fusion_position": 5,
+          "rerank_delta": 4
+        }
+      }
+    },
+    {
+      "id": "P04",
+      "type": "paraphrase",
+      "query": "counting an unbroken streak until it breaks",
+      "target": "teshuvah-restoration__the-ladder-was-never-required",
+      "modes": {
+        "hybrid": {
+          "rank": 7,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__count-the-ground-not-the-years",
+            "title": "Count the Ground, Not the Years"
+          },
+          "lex_rank": 1,
+          "sem_rank": 4,
+          "cosine": 0.7559651159996851,
+          "fusion_position": 2,
+          "rerank_delta": -5
+        },
+        "lexical": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 2,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-number-was-always-a-story",
+            "title": "The Number Was Always a Story"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": -1
+        },
+        "semantic": {
+          "rank": 7,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__count-the-ground-not-the-years",
+            "title": "Count the Ground, Not the Years"
+          },
+          "lex_rank": 1,
+          "sem_rank": 4,
+          "cosine": 0.7559651159996851,
+          "fusion_position": 4,
+          "rerank_delta": -3
+        }
+      }
+    },
+    {
+      "id": "P05",
+      "type": "paraphrase",
+      "query": "labour with no monument to point at",
+      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+      "modes": {
+        "hybrid": {
+          "rank": 12,
+          "displayed_rank": null,
+          "candidates": 38,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__let-the-blessing-do-the-reaching",
+            "title": "Let the Blessing Do the Reaching"
+          },
+          "lex_rank": null,
+          "sem_rank": 34,
+          "cosine": 0.6676985072050234,
+          "fusion_position": 34,
+          "rerank_delta": 22
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 0,
+          "coverage": "none",
+          "intent": "topical",
+          "top": null,
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 12,
+          "displayed_rank": null,
+          "candidates": 38,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__let-the-blessing-do-the-reaching",
+            "title": "Let the Blessing Do the Reaching"
+          },
+          "lex_rank": null,
+          "sem_rank": 34,
+          "cosine": 0.6676985072050234,
+          "fusion_position": 34,
+          "rerank_delta": 22
+        }
+      }
+    },
+    {
+      "id": "P06",
+      "type": "paraphrase",
+      "query": "standing still while moving forward",
+      "target": "covenant-identity__forward-looked-like-standing-still",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__forward-looked-like-standing-still",
+            "title": "Forward Looked Like Standing Still"
+          },
+          "lex_rank": 2,
+          "sem_rank": 1,
+          "cosine": 0.7427575535206348,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__forward-looked-like-standing-still",
+            "title": "Forward Looked Like Standing Still"
+          },
+          "lex_rank": 2,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 2,
+          "rerank_delta": 1
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 32,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__forward-looked-like-standing-still",
+            "title": "Forward Looked Like Standing Still"
+          },
+          "lex_rank": 2,
+          "sem_rank": 1,
+          "cosine": 0.7427575535206348,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "P07",
+      "type": "paraphrase",
+      "query": "one text message after nine years of silence",
+      "target": "teshuvah-restoration__the-packing-list-was-the-pardon",
+      "modes": {
+        "hybrid": {
+          "rank": 6,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__named-for-what-never-runs-dry",
+            "title": "Named for What Never Runs Dry"
+          },
+          "lex_rank": null,
+          "sem_rank": 4,
+          "cosine": 0.7152988342471228,
+          "fusion_position": 9,
+          "rerank_delta": 3
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 26,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__named-for-what-never-runs-dry",
+            "title": "Named for What Never Runs Dry"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 5,
+          "displayed_rank": null,
+          "candidates": 38,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-turn-you-never-regret",
+            "title": "The Turn You Never Regret"
+          },
+          "lex_rank": null,
+          "sem_rank": 4,
+          "cosine": 0.7152988342471228,
+          "fusion_position": 4,
+          "rerank_delta": -1
+        }
+      }
+    },
+    {
+      "id": "P08",
+      "type": "paraphrase",
+      "query": "humming where you are told to be quiet",
+      "target": "shalom-salvation__the-quiet-was-not-the-point",
+      "modes": {
+        "hybrid": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__joy-is-an-overthrow",
+            "title": "Joy Is an Overthrow"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.788394090733472,
+          "fusion_position": 6,
+          "rerank_delta": 4
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 28,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__joy-is-an-overthrow",
+            "title": "Joy Is an Overthrow"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 30,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__the-quiet-was-not-the-point",
+            "title": "The Quiet Was Not the Point"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.788394090733472,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "P09",
+      "type": "paraphrase",
+      "query": "a broadcast reaching the country that imprisoned your father",
+      "target": "teshuvah-restoration__the-last-word-is-a-question",
+      "modes": {
+        "hybrid": {
+          "rank": 33,
+          "displayed_rank": null,
+          "candidates": 34,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__the-foreigner-got-better-terms",
+            "title": "The Foreigner Got Better Terms"
+          },
+          "lex_rank": null,
+          "sem_rank": 19,
+          "cosine": 0.7228069614024212,
+          "fusion_position": 21,
+          "rerank_delta": -12
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 2,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__you-are-allowed-to-unpack",
+            "title": "You Are Allowed to Unpack"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 32,
+          "displayed_rank": null,
+          "candidates": 33,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__the-foreigner-got-better-terms",
+            "title": "The Foreigner Got Better Terms"
+          },
+          "lex_rank": null,
+          "sem_rank": 19,
+          "cosine": 0.7228069614024212,
+          "fusion_position": 19,
+          "rerank_delta": -13
+        }
+      }
+    },
+    {
+      "id": "P10",
+      "type": "paraphrase",
+      "query": "twenty minutes to decide about your own entry",
+      "target": "celebration-mishpakhah__her-name-was-a-full-sentence",
+      "modes": {
+        "hybrid": {
+          "rank": 25,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__set-something-that-gives-back",
+            "title": "Set Something That Gives Back"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 3,
+          "rerank_delta": -22
+        },
+        "lexical": {
+          "rank": 14,
+          "displayed_rank": null,
+          "candidates": 30,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__set-something-that-gives-back",
+            "title": "Set Something That Gives Back"
+          },
+          "lex_rank": 1,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 1,
+          "rerank_delta": -13
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 39,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__they-marked-the-part-thats-yours",
+            "title": "They Marked the Part That's Yours"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "X01",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "Holy Spirit breathing life into dry bones",
+      "target": "teshuvah-restoration__the-valley-was-never-a-graveyard",
+      "note": "article uses Ruach HaKodesh; query uses the English register",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-priest-walks-out-to-you",
+            "title": "The Priest Walks Out to You"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": 4,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__holiness-learned-to-travel",
+            "title": "Holiness Learned to Travel"
+          },
+          "lex_rank": 34,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 34,
+          "rerank_delta": 30
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 38,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-priest-walks-out-to-you",
+            "title": "The Priest Walks Out to You"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "X02",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "Ruach HaKodesh and the seal on your identity",
+      "target": "covenant-identity__the-seal-you-cannot-misplace",
+      "note": "article uses Ruach HaKodesh; both directions must resolve",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 45,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__the-seal-you-cannot-misplace",
+            "title": "The Seal You Cannot Misplace"
+          },
+          "lex_rank": 9,
+          "sem_rank": 5,
+          "cosine": 0.7056921122847231,
+          "fusion_position": 2,
+          "rerank_delta": 1
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 9,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__the-seal-you-cannot-misplace",
+            "title": "The Seal You Cannot Misplace"
+          },
+          "lex_rank": 9,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 9,
+          "rerank_delta": 8
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 38,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__the-seal-you-cannot-misplace",
+            "title": "The Seal You Cannot Misplace"
+          },
+          "lex_rank": 9,
+          "sem_rank": 5,
+          "cosine": 0.7056921122847231,
+          "fusion_position": 5,
+          "rerank_delta": 4
+        }
+      }
+    },
+    {
+      "id": "X03",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "steadfast love toward someone passed over for years",
+      "target": "covenant-identity__forward-looked-like-standing-still",
+      "note": "article uses chesed",
+      "modes": {
+        "hybrid": {
+          "rank": 35,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+            "title": "A Kindness Nobody Ever Saw"
+          },
+          "lex_rank": 20,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 42,
+          "rerank_delta": 7
+        },
+        "lexical": {
+          "rank": 22,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+            "title": "A Kindness Nobody Ever Saw"
+          },
+          "lex_rank": 20,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 20,
+          "rerank_delta": -2
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 38,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__he-gave-her-a-name-first",
+            "title": "He Gave Her a Name First"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "X04",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "lovingkindness at a funeral nobody attends",
+      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+      "note": "article uses chesed",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+            "title": "A Kindness Nobody Ever Saw"
+          },
+          "lex_rank": 14,
+          "sem_rank": 1,
+          "cosine": 0.8120179987572272,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+            "title": "A Kindness Nobody Ever Saw"
+          },
+          "lex_rank": 14,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 14,
+          "rerank_delta": 13
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 37,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+            "title": "A Kindness Nobody Ever Saw"
+          },
+          "lex_rank": 14,
+          "sem_rank": 1,
+          "cosine": 0.8120179987572272,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "X05",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "chesed shown to a boy in his third foster placement",
+      "target": "celebration-mishpakhah__nobody-moves-that-chair",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__fathers-come-home-too",
+            "title": "Fathers Come Home Too"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 0,
+          "coverage": "none",
+          "intent": "topical",
+          "top": null,
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__fathers-come-home-too",
+            "title": "Fathers Come Home Too"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "X06",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "chesed and a migrating bird named loyal",
+      "target": "teshuvah-restoration__the-stork-is-named-faithful",
+      "modes": {
+        "hybrid": {
+          "rank": 6,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-bird-you-release-releases-you",
+            "title": "The Bird You Release Releases You"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7523064791008229,
+          "fusion_position": 6,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__first-ripe-first-sent",
+            "title": "First Ripe, First Sent"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 6,
+          "displayed_rank": null,
+          "candidates": 30,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-bird-you-release-releases-you",
+            "title": "The Bird You Release Releases You"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7523064791008229,
+          "fusion_position": 1,
+          "rerank_delta": -5
+        }
+      }
+    },
+    {
+      "id": "X07",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "repentance and a name still on the roll",
+      "target": "teshuvah-restoration__your-name-stayed-on-the-list",
+      "note": "article uses teshuvah",
+      "modes": {
+        "hybrid": {
+          "rank": 15,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__confession-is-a-thanking-word",
+            "title": "Confession Is a Thanking Word"
+          },
+          "lex_rank": 44,
+          "sem_rank": 28,
+          "cosine": 0.7383933397894583,
+          "fusion_position": 11,
+          "rerank_delta": -4
+        },
+        "lexical": {
+          "rank": 6,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__repentance-has-a-delivery-date",
+            "title": "Repentance Has a Delivery Date"
+          },
+          "lex_rank": 44,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 44,
+          "rerank_delta": 38
+        },
+        "semantic": {
+          "rank": 15,
+          "displayed_rank": null,
+          "candidates": 36,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__confession-is-a-thanking-word",
+            "title": "Confession Is a Thanking Word"
+          },
+          "lex_rank": 44,
+          "sem_rank": 28,
+          "cosine": 0.7383933397894583,
+          "fusion_position": 28,
+          "rerank_delta": 13
+        }
+      }
+    },
+    {
+      "id": "X08",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "teshuvah in the book of Jonah",
+      "target": "teshuvah-restoration__the-last-word-is-a-question",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-last-word-is-a-question",
+            "title": "The Last Word Is a Question"
+          },
+          "lex_rank": 8,
+          "sem_rank": 2,
+          "cosine": 0.7273727094637034,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-last-word-is-a-question",
+            "title": "The Last Word Is a Question"
+          },
+          "lex_rank": 8,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 8,
+          "rerank_delta": 7
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 36,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__the-last-word-is-a-question",
+            "title": "The Last Word Is a Question"
+          },
+          "lex_rank": 8,
+          "sem_rank": 2,
+          "cosine": 0.7273727094637034,
+          "fusion_position": 2,
+          "rerank_delta": 1
+        }
+      }
+    },
+    {
+      "id": "X09",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "peace declared before the war is over",
+      "target": "shalom-salvation__he-named-it-before-it-was-true",
+      "note": "article uses shalom",
+      "modes": {
+        "hybrid": {
+          "rank": 40,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__he-left-it-behind-on-purpose",
+            "title": "He Left It Behind on Purpose"
+          },
+          "lex_rank": 37,
+          "sem_rank": 3,
+          "cosine": 0.7218702372442672,
+          "fusion_position": 9,
+          "rerank_delta": -31
+        },
+        "lexical": {
+          "rank": 33,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__peace-was-never-graded",
+            "title": "Peace Was Never Graded"
+          },
+          "lex_rank": 37,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 37,
+          "rerank_delta": 4
+        },
+        "semantic": {
+          "rank": 21,
+          "displayed_rank": null,
+          "candidates": 24,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__he-left-it-behind-on-purpose",
+            "title": "He Left It Behind on Purpose"
+          },
+          "lex_rank": 37,
+          "sem_rank": 3,
+          "cosine": 0.7218702372442672,
+          "fusion_position": 3,
+          "rerank_delta": -18
+        }
+      }
+    },
+    {
+      "id": "X10",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "shalom made by feeding an enemy",
+      "target": "shalom-salvation__one-meal-ended-the-war",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__one-meal-ended-the-war",
+            "title": "One Meal Ended the War"
+          },
+          "lex_rank": null,
+          "sem_rank": 5,
+          "cosine": 0.7081706408655235,
+          "fusion_position": 15,
+          "rerank_delta": 14
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__you-were-given-aim-not-rules",
+            "title": "You Were Given Aim, Not Rules"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 33,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__one-meal-ended-the-war",
+            "title": "One Meal Ended the War"
+          },
+          "lex_rank": null,
+          "sem_rank": 5,
+          "cosine": 0.7081706408655235,
+          "fusion_position": 5,
+          "rerank_delta": 4
+        }
+      }
+    },
+    {
+      "id": "X11",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "family that sets a place for you anyway",
+      "target": "celebration-mishpakhah__comfort-was-never-a-sentence",
+      "note": "article uses mishpakhah",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__your-home-has-arms",
+            "title": "Your Home Has Arms"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__somebody-rose-before-the-feast",
+            "title": "Somebody Rose Before the Feast"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 39,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__home-is-not-a-distance",
+            "title": "Home Is Not a Distance"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "X12",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "mishpakhah and belonging without a spouse",
+      "target": "celebration-mishpakhah__her-name-was-a-full-sentence",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 40,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__every-rule-was-a-vow",
+            "title": "Every Rule Was a Vow"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 0,
+          "coverage": "none",
+          "intent": "topical",
+          "top": null,
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 40,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__every-rule-was-a-vow",
+            "title": "Every Rule Was a Vow"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "X13",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "Adonai and a room held on thirty days notice",
+      "target": "covenant-identity__sons-do-not-hand-it-back",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-shine-you-cannot-see",
+            "title": "The Shine You Cannot See"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__sons-do-not-hand-it-back",
+            "title": "Sons Do Not Hand It Back"
+          },
+          "lex_rank": 44,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 44,
+          "rerank_delta": 43
+        },
+        "semantic": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 34,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__ready-comes-after-the-door",
+            "title": "Ready Comes After the Door"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        }
+      }
+    },
+    {
+      "id": "X14",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "Adonai and liberty pictured as a nesting bird",
+      "target": "shalom-salvation__freedom-is-a-bird-that-nests",
+      "modes": {
+        "hybrid": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-covering-was-made-too-big",
+            "title": "The Covering Was Made Too Big"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7334584303616218,
+          "fusion_position": 9,
+          "rerank_delta": 7
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "teshuvah-restoration__esau-was-already-running",
+            "title": "Esau Was Already Running"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 29,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-covering-was-made-too-big",
+            "title": "The Covering Was Made Too Big"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7334584303616218,
+          "fusion_position": 1,
+          "rerank_delta": -1
+        }
+      }
+    },
+    {
+      "id": "X15",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "Jesus asking a woman for a drink",
+      "target": "shalom-salvation__he-asked-before-he-offered",
+      "note": "article uses Yeshua",
+      "modes": {
+        "hybrid": {
+          "rank": 9,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__it-is-not-too-hard-for-you",
+            "title": "It Is Not Too Hard for You"
+          },
+          "lex_rank": 9,
+          "sem_rank": 1,
+          "cosine": 0.7381776110374635,
+          "fusion_position": 2,
+          "rerank_delta": -7
+        },
+        "lexical": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__she-never-asked-for-anything",
+            "title": "She Never Asked for Anything"
+          },
+          "lex_rank": 9,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 9,
+          "rerank_delta": 7
+        },
+        "semantic": {
+          "rank": 10,
+          "displayed_rank": null,
+          "candidates": 33,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__every-question-wants-a-face",
+            "title": "Every Question Wants a Face"
+          },
+          "lex_rank": 9,
+          "sem_rank": 1,
+          "cosine": 0.7381776110374635,
+          "fusion_position": 1,
+          "rerank_delta": -9
+        }
+      }
+    },
+    {
+      "id": "X16",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "the Lord's covering removed in exile",
+      "target": "teshuvah-restoration__nothing-was-buried-only-uncovered",
+      "modes": {
+        "hybrid": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__outside-the-camp-is-not-exile",
+            "title": "Outside the Camp Is Not Exile"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7440547800784639,
+          "fusion_position": 7,
+          "rerank_delta": 5
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__he-wanted-the-part-you-hide",
+            "title": "He Wanted the Part You Hide"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 2,
+          "displayed_rank": 2,
+          "candidates": 33,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__outside-the-camp-is-not-exile",
+            "title": "Outside the Camp Is Not Exile"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7440547800784639,
+          "fusion_position": 1,
+          "rerank_delta": -1
+        }
+      }
+    },
+    {
+      "id": "X17",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "Torah teaching about carts and doing less work",
+      "target": "torah-hebraic-insights__the-carts-were-gods-idea",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 50,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-carts-were-gods-idea",
+            "title": "The Carts Were God's Idea"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.760954859503711,
+          "fusion_position": 12,
+          "rerank_delta": 11
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "celebration-mishpakhah__commanded-to-enjoy-it",
+            "title": "Commanded to Enjoy It"
+          },
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 36,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-carts-were-gods-idea",
+            "title": "The Carts Were God's Idea"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.760954859503711,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "X18",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "Shabbat healing after eighteen years of waiting",
+      "target": "shalom-salvation__even-the-ox-gets-water",
+      "modes": {
+        "hybrid": {
+          "rank": 7,
+          "displayed_rank": null,
+          "candidates": 50,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__healed-with-the-snakes-still-there",
+            "title": "Healed With the Snakes Still There"
+          },
+          "lex_rank": 14,
+          "sem_rank": 1,
+          "cosine": 0.7146642323083148,
+          "fusion_position": 1,
+          "rerank_delta": -6
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 15,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__even-the-ox-gets-water",
+            "title": "Even the Ox Gets Water"
+          },
+          "lex_rank": 14,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 14,
+          "rerank_delta": 13
+        },
+        "semantic": {
+          "rank": 7,
+          "displayed_rank": null,
+          "candidates": 37,
+          "coverage": "weak",
+          "intent": "topical",
+          "top": {
+            "target": "shalom-salvation__healed-with-the-snakes-still-there",
+            "title": "Healed With the Snakes Still There"
+          },
+          "lex_rank": 14,
+          "sem_rank": 1,
+          "cosine": 0.7146642323083148,
+          "fusion_position": 1,
+          "rerank_delta": -6
+        }
+      }
+    },
+    {
+      "id": "X19",
+      "type": "cross-register",
+      "register": "he->en",
+      "query": "birkat kohanim and a judge lifting the face",
+      "target": "torah-hebraic-insights__the-judge-who-plays-favorites",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 31,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-judge-who-plays-favorites",
+            "title": "The Judge Who Plays Favorites"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7616020433066532,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": null,
+          "displayed_rank": null,
+          "candidates": 0,
+          "coverage": "none",
+          "intent": "topical",
+          "top": null,
+          "lex_rank": null,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": null,
+          "rerank_delta": null
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 31,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "torah-hebraic-insights__the-judge-who-plays-favorites",
+            "title": "The Judge Who Plays Favorites"
+          },
+          "lex_rank": null,
+          "sem_rank": 1,
+          "cosine": 0.7616020433066532,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        }
+      }
+    },
+    {
+      "id": "X20",
+      "type": "cross-register",
+      "register": "en->he",
+      "query": "marriage covenant written as a list of what is owed",
+      "target": "covenant-identity__every-rule-was-a-vow",
+      "note": "article uses ketubah",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 36,
+          "coverage": "strong",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__every-rule-was-a-vow",
+            "title": "Every Rule Was a Vow"
+          },
+          "lex_rank": 7,
+          "sem_rank": 2,
+          "cosine": 0.7563964256194186,
+          "fusion_position": 1,
+          "rerank_delta": 0
+        },
+        "lexical": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 10,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__every-rule-was-a-vow",
+            "title": "Every Rule Was a Vow"
+          },
+          "lex_rank": 7,
+          "sem_rank": null,
+          "cosine": null,
+          "fusion_position": 7,
+          "rerank_delta": 6
+        },
+        "semantic": {
+          "rank": 1,
+          "displayed_rank": 1,
+          "candidates": 29,
+          "coverage": "moderate",
+          "intent": "topical",
+          "top": {
+            "target": "covenant-identity__every-rule-was-a-vow",
+            "title": "Every Rule Was a Vow"
+          },
+          "lex_rank": 7,
+          "sem_rank": 2,
+          "cosine": 0.7563964256194186,
+          "fusion_position": 2,
+          "rerank_delta": 1
+        }
+      }
+    },
+    {
+      "id": "N01",
+      "type": "navigational",
+      "query": "JubileeVerse",
+      "target": "__navigational__jubileeverse.com",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "via": "panel",
+          "panel": "jubileeverse.com",
+          "intent": "navigational"
+        },
+        "lexical": {
+          "rank": 1,
+          "via": "panel",
+          "panel": "jubileeverse.com",
+          "intent": "navigational"
+        },
+        "semantic": {
+          "rank": 1,
+          "via": "panel",
+          "panel": "jubileeverse.com",
+          "intent": "navigational"
+        }
+      }
+    },
+    {
+      "id": "N02",
+      "type": "navigational",
+      "query": "KJubilee",
+      "target": "__navigational__kjubilee.com",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "via": "panel",
+          "panel": "kjubilee.com",
+          "intent": "navigational"
+        },
+        "lexical": {
+          "rank": 1,
+          "via": "panel",
+          "panel": "kjubilee.com",
+          "intent": "navigational"
+        },
+        "semantic": {
+          "rank": 1,
+          "via": "panel",
+          "panel": "kjubilee.com",
+          "intent": "navigational"
+        }
+      }
+    },
+    {
+      "id": "N03",
+      "type": "navigational",
+      "query": "Jubilee Inspire",
+      "target": "__navigational__jubileeinspire.com",
+      "modes": {
+        "hybrid": {
+          "rank": 1,
+          "via": "panel",
+          "panel": "jubileeinspire.com",
+          "intent": "navigational"
+        },
+        "lexical": {
+          "rank": 1,
+          "via": "panel",
+          "panel": "jubileeinspire.com",
+          "intent": "navigational"
+        },
+        "semantic": {
+          "rank": 1,
+          "via": "panel",
+          "panel": "jubileeinspire.com",
+          "intent": "navigational"
+        }
+      }
+    },
+    {
+      "id": "N04",
+      "type": "navigational",
+      "query": "Jubilee Bible Talks",
+      "target": "__navigational__jubileebibletalks.com",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "via": "panel",
+          "panel": null,
+          "intent": "topical"
+        },
+        "lexical": {
+          "rank": null,
+          "via": "panel",
+          "panel": null,
+          "intent": "topical"
+        },
+        "semantic": {
+          "rank": null,
+          "via": "panel",
+          "panel": null,
+          "intent": "topical"
+        }
+      }
+    },
+    {
+      "id": "N05",
+      "type": "navigational",
+      "query": "Born Again DNA",
+      "target": "__navigational__bornagaindna.com",
+      "modes": {
+        "hybrid": {
+          "rank": null,
+          "via": "panel",
+          "panel": null,
+          "intent": "topical"
+        },
+        "lexical": {
+          "rank": null,
+          "via": "panel",
+          "panel": null,
+          "intent": "topical"
+        },
+        "semantic": {
+          "rank": null,
+          "via": "panel",
+          "panel": null,
+          "intent": "topical"
+        }
+      }
+    }
+  ]
+}

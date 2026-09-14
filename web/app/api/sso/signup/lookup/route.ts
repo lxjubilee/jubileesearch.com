@@ -1,5 +1,7 @@
 import * as sso from '@/lib/sso';
 import { json, readJson, normalizeEmail, EMAIL_RE, UNAVAILABLE } from '@/lib/sso-door';
+import { ssoAuthLimiter, clientIp } from '@/lib/rate-limit';
+import { verifyTurnstile, HUMAN_CHECK_FAILED } from '@/lib/turnstile';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -17,11 +19,25 @@ export const dynamic = 'force-dynamic';
 // which one it is talking to.
 
 export async function POST(request: Request) {
+  // This route answers "does this address have a Jubilee ID". Unthrottled,
+  // that is an enumeration oracle for any address someone cares to try.
+  const limited = ssoAuthLimiter(request);
+  if (limited) return limited;
+
   const body = await readJson(request);
   const email = normalizeEmail(body.email);
 
   if (!email || !EMAIL_RE.test(email)) {
     return json({ success: false, error: 'Please enter a valid email address.' }, 400);
+  }
+
+  // Human verification. Checked BEFORE the lookup below, because that lookup is
+  // what a script would be here for: it answers whether an address has a Jubilee
+  // ID, one address per request, for free.
+  const human = await verifyTurnstile(body.turnstileToken, clientIp(request));
+  if (!human.ok) {
+    console.warn('[sso/lookup] turnstile rejected a request:', human.reason);
+    return json({ success: false, error: HUMAN_CHECK_FAILED }, 403);
   }
 
   if (!sso.isConfigured()) {

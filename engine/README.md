@@ -159,24 +159,103 @@ first, or their own `PGLITE_DIR`.
 
 ### Against a real Postgres
 
+Requires **PostgreSQL 16+** and **pgvector 0.7+**. `halfvec` and
+`halfvec_cosine_ops` are 0.7 features and five migrations depend on them; on 0.6
+migration 002 does not degrade, it fails. Verified on 17.11 + pgvector 0.8.6.
+
+**Step 0 — prove the server can host it, before creating anything.**
+
 ```bash
-npm run migrate          # applies db/migrations in order, each in a transaction
-npm test                 # 253 tests
-                         # run it plain -- do not set `PGLITE_DIR`. The
-                         # DB tests run in memory and each opens its own
-                         # PGlite; pointing them all at one directory
-                         # makes them contend for a single-writer
-                         # database and the suite hangs.
-npm start                # API on :4038
+psql "postgresql://USER@HOST:5432/postgres" -f db/preflight-postgres.sql
 ```
 
-Then grant Zone A eligibility. It is deliberately not something a seed file does:
+Then, as a superuser. `OWNER` is load-bearing: PostgreSQL 15 removed the default
+CREATE privilege on schema `public` for every role except the database owner, so
+without it the app role connects fine, reads fine, and cannot create a table —
+and migration 002 fails with `permission denied for schema public`, which reads
+like a broken migration and is a grant.
+
+```sql
+CREATE ROLE jubileesearch LOGIN PASSWORD '...';
+CREATE DATABASE jubileesearch OWNER jubileesearch;
+\c jubileesearch
+CREATE EXTENSION vector; CREATE EXTENSION pg_trgm; CREATE EXTENSION unaccent;
+CREATE EXTENSION pgcrypto; CREATE EXTENSION btree_gin;
+```
+
+```bash
+# as the APP role, not as superuser -- extensions are per database and
+# privileges are per role, so a superuser run would pass while the app fails
+psql "postgresql://jubileesearch@HOST:5432/jubileesearch" -f db/preflight-database.sql
+```
+
+**Step 1 — point `.env` at it, and read the line it prints.**
+
+```
+PGHOST=  PGPORT=5432  PGDATABASE=jubileesearch  PGUSER=  PGPASSWORD=
+```
+
+Every command announces which database it connected to and why:
+
+```json
+{"at":"db.connect","database":"Postgres jubileesearch@127.0.0.1:5432/jubileesearch",
+ "reason":"USE_PGLITE is not set"}
+```
+
+**Read it.** This is not decoration. On the first real move, `.env` carried a
+`PGHOST`/`PGPORT` for a container that does not exist on this workstation *and*
+`USE_PGLITE=1` — each fault hiding the other, because the unreachable Postgres
+was never contacted. Without this line the move would have "succeeded" onto the
+same PGlite file it was supposed to leave.
+
+**Step 2 — migrate.**
+
+```bash
+npm run migrate          # 32 migrations, in order, each in a transaction
+npm test                 # 261 tests
+                         # run it plain -- do not set `PGLITE_DIR`. The DB tests
+                         # run in memory and each opens its own PGlite; pointing
+                         # them all at one directory makes them contend for a
+                         # single-writer database and the suite hangs.
+```
+
+**Step 3 — verify the domain. THE IMPORT FAILS WITHOUT THIS.**
 
 ```bash
 npm run admin -- domains list
-npm run admin -- domains verify --all --method=authoritative_list --actor=<your-jubilee-id>
+npm run admin -- domains verify --host=jubileeverse.com \
+                --method=authoritative_list --actor=<your-jubilee-id>
+```
+
+A fresh database seeds every domain `status='pending'`, `zone_a_eligible=FALSE`,
+and the CDN import refuses outright:
+
+```
+jubileeverse.com is pending; §8.2 reserves Zone A for a verified, active domain
+```
+
+**This is deliberate and must not be moved into a migration.** §8.2 calls domain
+verification *"the only path to Zone A, and it is a security control"*: it records
+`verification_method`, `verified_at` and `approved_by`, so a migration that did it
+silently would be an unattributed grant of Zone A eligibility. Every fresh
+environment pays this step, on purpose. Use the CLI or the admin API — an
+`UPDATE domains SET status='active'` reaches the same row and leaves no
+attestation.
+
+**Step 4 — import, then embed.**
+
+```bash
+npm run import:cdn       # 600 JubileeVerse articles; conditional GET, so re-runs are cheap
+npm start                # API on :4038 -- start it BEFORE the backfill
+npm run embed            # ~2.9 s/chunk on the CPU stand-in; search stays up throughout
 npm run admin -- check   # the acceptance criteria the database can answer
 ```
+
+Starting the engine before the backfill is the point of being on Postgres.
+Measured on this corpus, with the engine serving and the embed job writing:
+zero failed or timed-out queries, `db_latency_ms` 138 → 704. The degradation is
+CPU contention with the embedding model, not the database — cache hits, which
+never touch the vector index, degraded by the same factor.
 
 Jobs, for the systemd timers:
 

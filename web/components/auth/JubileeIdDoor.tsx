@@ -26,6 +26,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Turnstile from './Turnstile';
 import AuthShell from './AuthShell';
 
 const SITE_NAME = 'JubileeSearch';
@@ -255,12 +256,21 @@ type Step = 'email' | 'welcome' | 'form' | 'success';
 // props, so the first response already contains the sign-in screen rather than
 // an empty shell for the client to fill in.
 export default function JubileeIdDoor(
-  { returnUrl = '/', initialEmail = '', initialError = '', configWarning = '' }:
-  { returnUrl?: string; initialEmail?: string; initialError?: string; configWarning?: string },
+  { returnUrl = '/', initialEmail = '', initialError = '', configWarning = '',
+    turnstileSiteKey = '' }:
+  { returnUrl?: string; initialEmail?: string; initialError?: string; configWarning?: string;
+    turnstileSiteKey?: string },
 ) {
   const router = useRouter();
 
   const [step, setStep] = useState<Step>('email');
+
+  // Cloudflare Turnstile, on Screen 1 only. The token is verified server-side
+  // in app/api/sso/signup/lookup, so this is a real gate rather than the
+  // decorative one a site without the secret would be rendering.
+  const [tnToken, setTnToken] = useState('');
+  const [tnBroken, setTnBroken] = useState(false);   // the widget could not render
+  const [tnNonce, setTnNonce] = useState(0);         // bumped to demand a fresh challenge
   const [email, setEmail] = useState(initialEmail);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -300,6 +310,13 @@ export default function JubileeIdDoor(
   // contradicts what the person is now looking at.
   const edit = (set: (v: string) => void) => (v: string) => { set(v); if (error) setError(''); };
 
+  // A token is spent the moment it is checked, so any outcome other than
+  // leaving Screen 1 needs a fresh challenge before the next attempt.
+  function resetTurnstile() {
+    setTnToken('');
+    setTnNonce((v) => v + 1);
+  }
+
   function useDifferentEmail() {
     setExistingPassword('');
     setPassword('');
@@ -331,13 +348,22 @@ export default function JubileeIdDoor(
       return setError('That does not look like a complete email address. Please check it.');
     }
 
+    // A rendered widget that has not been answered is a stop here, so the
+    // person is told before a round trip. A widget that could not render is not:
+    // the server decides that case, and it fails open only if Cloudflare itself
+    // is unreachable.
+    if (turnstileSiteKey && !tnToken && !tnBroken) {
+      return setError('Please complete the human verification.');
+    }
+
     setEmail(addr);
     setError('');
     setLoading(true);
-    const r = await postJson('/api/sso/signup/lookup', { email: addr });
+    const r = await postJson('/api/sso/signup/lookup', { email: addr, turnstileToken: tnToken });
     setLoading(false);
 
     if (!r.ok || !r.data.success) {
+      resetTurnstile();
       return setError(String(r.data.error
         || 'We are having trouble reaching your account right now. Please try again in a moment.'));
     }
@@ -426,6 +452,17 @@ export default function JubileeIdDoor(
             <Field id="email" label="Email address" type="email" value={email}
                    onChange={setEmail} required maxLength={254}
                    autoComplete="email" autoFocus />
+            <Turnstile
+              siteKey={turnstileSiteKey}
+              onToken={(t) => { setTnToken(t); if (t) setTnBroken(false); }}
+              onUnavailable={() => { setTnToken(''); setTnBroken(true); }}
+              resetNonce={tnNonce}
+            />
+            {tnBroken && (
+              <p className="auth-alert auth-alert--notice" role="status">
+                Human verification could not load. Please refresh the page and try again.
+              </p>
+            )}
             <SubmitButton loading={loading} busyLabel="Checking…">Continue</SubmitButton>
             <p className="door-disclaimer">No account yet? We&rsquo;ll set one up for you.</p>
           </form>

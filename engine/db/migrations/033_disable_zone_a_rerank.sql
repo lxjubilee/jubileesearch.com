@@ -1,0 +1,74 @@
+-- 033 — turn the Zone A reranker off. TWO INDEPENDENT REASONS.
+--
+-- The rerank stage is §6.1's cross-encoder slot, and the cross-encoder does not
+-- exist here: `bge-reranker-v2-m3` is gated on HuggingFace (401) and ships no
+-- ONNX build, so the slot has been filled by a bi-encoder cosine stand-in. This
+-- migration stops using it. Both reasons below are measured, and they are
+-- independent — fixing one would not rescue the other.
+--
+-- ---------------------------------------------------------------------------
+-- REASON 1: IT MAKES RESULTS WORSE. Not marginally.
+-- ---------------------------------------------------------------------------
+--
+-- Same retrieval, rerank on vs off, 80 gold pairs (navigational excluded — they
+-- are graded on the panel, not on Zone A):
+--
+--                 rerank ON      rerank OFF
+--   recall@1      30.0 (24/80)   35.0 (28/80)     +4 pairs
+--   recall@3      37.5 (30/80)   45.0 (36/80)     +6 pairs
+--   recall@5      45.0 (36/80)   60.0 (48/80)    +12 pairs
+--   recall@10     57.5 (46/80)   67.5 (54/80)     +8 pairs
+--
+--   conversational  4/20 -> 10/20     paraphrase  6/10 -> 8/10
+--   topical        24/30 -> 26/30     cross-register 12/20 -> 10/20
+--
+-- It cost 12 pairs a top-10 place and won 4. The losses are not near-misses:
+-- targets ranked 1, 1, 2, 4 and 5 by fusion were pushed to 14, 28, 23, 28 and 12.
+-- Retrieval had already put the right article first and the stage moved it out.
+--
+-- CROSS-REGISTER IS THE EXCEPTION AND IT IS COHERENT, not noise. A bi-encoder
+-- embeds query and document separately and rewards SURFACE similarity, which is
+-- what a register-crossing query needs once the lexicon has bridged the terms —
+-- so it won X02, X10 and X17. Surface similarity is the wrong signal for a
+-- question, whose answer rarely resembles it. §6.1 specifies a cross-encoder
+-- precisely because that relationship must be scored with both texts together,
+-- and a bi-encoder structurally cannot. Losing 2 cross-register pairs to win 10
+-- elsewhere is the trade being taken.
+--
+-- ---------------------------------------------------------------------------
+-- REASON 2: IT CANNOT MEET THE LATENCY BUDGET. By fourteen times.
+-- ---------------------------------------------------------------------------
+--
+-- §13.10 allots 180 ms to rerank across BOTH zones. Measured on 50 realistic
+-- documents (title + snippet, the shape the stage actually receives):
+--
+--   MiniLM stand-in     2,550 ms      14x the rerank budget
+--   bge-m3              8,375 ms      47x
+--
+-- 2,550 ms is also five times §17's 500 ms p95 for an entire cache-miss search.
+-- And `TIMEOUTS.rerank` is 2,000 ms, so at full candidate depth the stage was
+-- already timing out and returning the input order unchanged — silently, by
+-- design (§13.10 makes rerank the first thing to drop under load). Part of what
+-- production was doing was therefore this migration, non-deterministically.
+--
+-- ---------------------------------------------------------------------------
+-- WHAT THE REAL CROSS-ENCODER MUST CLEAR
+-- ---------------------------------------------------------------------------
+--
+-- Both bars, not one. Re-enable only when a candidate beats fusion order on the
+-- gold set AND fits the 180 ms budget on real hardware. `npm run eval:rerank`
+-- produces the first number; the second needs the Inference API. A model that
+-- ranks beautifully at 3 seconds is not a fix.
+--
+-- Zone B keeps its reranker: it is never compared against Zone A (§13.5), the
+-- zone is empty today because Safety Gate 3 has no classifier, and there is no
+-- measurement to justify changing it.
+
+UPDATE ranking_config
+   SET value = 0,
+       description = 'DISABLED. 1 = rerank Zone A, 0 = fusion order only. Off since migration 033 for two independent measured reasons: the bi-encoder stand-in costs 12 gold pairs a top-10 place to win 4 (conversational 4/20 -> 10/20 without it), and it needs 2,550 ms for 50 documents against a 180 ms budget in 13.10. Re-enable only for a cross-encoder that clears BOTH bars.'
+ WHERE key = 'rerank_zone_a';
+
+-- The result cache is keyed on the index version and every cached payload was
+-- built with the reranker in the loop, so they are all stale.
+SELECT bump_index_version('migration:033-disable-zone-a-rerank');

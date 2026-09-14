@@ -28,6 +28,15 @@
     "inference:check": "node --env-file-if-exists=.env bin/inference-check.mjs",
     "dev:inference": "node bin/dev-inference.mjs",
     "import:feed": "node --env-file-if-exists=.env src/jobs/import-feed.js",
+    "eval": "node --env-file-if-exists=.env eval/run.mjs",
+    "eval:lexicon": "node --env-file-if-exists=.env eval/lexicon-audit.mjs",
+    "eval:candidates": "node --env-file-if-exists=.env eval/lexicon-candidates.mjs",
+    "eval:proposal": "node --env-file-if-exists=.env eval/lexicon-proposal.mjs",
+    "eval:thresholds": "node --env-file-if-exists=.env eval/derive-thresholds.mjs",
+    "eval:latency": "node --env-file-if-exists=.env eval/latency.mjs",
+    "eval:rerank": "node --env-file-if-exists=.env eval/rerank-effect.mjs",
+    "pg:preflight": "psql -f db/preflight-postgres.sql",
+    "eval:contamination": "node --env-file-if-exists=.env eval/lexicon-contamination.mjs",
     "import:cdn": "node --env-file-if-exists=.env src/jobs/import-cdn.js"
   },
   "dependencies": {

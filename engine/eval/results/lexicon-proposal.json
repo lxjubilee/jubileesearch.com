@@ -1,0 +1,378 @@
+{
+  "ran_at": "2026-09-09T12:11:14.010Z",
+  "proposed": [
+    {
+      "concept_key": "israel",
+      "gloss": "Israel, the people and the land.",
+      "hebrew": [
+        "yisrael",
+        "yisra'el"
+      ],
+      "english": [
+        "israel"
+      ],
+      "pages_total": 225,
+      "hebrew_only": 84,
+      "english_only": 94,
+      "both": 47,
+      "bridged_pages": 178
+    },
+    {
+      "concept_key": "yeshayahu",
+      "gloss": "The prophet Isaiah, and the book.",
+      "hebrew": [
+        "yeshayahu"
+      ],
+      "english": [
+        "isaiah"
+      ],
+      "pages_total": 135,
+      "hebrew_only": 5,
+      "english_only": 108,
+      "both": 22,
+      "bridged_pages": 113
+    },
+    {
+      "concept_key": "moshe",
+      "gloss": "Moses.",
+      "hebrew": [
+        "moshe",
+        "mosheh"
+      ],
+      "english": [
+        "moses"
+      ],
+      "pages_total": 120,
+      "hebrew_only": 87,
+      "english_only": 24,
+      "both": 9,
+      "bridged_pages": 111
+    },
+    {
+      "concept_key": "dawid",
+      "gloss": "King David.",
+      "hebrew": [
+        "dawid"
+      ],
+      "english": [
+        "david"
+      ],
+      "pages_total": 89,
+      "hebrew_only": 11,
+      "english_only": 68,
+      "both": 10,
+      "bridged_pages": 79
+    },
+    {
+      "concept_key": "yerushalayim",
+      "gloss": "Jerusalem.",
+      "hebrew": [
+        "yerushalayim"
+      ],
+      "english": [
+        "jerusalem"
+      ],
+      "pages_total": 85,
+      "hebrew_only": 37,
+      "english_only": 42,
+      "both": 6,
+      "bridged_pages": 79
+    },
+    {
+      "concept_key": "mitsrayim",
+      "gloss": "Egypt.",
+      "hebrew": [
+        "mitsrayim",
+        "mitzrayim"
+      ],
+      "english": [
+        "egypt"
+      ],
+      "pages_total": 89,
+      "hebrew_only": 21,
+      "english_only": 55,
+      "both": 13,
+      "bridged_pages": 76
+    },
+    {
+      "concept_key": "yaakov",
+      "gloss": "Jacob, renamed Israel.",
+      "hebrew": [
+        "ya'akov",
+        "ya'aqov",
+        "yaakov"
+      ],
+      "english": [
+        "jacob"
+      ],
+      "pages_total": 68,
+      "hebrew_only": 51,
+      "english_only": 15,
+      "both": 2,
+      "bridged_pages": 66
+    },
+    {
+      "concept_key": "shaul",
+      "gloss": "The apostle Paul, by his Hebrew name.",
+      "hebrew": [
+        "sha'ul",
+        "shaul"
+      ],
+      "english": [
+        "paul"
+      ],
+      "pages_total": 70,
+      "hebrew_only": 37,
+      "english_only": 26,
+      "both": 7,
+      "bridged_pages": 63
+    },
+    {
+      "concept_key": "avraham",
+      "gloss": "Abraham, called Avram before the covenant.",
+      "hebrew": [
+        "avraham",
+        "avram"
+      ],
+      "english": [
+        "abraham",
+        "abram"
+      ],
+      "pages_total": 56,
+      "hebrew_only": 35,
+      "english_only": 17,
+      "both": 4,
+      "bridged_pages": 52
+    },
+    {
+      "concept_key": "yirmeyahu",
+      "gloss": "The prophet Jeremiah, and the book.",
+      "hebrew": [
+        "yirmeyahu"
+      ],
+      "english": [
+        "jeremiah"
+      ],
+      "pages_total": 56,
+      "hebrew_only": 3,
+      "english_only": 42,
+      "both": 11,
+      "bridged_pages": 45
+    },
+    {
+      "concept_key": "yehudah",
+      "gloss": "Judah, the tribe and the kingdom.",
+      "hebrew": [
+        "yehudah"
+      ],
+      "english": [
+        "judah"
+      ],
+      "pages_total": 41,
+      "hebrew_only": 26,
+      "english_only": 12,
+      "both": 3,
+      "bridged_pages": 38
+    },
+    {
+      "concept_key": "aharon",
+      "gloss": "Aaron, the first high priest.",
+      "hebrew": [
+        "aharon"
+      ],
+      "english": [
+        "aaron"
+      ],
+      "pages_total": 36,
+      "hebrew_only": 30,
+      "english_only": 5,
+      "both": 1,
+      "bridged_pages": 35
+    },
+    {
+      "concept_key": "yosef",
+      "gloss": "Joseph.",
+      "hebrew": [
+        "yosef"
+      ],
+      "english": [
+        "joseph"
+      ],
+      "pages_total": 30,
+      "hebrew_only": 20,
+      "english_only": 8,
+      "both": 2,
+      "bridged_pages": 28
+    },
+    {
+      "concept_key": "yehoshua_bin_nun",
+      "gloss": "Joshua son of Nun.",
+      "hebrew": [
+        "yehoshua"
+      ],
+      "english": [
+        "joshua"
+      ],
+      "pages_total": 31,
+      "hebrew_only": 11,
+      "english_only": 7,
+      "both": 13,
+      "bridged_pages": 18
+    }
+  ],
+  "runners_up": [
+    {
+      "concept_key": "iyov",
+      "gloss": "Job, the man and the book.",
+      "hebrew": [
+        "iyov"
+      ],
+      "english": [
+        "job"
+      ],
+      "pages_total": 367,
+      "hebrew_only": 0,
+      "english_only": 361,
+      "both": 6,
+      "bridged_pages": 361
+    },
+    {
+      "concept_key": "shemot",
+      "gloss": "Exodus, the book.",
+      "hebrew": [
+        "shemot"
+      ],
+      "english": [
+        "exodus"
+      ],
+      "pages_total": 130,
+      "hebrew_only": 2,
+      "english_only": 118,
+      "both": 10,
+      "bridged_pages": 120
+    },
+    {
+      "concept_key": "devarim",
+      "gloss": "Deuteronomy, the book.",
+      "hebrew": [
+        "devarim"
+      ],
+      "english": [
+        "deuteronomy"
+      ],
+      "pages_total": 112,
+      "hebrew_only": 2,
+      "english_only": 101,
+      "both": 9,
+      "bridged_pages": 103
+    },
+    {
+      "concept_key": "yochanan",
+      "gloss": "John.",
+      "hebrew": [
+        "yochanan"
+      ],
+      "english": [
+        "john"
+      ],
+      "pages_total": 40,
+      "hebrew_only": 5,
+      "english_only": 31,
+      "both": 4,
+      "bridged_pages": 36
+    },
+    {
+      "concept_key": "tsion",
+      "gloss": "Zion.",
+      "hebrew": [
+        "tsion",
+        "tziyon"
+      ],
+      "english": [
+        "zion"
+      ],
+      "pages_total": 22,
+      "hebrew_only": 12,
+      "english_only": 10,
+      "both": 0,
+      "bridged_pages": 22
+    },
+    {
+      "concept_key": "yitzchak",
+      "gloss": "Isaac.",
+      "hebrew": [
+        "yitzchak",
+        "yitschak"
+      ],
+      "english": [
+        "isaac"
+      ],
+      "pages_total": 18,
+      "hebrew_only": 11,
+      "english_only": 7,
+      "both": 0,
+      "bridged_pages": 18
+    },
+    {
+      "concept_key": "noach",
+      "gloss": "Noah.",
+      "hebrew": [
+        "noach"
+      ],
+      "english": [
+        "noah"
+      ],
+      "pages_total": 16,
+      "hebrew_only": 14,
+      "english_only": 2,
+      "both": 0,
+      "bridged_pages": 16
+    },
+    {
+      "concept_key": "kefa",
+      "gloss": "Peter.",
+      "hebrew": [
+        "kefa"
+      ],
+      "english": [
+        "peter"
+      ],
+      "pages_total": 22,
+      "hebrew_only": 6,
+      "english_only": 8,
+      "both": 8,
+      "bridged_pages": 14
+    },
+    {
+      "concept_key": "eliyahu",
+      "gloss": "Elijah.",
+      "hebrew": [
+        "eliyahu"
+      ],
+      "english": [
+        "elijah"
+      ],
+      "pages_total": 12,
+      "hebrew_only": 8,
+      "english_only": 2,
+      "both": 2,
+      "bridged_pages": 10
+    },
+    {
+      "concept_key": "miryam",
+      "gloss": "Miriam; also Mary.",
+      "hebrew": [
+        "miryam"
+      ],
+      "english": [
+        "miriam",
+        "mary"
+      ],
+      "pages_total": 11,
+      "hebrew_only": 6,
+      "english_only": 4,
+      "both": 1,
+      "bridged_pages": 10
+    }
+  ]
+}

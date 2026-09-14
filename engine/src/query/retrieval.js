@@ -86,6 +86,10 @@ function buildQuery(zone, ctx) {
   // to be unavailable without affecting search, and the same principle applies
   // here. Lexical-only is a degraded answer; no answer is a worse one.
   const hasVector = Array.isArray(ctx.embedding) && ctx.embedding.length > 0;
+  // Which vector column to search. Always 'embedding' in production; 'embedding_prev'
+  // only when an evaluation is scoring a §12.3 candidate model before cutover.
+  // Nothing on the request path sets this.
+  const embeddingColumn = ctx.embeddingColumn === 'prev' ? 'embedding_prev' : 'embedding';
   const vecParam = hasVector ? p(`[${ctx.embedding.join(',')}]`) : null;
   const tierPredicate = zone === 'A' ? `= 'T1'` : `IN ('T2','T3')`;
 
@@ -96,10 +100,10 @@ function buildQuery(zone, ctx) {
         -- 3x candidates in chunks, because several chunks of one page can crowd
         -- the neighbourhood and only the best of them survives the next step.
         SELECT ch.page_id, ch.id AS chunk_id, ch.text, ch.heading_path,
-               ch.embedding <=> ${vecParam}::halfvec AS dist
+               ch.${embeddingColumn} <=> ${vecParam}::halfvec AS dist
         FROM chunks ch
-        WHERE ch.tier ${tierPredicate} AND ch.embedding IS NOT NULL
-        ORDER BY ch.embedding <=> ${vecParam}::halfvec
+        WHERE ch.tier ${tierPredicate} AND ch.${embeddingColumn} IS NOT NULL
+        ORDER BY ch.${embeddingColumn} <=> ${vecParam}::halfvec
         LIMIT ${candidates}::int * 3
     )
     , sem_best AS (

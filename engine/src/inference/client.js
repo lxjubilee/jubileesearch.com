@@ -23,18 +23,47 @@ const TIMEOUTS = {
   // §13.10 budgets 60 ms for a query embedding on a cache miss. 800 ms is the
   // point past which the request has already blown its p95 and waiting longer
   // only makes the failure slower.
-  embedQuery: 800,
-  rerank: 2_000,
-  embedBatch: 30_000,
+  // §13.10 budgets 60 ms for a query embedding on a cache miss. 800 ms is the
+  // point past which the request has already blown its p95 and waiting longer
+  // only makes the failure slower.
+  //
+  // Configurable for the same reason as the other two: an evaluation must not
+  // inherit production's soft failure. Measured here, bge-m3 on CPU answers a
+  // query in ~222 ms median / 258 ms max once warm — inside the cap, but nowhere
+  // near §13.10's 60 ms — and the FIRST call after the model has been idle can
+  // exceed 800 ms outright. In production that degrades to lexical-only for one
+  // request, which is correct. In a measurement it silently removes the semantic
+  // arm from the run.
+  embedQuery: Number(process.env.EMBED_QUERY_TIMEOUT_MS ?? 800),
+  // §13.10 budgets 180 ms for rerank across both zones and makes it the first
+  // thing to drop under load, so 2 s in production is already generous.
+  //
+  // Configurable because an EVALUATION must not inherit that. Measured here, 50
+  // realistic documents cost 2,550 ms on the MiniLM stand-in and 8,375 ms on
+  // bge-m3 — both over the cap. In production dropping the rerank is correct
+  // behaviour; in a measurement it means some queries rerank and some silently
+  // do not, which is noise the comparison then attributes to the model.
+  rerank: Number(process.env.RERANK_TIMEOUT_MS ?? 2_000),
+  // Ingest-time, so no request is waiting on it -- but it is NOT unbounded,
+  // because an abort here is what stops a slow provider from being retried into
+  // the ground. That happened: a 30 s cap against a CPU ONNX bge-m3 aborted every
+  // batch, and because an aborted fetch does not cancel the server's work, three
+  // retries per batch queued 15,348 requests onto a single-threaded model until it
+  // stopped answering anything at all. 0 chunks embedded, 5,644 marked failed.
+  //
+  // So it is configurable rather than generous: the value must match the provider
+  // actually in use. Measured on this machine, a 500-word chunk costs ~2.8 s on
+  // bge-m3 int8, which puts a batch of 8 at ~24 s and a batch of 16 at ~43 s.
+  embedBatch: Number(process.env.EMBED_BATCH_TIMEOUT_MS ?? 30_000),
   classify: 15_000,
 };
 
-async function call(path, body, timeoutMs) {
-  if (!env.inferenceUrl) throw new Error('INFERENCE_API_URL is not configured');
+async function call(path, body, timeoutMs, baseUrl = env.inferenceUrl) {
+  if (!baseUrl) throw new Error('INFERENCE_API_URL is not configured');
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(`${env.inferenceUrl.replace(/\/$/, '')}${path}`, {
+    const res = await fetch(`${baseUrl.replace(/\/$/, '')}${path}`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -103,7 +132,7 @@ export async function rerank(query, documents) {
       query,
       documents,
       priority: 'realtime',
-    }, TIMEOUTS.rerank);
+    }, TIMEOUTS.rerank, env.rerankUrl);
     const results = json?.results ?? json?.data;
     if (!Array.isArray(results)) throw new Error('rerank returned no results array');
     const order = results

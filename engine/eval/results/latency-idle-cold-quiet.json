@@ -1,0 +1,55 @@
+{
+  "label": "idle-cold-quiet",
+  "ran_at": "2026-09-11T06:30:02.988Z",
+  "base": "http://127.0.0.1:4038",
+  "seconds": 180,
+  "concurrency": 2,
+  "rpm": 55,
+  "requests": 166,
+  "ok": 162,
+  "failed": 4,
+  "cache_hit_rate": 25.3,
+  "all": {
+    "n": 162,
+    "p50": 1273,
+    "p95": 2748.5,
+    "p99": 4073.8,
+    "max": 7183.5
+  },
+  "cache_miss": {
+    "n": 121,
+    "p50": 1454.3,
+    "p95": 2881,
+    "p99": 4073.8,
+    "max": 7183.5
+  },
+  "cache_hit": {
+    "n": 41,
+    "p50": 448.7,
+    "p95": 1463.9,
+    "p99": 1880.4,
+    "max": 1880.4
+  },
+  "errors": [
+    {
+      "q": "How should I treat an enemy who is completely at my mercy?",
+      "status": 429,
+      "ms": 66.55710000000545
+    },
+    {
+      "q": "Why would God show favouritism when the law forbids judges to?",
+      "status": 429,
+      "ms": 81.15650000001187
+    },
+    {
+      "q": "Can I call something peace before anything has changed?",
+      "status": 429,
+      "ms": 535.8191999999981
+    },
+    {
+      "q": "What does it mean that my identity cannot be taken away?",
+      "status": 429,
+      "ms": 563.8920000000217
+    }
+  ]
+}

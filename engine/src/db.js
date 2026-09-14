@@ -10,16 +10,52 @@ import pg from 'pg';
 // Development escape hatch: run against PGlite (Postgres compiled to WASM) when
 // there is no server to connect to. See src/db-pglite.js for what it is not.
 // Two independent conditions, and inert in production whatever the env file says.
-const usePglite = process.env.USE_PGLITE === '1' && process.env.NODE_ENV !== 'production';
+const pgliteRequested = process.env.USE_PGLITE === '1';
+const isProduction = process.env.NODE_ENV === 'production';
+const usePglite = pgliteRequested && !isProduction;
+
+// SAY WHICH DATABASE, AND WHY, ON EVERY START.
+//
+// This used to announce PGlite when it was chosen and say nothing at all
+// otherwise -- so "the engine refuses to fall back to PGlite in production" was
+// confirmed by the ABSENCE of a log line. That is the pattern that has now been
+// caught four times in this build: a fixture that tested nothing because it never
+// reached the code path, an eval preflight that passed against a toy input, a
+// startup banner that named the wrong model, and a threshold whose migration and
+// database disagreed. Every one of them looked correct by producing no evidence
+// of being wrong.
+//
+// So the decision is stated positively, every time, including the boring case.
+const target = usePglite
+  ? `PGlite ${process.env.PGLITE_DIR ? `in ${process.env.PGLITE_DIR}` : 'in memory'}`
+  : `Postgres ${process.env.PGUSER ?? 'jubileesearch'}@${process.env.PGHOST ?? 'localhost'}:`
+    + `${process.env.PGPORT ?? 5432}/${process.env.PGDATABASE ?? 'jubileesearch'}`;
+
+const reason = usePglite
+  ? 'USE_PGLITE=1 and NODE_ENV is not production'
+  : pgliteRequested
+    ? 'USE_PGLITE=1 was IGNORED because NODE_ENV=production'
+    : 'USE_PGLITE is not set';
+
+console.log(JSON.stringify({
+  level: pgliteRequested && isProduction ? 'warn' : usePglite ? 'warn' : 'info',
+  at: 'db.connect',
+  database: target,
+  reason,
+  ...(usePglite ? {
+    msg: 'PGlite is a DEVELOPMENT store: single connection, no concurrency, '
+      + 'FOR UPDATE SKIP LOCKED does not skip, and nothing operational. See src/db-pglite.js.',
+  } : {}),
+  ...(pgliteRequested && isProduction ? {
+    msg: 'An env file asked for PGlite in production. It was refused and the '
+      + 'Postgres settings above were used instead. Fix the env file: a request '
+      + 'that is silently overridden is a request someone still believes was honoured.',
+  } : {}),
+}));
 
 export const pool = usePglite ? await (async () => {
   const { createPglitePool } = await import('./db-pglite.js');
-  const adapter = await createPglitePool({ dataDir: process.env.PGLITE_DIR ?? null });
-  console.warn(JSON.stringify({
-    level: 'warn', at: 'db',
-    msg: `USE_PGLITE is on. Running against PGlite${process.env.PGLITE_DIR ? ` in ${process.env.PGLITE_DIR}` : ' in memory'}, not a Postgres server. Development only.`,
-  }));
-  return adapter;
+  return createPglitePool({ dataDir: process.env.PGLITE_DIR ?? null });
 })() : new pg.Pool({
   host: process.env.PGHOST ?? 'localhost',
   port: Number(process.env.PGPORT ?? 5432),

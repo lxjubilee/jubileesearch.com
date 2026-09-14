@@ -1,5 +1,6 @@
 import * as sso from '@/lib/sso';
 import { json, readJson, normalizeEmail, respondSignedIn, UNAVAILABLE } from '@/lib/sso-door';
+import { ssoAuthLimiter } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -19,6 +20,11 @@ export const dynamic = 'force-dynamic';
 // keep retyping a password that was right.
 
 export async function POST(request: Request) {
+  // Before anything else, and before the body is even read: this route hands
+  // every attempt straight to the authority, so the budget has to be spent here.
+  const limited = ssoAuthLimiter(request);
+  if (limited) return limited;
+
   const body = await readJson(request);
   const email = normalizeEmail(body.email);
   const password = String(body.password ?? '');

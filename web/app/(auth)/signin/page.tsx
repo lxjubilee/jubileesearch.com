@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import JubileeIdDoor from '@/components/auth/JubileeIdDoor';
 import { doorParams } from '@/lib/door-params';
 import { missingConfig } from '@/lib/sso';
+import { siteKey } from '@/lib/turnstile';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/session';
 
@@ -37,5 +38,5 @@ export default async function Page(
     ? `Sign-in is not configured on this deployment. Missing: ${missing.join(', ')}.`
     : '';
 
-  return <JubileeIdDoor {...params} configWarning={configWarning} />;
+  return <JubileeIdDoor {...params} configWarning={configWarning} turnstileSiteKey={siteKey()} />;
 }

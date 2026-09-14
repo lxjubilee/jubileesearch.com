@@ -1,0 +1,605 @@
+{
+  "ran_at": "2026-09-10T08:31:28.067Z",
+  "model": "bge-m3@onnx-int8",
+  "reranker": "http://127.0.0.1:4032",
+  "by_type": {
+    "topical": {
+      "n": 30,
+      "with10": 24,
+      "without10": 26,
+      "with5": 21,
+      "without5": 26,
+      "with1": 14,
+      "without1": 19
+    },
+    "conversational": {
+      "n": 20,
+      "with10": 4,
+      "without10": 10,
+      "with5": 2,
+      "without5": 8,
+      "with1": 1,
+      "without1": 2
+    },
+    "paraphrase": {
+      "n": 10,
+      "with10": 6,
+      "without10": 8,
+      "with5": 4,
+      "without5": 7,
+      "with1": 3,
+      "without1": 2
+    },
+    "cross-register": {
+      "n": 20,
+      "with10": 12,
+      "without10": 10,
+      "with5": 9,
+      "without5": 7,
+      "with1": 6,
+      "without1": 5
+    }
+  },
+  "pairs": [
+    {
+      "id": "T01",
+      "type": "topical",
+      "query": "chiasm in Hebrew writing",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "T02",
+      "type": "topical",
+      "query": "Aaronic blessing lifting the face",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "T03",
+      "type": "topical",
+      "query": "ketubah marriage contract commandments",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T04",
+      "type": "topical",
+      "query": "Ezekiel valley of dry bones",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T05",
+      "type": "topical",
+      "query": "Jonah mercy and the book's final question",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T06",
+      "type": "topical",
+      "query": "Gideon altar Yahuah-Shalom",
+      "with": 42,
+      "without": 3
+    },
+    {
+      "id": "T07",
+      "type": "topical",
+      "query": "woman at the well request before offer",
+      "with": 1,
+      "without": 2
+    },
+    {
+      "id": "T08",
+      "type": "topical",
+      "query": "feeding an enemy army instead of striking them",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T09",
+      "type": "topical",
+      "query": "Joseph and his brothers speaking to the heart",
+      "with": 4,
+      "without": 1
+    },
+    {
+      "id": "T10",
+      "type": "topical",
+      "query": "Anna the prophetess belonging and singleness",
+      "with": 4,
+      "without": 1
+    },
+    {
+      "id": "T11",
+      "type": "topical",
+      "query": "Leviticus law about being fully covered",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T12",
+      "type": "topical",
+      "query": "carts in Torah and automation at work",
+      "with": 1,
+      "without": 4
+    },
+    {
+      "id": "T13",
+      "type": "topical",
+      "query": "orchard fruit stripped for three years",
+      "with": 5,
+      "without": 1
+    },
+    {
+      "id": "T14",
+      "type": "topical",
+      "query": "a word spoken at the right time",
+      "with": 5,
+      "without": 4
+    },
+    {
+      "id": "T15",
+      "type": "topical",
+      "query": "Zephaniah perhaps the boldest intercessors",
+      "with": 2,
+      "without": 1
+    },
+    {
+      "id": "T16",
+      "type": "topical",
+      "query": "the most quoted line in Job written two ways",
+      "with": 5,
+      "without": 1
+    },
+    {
+      "id": "T17",
+      "type": "topical",
+      "query": "closed letter in Isaiah and the foundation stone",
+      "with": 8,
+      "without": 1
+    },
+    {
+      "id": "T18",
+      "type": "topical",
+      "query": "blessing spoken over one person not a crowd",
+      "with": 1,
+      "without": 5
+    },
+    {
+      "id": "T19",
+      "type": "topical",
+      "query": "Ezekiel property law about a borrowed room",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T20",
+      "type": "topical",
+      "query": "healing on Shabbat and watering an ox",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T21",
+      "type": "topical",
+      "query": "the Hebrew word for hope and immersion",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T22",
+      "type": "topical",
+      "query": "meal train ending after week three",
+      "with": 8,
+      "without": 1
+    },
+    {
+      "id": "T23",
+      "type": "topical",
+      "query": "a community meal missing the people it was built for",
+      "with": 4,
+      "without": 4
+    },
+    {
+      "id": "T24",
+      "type": "topical",
+      "query": "Elizabeth and Mary celebrating a promise with no evidence",
+      "with": 24,
+      "without": 28
+    },
+    {
+      "id": "T25",
+      "type": "topical",
+      "query": "a grandmother setting places for guests who are not there",
+      "with": 40,
+      "without": 2
+    },
+    {
+      "id": "T26",
+      "type": "topical",
+      "query": "the plan finished before the builder arrived",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T27",
+      "type": "topical",
+      "query": "exile and having a covering taken off",
+      "with": 8,
+      "without": 1
+    },
+    {
+      "id": "T28",
+      "type": "topical",
+      "query": "the bird in the psalm whose name means liberty",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T29",
+      "type": "topical",
+      "query": "a stork named faithful and a nation that will not return",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "T30",
+      "type": "topical",
+      "query": "answered prayer that felt like nothing",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "C01",
+      "type": "conversational",
+      "query": "Why do I feel nothing after God answered my prayer?",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "C02",
+      "type": "conversational",
+      "query": "How do I forgive a brother I already forgave publicly?",
+      "with": 2,
+      "without": 34
+    },
+    {
+      "id": "C03",
+      "type": "conversational",
+      "query": "Is it wrong to pray maybe instead of being certain?",
+      "with": 14,
+      "without": 1
+    },
+    {
+      "id": "C04",
+      "type": "conversational",
+      "query": "What happens to my place in church if I walk away for years?",
+      "with": 18,
+      "without": 26
+    },
+    {
+      "id": "C05",
+      "type": "conversational",
+      "query": "How do I keep going when nothing is growing?",
+      "with": 22,
+      "without": 8
+    },
+    {
+      "id": "C06",
+      "type": "conversational",
+      "query": "Does God notice work that nobody ever sees?",
+      "with": 24,
+      "without": 23
+    },
+    {
+      "id": "C07",
+      "type": "conversational",
+      "query": "What do I do when my job is being automated away?",
+      "with": 31,
+      "without": 4
+    },
+    {
+      "id": "C08",
+      "type": "conversational",
+      "query": "How do I know I belong if I am single and have no family here?",
+      "with": 28,
+      "without": 1
+    },
+    {
+      "id": "C09",
+      "type": "conversational",
+      "query": "Why does nobody say my name anymore?",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "C10",
+      "type": "conversational",
+      "query": "How should I treat an enemy who is completely at my mercy?",
+      "with": 12,
+      "without": 5
+    },
+    {
+      "id": "C11",
+      "type": "conversational",
+      "query": "What should I say first to someone who is lonely?",
+      "with": 6,
+      "without": 5
+    },
+    {
+      "id": "C12",
+      "type": "conversational",
+      "query": "Can I call something peace before anything has changed?",
+      "with": 7,
+      "without": 6
+    },
+    {
+      "id": "C13",
+      "type": "conversational",
+      "query": "Why do people stop showing up after the crisis passes?",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "C14",
+      "type": "conversational",
+      "query": "How do I read the Bible so the point does not get lost?",
+      "with": 28,
+      "without": 4
+    },
+    {
+      "id": "C15",
+      "type": "conversational",
+      "query": "Why would God show favouritism when the law forbids judges to?",
+      "with": 1,
+      "without": 3
+    },
+    {
+      "id": "C16",
+      "type": "conversational",
+      "query": "I keep waiting for care that never comes. Does that matter to God?",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "C17",
+      "type": "conversational",
+      "query": "What does it mean that my identity cannot be taken away?",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "C18",
+      "type": "conversational",
+      "query": "Why was I passed over again and again?",
+      "with": 43,
+      "without": 48
+    },
+    {
+      "id": "C19",
+      "type": "conversational",
+      "query": "How do I include people who keep getting left out?",
+      "with": 35,
+      "without": 39
+    },
+    {
+      "id": "C20",
+      "type": "conversational",
+      "query": "Why can I not bring myself to sign up for baptism?",
+      "with": 23,
+      "without": 2
+    },
+    {
+      "id": "P01",
+      "type": "paraphrase",
+      "query": "a cemetery that turns out to be a nursery",
+      "with": 1,
+      "without": 4
+    },
+    {
+      "id": "P02",
+      "type": "paraphrase",
+      "query": "credentials your employer never issued",
+      "with": 27,
+      "without": 2
+    },
+    {
+      "id": "P03",
+      "type": "paraphrase",
+      "query": "the empty seat nobody is allowed to take",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "P04",
+      "type": "paraphrase",
+      "query": "counting an unbroken streak until it breaks",
+      "with": 7,
+      "without": 2
+    },
+    {
+      "id": "P05",
+      "type": "paraphrase",
+      "query": "labour with no monument to point at",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "P06",
+      "type": "paraphrase",
+      "query": "standing still while moving forward",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "P07",
+      "type": "paraphrase",
+      "query": "one text message after nine years of silence",
+      "with": 6,
+      "without": 5
+    },
+    {
+      "id": "P08",
+      "type": "paraphrase",
+      "query": "humming where you are told to be quiet",
+      "with": 2,
+      "without": 6
+    },
+    {
+      "id": "P09",
+      "type": "paraphrase",
+      "query": "a broadcast reaching the country that imprisoned your father",
+      "with": 34,
+      "without": 15
+    },
+    {
+      "id": "P10",
+      "type": "paraphrase",
+      "query": "twenty minutes to decide about your own entry",
+      "with": 25,
+      "without": 4
+    },
+    {
+      "id": "X01",
+      "type": "cross-register",
+      "query": "Holy Spirit breathing life into dry bones",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "X02",
+      "type": "cross-register",
+      "query": "Ruach HaKodesh and the seal on your identity",
+      "with": 1,
+      "without": 16
+    },
+    {
+      "id": "X03",
+      "type": "cross-register",
+      "query": "steadfast love toward someone passed over for years",
+      "with": 32,
+      "without": 39
+    },
+    {
+      "id": "X04",
+      "type": "cross-register",
+      "query": "lovingkindness at a funeral nobody attends",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "X05",
+      "type": "cross-register",
+      "query": "chesed shown to a boy in his third foster placement",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "X06",
+      "type": "cross-register",
+      "query": "chesed and a migrating bird named loyal",
+      "with": 6,
+      "without": 5
+    },
+    {
+      "id": "X07",
+      "type": "cross-register",
+      "query": "repentance and a name still on the roll",
+      "with": 13,
+      "without": 11
+    },
+    {
+      "id": "X08",
+      "type": "cross-register",
+      "query": "teshuvah in the book of Jonah",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "X09",
+      "type": "cross-register",
+      "query": "peace declared before the war is over",
+      "with": 41,
+      "without": 9
+    },
+    {
+      "id": "X10",
+      "type": "cross-register",
+      "query": "shalom made by feeding an enemy",
+      "with": 2,
+      "without": 20
+    },
+    {
+      "id": "X11",
+      "type": "cross-register",
+      "query": "family that sets a place for you anyway",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "X12",
+      "type": "cross-register",
+      "query": "mishpakhah and belonging without a spouse",
+      "with": 29,
+      "without": 35
+    },
+    {
+      "id": "X13",
+      "type": "cross-register",
+      "query": "Adonai and a room held on thirty days notice",
+      "with": null,
+      "without": null
+    },
+    {
+      "id": "X14",
+      "type": "cross-register",
+      "query": "Adonai and liberty pictured as a nesting bird",
+      "with": 2,
+      "without": 7
+    },
+    {
+      "id": "X15",
+      "type": "cross-register",
+      "query": "Jesus asking a woman for a drink",
+      "with": 7,
+      "without": 2
+    },
+    {
+      "id": "X16",
+      "type": "cross-register",
+      "query": "the Lord's covering removed in exile",
+      "with": 2,
+      "without": 7
+    },
+    {
+      "id": "X17",
+      "type": "cross-register",
+      "query": "Torah teaching about carts and doing less work",
+      "with": 1,
+      "without": 11
+    },
+    {
+      "id": "X18",
+      "type": "cross-register",
+      "query": "Shabbat healing after eighteen years of waiting",
+      "with": 7,
+      "without": 1
+    },
+    {
+      "id": "X19",
+      "type": "cross-register",
+      "query": "birkat kohanim and a judge lifting the face",
+      "with": 1,
+      "without": 1
+    },
+    {
+      "id": "X20",
+      "type": "cross-register",
+      "query": "marriage covenant written as a list of what is owed",
+      "with": 1,
+      "without": 1
+    }
+  ]
+}

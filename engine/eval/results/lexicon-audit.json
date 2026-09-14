@@ -1,0 +1,3263 @@
+{
+  "ran_at": "2026-09-09T12:08:28.448Z",
+  "corpus": {
+    "pages": 600,
+    "distinct_words": 21245
+  },
+  "lexicon": {
+    "concepts": 46,
+    "terms": 185
+  },
+  "note": "An English term with 0 occurrences in a Hebraic-register corpus is the bridge working, not a defect. Judgement is per concept.",
+  "totals": {
+    "reachable": 37,
+    "misspelled_dominant": 7,
+    "misspelled": 0,
+    "uncovered": 2
+  },
+  "concepts": [
+    {
+      "concept": "abba",
+      "gloss": "Father, in the intimate address.",
+      "terms": [
+        {
+          "term": "abba",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 7,
+          "pages": 2,
+          "near_spellings": []
+        },
+        {
+          "term": "father",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 996,
+          "pages": 335,
+          "near_spellings": [
+            {
+              "form": "feather",
+              "hits": 3,
+              "pages": 2
+            }
+          ]
+        },
+        {
+          "term": "tata",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "tattoo",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "abba (2p)",
+        "father (335p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "tata"
+      ]
+    },
+    {
+      "concept": "adonai",
+      "gloss": "Lord, Master, as a title of address.",
+      "terms": [
+        {
+          "term": "adonai",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 4,
+          "pages": 4,
+          "near_spellings": [
+            {
+              "form": "adana",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "lord",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 20,
+          "pages": 18,
+          "near_spellings": []
+        },
+        {
+          "term": "master",
+          "lang": "en",
+          "register": "common",
+          "is_primary": false,
+          "hits": 137,
+          "pages": 90,
+          "near_spellings": [
+            {
+              "form": "muster",
+              "hits": 2,
+              "pages": 2
+            },
+            {
+              "form": "master 1",
+              "hits": 2,
+              "pages": 2
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "adonai (4p)",
+        "lord (18p)",
+        "master (90p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "adana",
+          "hits": 2,
+          "pages": 1,
+          "from": "adonai"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": []
+    },
+    {
+      "concept": "avodah",
+      "gloss": "Service, work, and worship as one word.",
+      "terms": [
+        {
+          "term": "avodah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 8,
+          "pages": 4,
+          "near_spellings": [
+            {
+              "form": "avedah",
+              "hits": 5,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "service",
+          "lang": "en",
+          "register": "common",
+          "is_primary": false,
+          "hits": 208,
+          "pages": 131,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "avodah (4p)",
+        "service (131p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "avedah",
+          "hits": 5,
+          "pages": 1,
+          "from": "avodah"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": []
+    },
+    {
+      "concept": "baptism",
+      "gloss": "Baptism, immersion, mikveh.",
+      "terms": [
+        {
+          "term": "baptism",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": true,
+          "hits": 11,
+          "pages": 8,
+          "near_spellings": []
+        },
+        {
+          "term": "botez",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "mikveh",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 13,
+          "pages": 2,
+          "near_spellings": []
+        },
+        {
+          "term": "immersion",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 10,
+          "pages": 4,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "baptism (8p)",
+        "mikveh (2p)",
+        "immersion (4p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "botez"
+      ]
+    },
+    {
+      "concept": "bikkurim",
+      "gloss": "Firstfruits.",
+      "terms": [
+        {
+          "term": "bikkurim",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 2,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "firstfruits",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 12,
+          "pages": 6,
+          "near_spellings": []
+        },
+        {
+          "term": "yom habikkurim",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "bikkurim (1p)",
+        "firstfruits (6p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "yom habikkurim"
+      ]
+    },
+    {
+      "concept": "brit",
+      "gloss": "Covenant.",
+      "terms": [
+        {
+          "term": "brit",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 6,
+          "pages": 6,
+          "near_spellings": [
+            {
+              "form": "breath",
+              "hits": 204,
+              "pages": 127
+            },
+            {
+              "form": "britt",
+              "hits": 13,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "covenant",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 343,
+          "pages": 161,
+          "near_spellings": []
+        },
+        {
+          "term": "legamant",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "bris",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "brass",
+              "hits": 55,
+              "pages": 23
+            },
+            {
+              "form": "brush",
+              "hits": 17,
+              "pages": 8
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "brit (6p)",
+        "covenant (161p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "breath",
+          "hits": 204,
+          "pages": 127,
+          "from": "brit"
+        },
+        {
+          "form": "brass",
+          "hits": 55,
+          "pages": 23,
+          "from": "bris"
+        },
+        {
+          "form": "brush",
+          "hits": 17,
+          "pages": 8,
+          "from": "bris"
+        },
+        {
+          "form": "britt",
+          "hits": 13,
+          "pages": 1,
+          "from": "brit"
+        }
+      ],
+      "status": "MISSPELLED-DOMINANT",
+      "dead_terms": [
+        "legamant",
+        "bris"
+      ]
+    },
+    {
+      "concept": "chesed",
+      "gloss": "Covenant lovingkindness, steadfast mercy.",
+      "terms": [
+        {
+          "term": "chesed",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 17,
+          "pages": 7,
+          "near_spellings": [
+            {
+              "form": "chased",
+              "hits": 6,
+              "pages": 6
+            }
+          ]
+        },
+        {
+          "term": "lovingkindness",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 2,
+          "pages": 2,
+          "near_spellings": []
+        },
+        {
+          "term": "hesed",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "housed",
+              "hits": 2,
+              "pages": 2
+            }
+          ]
+        },
+        {
+          "term": "indurare",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "steadfast love",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 2,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "mercy",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 165,
+          "pages": 96,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "chesed (7p)",
+        "lovingkindness (2p)",
+        "steadfast love (1p)",
+        "mercy (96p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "chased",
+          "hits": 6,
+          "pages": 6,
+          "from": "chesed"
+        },
+        {
+          "form": "housed",
+          "hits": 2,
+          "pages": 2,
+          "from": "hesed"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "hesed",
+        "indurare"
+      ]
+    },
+    {
+      "concept": "el_shaddai",
+      "gloss": "God Almighty.",
+      "terms": [
+        {
+          "term": "el shaddai",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "god almighty",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "almighty",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 5,
+          "pages": 5,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "almighty (5p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "el shaddai",
+        "god almighty"
+      ]
+    },
+    {
+      "concept": "elohim",
+      "gloss": "God, the Creator.",
+      "terms": [
+        {
+          "term": "elohim",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 867,
+          "pages": 358,
+          "near_spellings": [
+            {
+              "form": "elohim 1",
+              "hits": 4,
+              "pages": 3
+            },
+            {
+              "form": "elohim 2",
+              "hits": 3,
+              "pages": 3
+            }
+          ]
+        },
+        {
+          "term": "god",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 145,
+          "pages": 78,
+          "near_spellings": [
+            {
+              "form": "good",
+              "hits": 1358,
+              "pages": 493
+            },
+            {
+              "form": "gid",
+              "hits": 15,
+              "pages": 2
+            },
+            {
+              "form": "gadd",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "dumnezeu",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "parmeshwar",
+          "lang": "hi",
+          "register": "common",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "elohim (358p)",
+        "god (78p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "elohim 1",
+          "hits": 4,
+          "pages": 3,
+          "from": "elohim"
+        },
+        {
+          "form": "elohim 2",
+          "hits": 3,
+          "pages": 3,
+          "from": "elohim"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "dumnezeu",
+        "parmeshwar"
+      ]
+    },
+    {
+      "concept": "emunah",
+      "gloss": "Faith, faithfulness, steadfastness.",
+      "terms": [
+        {
+          "term": "emunah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 2,
+          "pages": 2,
+          "near_spellings": [
+            {
+              "form": "emine",
+              "hits": 6,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "credinta",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "faith",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 181,
+          "pages": 103,
+          "near_spellings": [
+            {
+              "form": "feet",
+              "hits": 402,
+              "pages": 186
+            },
+            {
+              "form": "foot",
+              "hits": 109,
+              "pages": 70
+            },
+            {
+              "form": "fit",
+              "hits": 99,
+              "pages": 78
+            },
+            {
+              "form": "fat",
+              "hits": 21,
+              "pages": 11
+            }
+          ]
+        },
+        {
+          "term": "faithfulness",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 54,
+          "pages": 41,
+          "near_spellings": []
+        },
+        {
+          "term": "vishwas",
+          "lang": "hi",
+          "register": "common",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "emunah (2p)",
+        "faith (103p)",
+        "faithfulness (41p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "emine",
+          "hits": 6,
+          "pages": 1,
+          "from": "emunah"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "credinta",
+        "vishwas"
+      ]
+    },
+    {
+      "concept": "forgiveness",
+      "gloss": "Forgiveness of sins.",
+      "terms": [
+        {
+          "term": "forgiveness",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": true,
+          "hits": 44,
+          "pages": 26,
+          "near_spellings": []
+        },
+        {
+          "term": "iertare",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "selichah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "kshama",
+          "lang": "hi",
+          "register": "common",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "forgiveness (26p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "iertare",
+        "selichah",
+        "kshama"
+      ]
+    },
+    {
+      "concept": "geulah",
+      "gloss": "Redemption, deliverance.",
+      "terms": [
+        {
+          "term": "geulah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "galah",
+              "hits": 8,
+              "pages": 1
+            },
+            {
+              "form": "golah",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "redemption",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 25,
+          "pages": 16,
+          "near_spellings": []
+        },
+        {
+          "term": "deliverance",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 41,
+          "pages": 30,
+          "near_spellings": []
+        },
+        {
+          "term": "rascumparare",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "redemption (16p)",
+        "deliverance (30p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "galah",
+          "hits": 8,
+          "pages": 1,
+          "from": "geulah"
+        },
+        {
+          "form": "golah",
+          "hits": 2,
+          "pages": 1,
+          "from": "geulah"
+        }
+      ],
+      "status": "MISSPELLED-DOMINANT",
+      "dead_terms": [
+        "geulah",
+        "rascumparare"
+      ]
+    },
+    {
+      "concept": "grace",
+      "gloss": "Grace, unmerited favour.",
+      "terms": [
+        {
+          "term": "grace",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": true,
+          "hits": 72,
+          "pages": 32,
+          "near_spellings": []
+        },
+        {
+          "term": "har",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "her",
+              "hits": 8136,
+              "pages": 536
+            },
+            {
+              "form": "hear",
+              "hits": 927,
+              "pages": 423
+            },
+            {
+              "form": "hour",
+              "hits": 405,
+              "pages": 228
+            },
+            {
+              "form": "hair",
+              "hits": 58,
+              "pages": 28
+            }
+          ]
+        },
+        {
+          "term": "chen",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 4,
+          "pages": 3,
+          "near_spellings": [
+            {
+              "form": "chain",
+              "hits": 86,
+              "pages": 49
+            },
+            {
+              "form": "chin",
+              "hits": 13,
+              "pages": 9
+            },
+            {
+              "form": "chun",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "favour",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 35,
+          "pages": 22,
+          "near_spellings": [
+            {
+              "form": "favor",
+              "hits": 42,
+              "pages": 32
+            },
+            {
+              "form": "fever",
+              "hits": 18,
+              "pages": 11
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "grace (32p)",
+        "chen (3p)",
+        "favour (22p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "chain",
+          "hits": 86,
+          "pages": 49,
+          "from": "chen"
+        },
+        {
+          "form": "chin",
+          "hits": 13,
+          "pages": 9,
+          "from": "chen"
+        },
+        {
+          "form": "chun",
+          "hits": 2,
+          "pages": 1,
+          "from": "chen"
+        }
+      ],
+      "status": "MISSPELLED-DOMINANT",
+      "dead_terms": [
+        "har"
+      ]
+    },
+    {
+      "concept": "halakhah",
+      "gloss": "Walk, the way one goes; practice.",
+      "terms": [
+        {
+          "term": "halakhah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "halacha",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "walk",
+          "lang": "en",
+          "register": "common",
+          "is_primary": false,
+          "hits": 547,
+          "pages": 289,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "walk (289p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "halakhah",
+        "halacha"
+      ]
+    },
+    {
+      "concept": "hamashiach",
+      "gloss": "The Messiah, the Christ, the Anointed One.",
+      "terms": [
+        {
+          "term": "hamashiach",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "mesia",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "messiah",
+              "hits": 26,
+              "pages": 21
+            },
+            {
+              "form": "massa",
+              "hits": 9,
+              "pages": 3
+            },
+            {
+              "form": "maisie",
+              "hits": 3,
+              "pages": 1
+            },
+            {
+              "form": "masa",
+              "hits": 3,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "christ",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 1,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "messiah",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 26,
+          "pages": 21,
+          "near_spellings": [
+            {
+              "form": "massa",
+              "hits": 9,
+              "pages": 3
+            }
+          ]
+        },
+        {
+          "term": "mashiach",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 7,
+          "pages": 6,
+          "near_spellings": [
+            {
+              "form": "mashiach 1",
+              "hits": 2,
+              "pages": 2
+            }
+          ]
+        },
+        {
+          "term": "hristos",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "christ (1p)",
+        "messiah (21p)",
+        "mashiach (6p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "mashiach 1",
+          "hits": 2,
+          "pages": 2,
+          "from": "mashiach"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "hamashiach",
+        "mesia",
+        "hristos"
+      ]
+    },
+    {
+      "concept": "hanukkah",
+      "gloss": "Dedication; Feast of Lights.",
+      "terms": [
+        {
+          "term": "hanukkah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 1,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "feast of dedication",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 1,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "chanukah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "chanukkah",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "hanukkah (1p)",
+        "feast of dedication (1p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "chanukkah",
+          "hits": 2,
+          "pages": 1,
+          "from": "chanukah"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "chanukah"
+      ]
+    },
+    {
+      "concept": "kadosh",
+      "gloss": "Holy, set apart.",
+      "terms": [
+        {
+          "term": "kadosh",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "kodesh",
+              "hits": 9,
+              "pages": 8
+            },
+            {
+              "form": "kadesh",
+              "hits": 2,
+              "pages": 2
+            },
+            {
+              "form": "kiddush",
+              "hits": 2,
+              "pages": 2
+            }
+          ]
+        },
+        {
+          "term": "holy",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 116,
+          "pages": 68,
+          "near_spellings": []
+        },
+        {
+          "term": "sfant",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "set apart",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 69,
+          "pages": 38,
+          "near_spellings": []
+        },
+        {
+          "term": "sanctified",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 1,
+          "pages": 1,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "holy (68p)",
+        "set apart (38p)",
+        "sanctified (1p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "kodesh",
+          "hits": 9,
+          "pages": 8,
+          "from": "kadosh"
+        },
+        {
+          "form": "kadesh",
+          "hits": 2,
+          "pages": 2,
+          "from": "kadosh"
+        },
+        {
+          "form": "kiddush",
+          "hits": 2,
+          "pages": 2,
+          "from": "kadosh"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "kadosh",
+        "sfant"
+      ]
+    },
+    {
+      "concept": "kavanah",
+      "gloss": "Intention, the heart directed in worship.",
+      "terms": [
+        {
+          "term": "kavanah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "intention",
+          "lang": "en",
+          "register": "common",
+          "is_primary": false,
+          "hits": 15,
+          "pages": 15,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "intention (15p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "kavanah"
+      ]
+    },
+    {
+      "concept": "kingdom",
+      "gloss": "The kingdom of God; the kingdom of heaven.",
+      "terms": [
+        {
+          "term": "kingdom of god",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "imparatia lui dumnezeu",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "kingdom of heaven",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "malchut",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": false,
+      "corpus_forms": [],
+      "unlisted_spellings": [],
+      "status": "UNCOVERED",
+      "dead_terms": [
+        "kingdom of god",
+        "imparatia lui dumnezeu",
+        "kingdom of heaven",
+        "malchut"
+      ]
+    },
+    {
+      "concept": "matzot",
+      "gloss": "Unleavened Bread.",
+      "terms": [
+        {
+          "term": "chag hamatzot",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "unleavened bread",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 7,
+          "pages": 6,
+          "near_spellings": []
+        },
+        {
+          "term": "matzot",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "unleavened bread (6p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "chag hamatzot",
+        "matzot"
+      ]
+    },
+    {
+      "concept": "mishpachah",
+      "gloss": "Family, household, the community of belonging.",
+      "terms": [
+        {
+          "term": "mishpachah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 2,
+          "pages": 2,
+          "near_spellings": [
+            {
+              "form": "mishpakhah",
+              "hits": 12,
+              "pages": 10
+            }
+          ]
+        },
+        {
+          "term": "family",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 1318,
+          "pages": 381,
+          "near_spellings": []
+        },
+        {
+          "term": "familie",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "female",
+              "hits": 13,
+              "pages": 9
+            }
+          ]
+        },
+        {
+          "term": "mishpacha",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "mishpakhah",
+              "hits": 12,
+              "pages": 10
+            },
+            {
+              "form": "mishpachah",
+              "hits": 2,
+              "pages": 2
+            }
+          ]
+        },
+        {
+          "term": "household",
+          "lang": "en",
+          "register": "common",
+          "is_primary": false,
+          "hits": 317,
+          "pages": 154,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "mishpachah (2p)",
+        "family (381p)",
+        "household (154p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "mishpakhah",
+          "hits": 12,
+          "pages": 10,
+          "from": "mishpachah"
+        }
+      ],
+      "status": "MISSPELLED-DOMINANT",
+      "dead_terms": [
+        "familie",
+        "mishpacha"
+      ]
+    },
+    {
+      "concept": "mitzvot",
+      "gloss": "Commandments.",
+      "terms": [
+        {
+          "term": "mitzvot",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 1,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "porunci",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "commandments",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 21,
+          "pages": 11,
+          "near_spellings": []
+        },
+        {
+          "term": "mitzvah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 5,
+          "pages": 3,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "mitzvot (1p)",
+        "commandments (11p)",
+        "mitzvah (3p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "porunci"
+      ]
+    },
+    {
+      "concept": "nefesh",
+      "gloss": "Soul, the living being.",
+      "terms": [
+        {
+          "term": "nefesh",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 9,
+          "pages": 4,
+          "near_spellings": [
+            {
+              "form": "nephesh",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "suflet",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "soul",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 65,
+          "pages": 44,
+          "near_spellings": [
+            {
+              "form": "seal",
+              "hits": 62,
+              "pages": 19
+            },
+            {
+              "form": "sell",
+              "hits": 57,
+              "pages": 45
+            },
+            {
+              "form": "soil",
+              "hits": 48,
+              "pages": 34
+            },
+            {
+              "form": "sill",
+              "hits": 16,
+              "pages": 6
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "nefesh (4p)",
+        "soul (44p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "nephesh",
+          "hits": 2,
+          "pages": 1,
+          "from": "nefesh"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "suflet"
+      ]
+    },
+    {
+      "concept": "olam_haba",
+      "gloss": "The world to come.",
+      "terms": [
+        {
+          "term": "olam haba",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "world to come",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 1,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "age to come",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "world to come (1p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "olam haba",
+        "age to come"
+      ]
+    },
+    {
+      "concept": "pesach",
+      "gloss": "Passover.",
+      "terms": [
+        {
+          "term": "pesach",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 18,
+          "pages": 8,
+          "near_spellings": [
+            {
+              "form": "pasach",
+              "hits": 4,
+              "pages": 2
+            }
+          ]
+        },
+        {
+          "term": "passover",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 38,
+          "pages": 17,
+          "near_spellings": []
+        },
+        {
+          "term": "pastele",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "pasti",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "pasta",
+              "hits": 4,
+              "pages": 2
+            },
+            {
+              "form": "paste",
+              "hits": 4,
+              "pages": 4
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "pesach (8p)",
+        "passover (17p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "pasach",
+          "hits": 4,
+          "pages": 2,
+          "from": "pesach"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "pastele",
+        "pasti"
+      ]
+    },
+    {
+      "concept": "purim",
+      "gloss": "Purim.",
+      "terms": [
+        {
+          "term": "purim",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 9,
+          "pages": 2,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "purim (2p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": []
+    },
+    {
+      "concept": "resurrection",
+      "gloss": "Resurrection, rising from the dead.",
+      "terms": [
+        {
+          "term": "resurrection",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": true,
+          "hits": 11,
+          "pages": 6,
+          "near_spellings": []
+        },
+        {
+          "term": "inviere",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "techiyat hametim",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "risen",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 8,
+          "pages": 7,
+          "near_spellings": [
+            {
+              "form": "reason",
+              "hits": 815,
+              "pages": 404
+            },
+            {
+              "form": "resin",
+              "hits": 4,
+              "pages": 4
+            },
+            {
+              "form": "raisin",
+              "hits": 2,
+              "pages": 2
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "resurrection (6p)",
+        "risen (7p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "inviere",
+        "techiyat hametim"
+      ]
+    },
+    {
+      "concept": "ruach_hakodesh",
+      "gloss": "The Holy Spirit.",
+      "terms": [
+        {
+          "term": "ruach hakodesh",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 2,
+          "pages": 2,
+          "near_spellings": []
+        },
+        {
+          "term": "duhul sfant",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "holy spirit",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "ruach kodesh",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 9,
+          "pages": 8,
+          "near_spellings": []
+        },
+        {
+          "term": "ruach ha-kodesh",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "ruach hakodesh",
+              "hits": 2,
+              "pages": 2
+            }
+          ]
+        },
+        {
+          "term": "holy ghost",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "pavitra atma",
+          "lang": "hi",
+          "register": "common",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "ruach hakodesh (2p)",
+        "ruach kodesh (8p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "duhul sfant",
+        "holy spirit",
+        "ruach ha-kodesh",
+        "holy ghost",
+        "pavitra atma"
+      ]
+    },
+    {
+      "concept": "salvation",
+      "gloss": "Salvation, being saved, deliverance.",
+      "terms": [
+        {
+          "term": "salvation",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": true,
+          "hits": 39,
+          "pages": 23,
+          "near_spellings": []
+        },
+        {
+          "term": "mantuire",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "yeshuah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 2,
+          "pages": 2,
+          "near_spellings": [
+            {
+              "form": "yeshua",
+              "hits": 455,
+              "pages": 247
+            },
+            {
+              "form": "yasha",
+              "hits": 8,
+              "pages": 3
+            },
+            {
+              "form": "yishai",
+              "hits": 6,
+              "pages": 5
+            }
+          ]
+        },
+        {
+          "term": "saved",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 76,
+          "pages": 58,
+          "near_spellings": []
+        },
+        {
+          "term": "uddhar",
+          "lang": "hi",
+          "register": "common",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "salvation (23p)",
+        "yeshuah (2p)",
+        "saved (58p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "yeshua",
+          "hits": 455,
+          "pages": 247,
+          "from": "yeshuah"
+        },
+        {
+          "form": "yasha",
+          "hits": 8,
+          "pages": 3,
+          "from": "yeshuah"
+        },
+        {
+          "form": "yishai",
+          "hits": 6,
+          "pages": 5,
+          "from": "yeshuah"
+        }
+      ],
+      "status": "MISSPELLED-DOMINANT",
+      "dead_terms": [
+        "mantuire",
+        "uddhar"
+      ]
+    },
+    {
+      "concept": "scripture",
+      "gloss": "The Scriptures, the Bible.",
+      "terms": [
+        {
+          "term": "scripture",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": true,
+          "hits": 573,
+          "pages": 323,
+          "near_spellings": []
+        },
+        {
+          "term": "biblia",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "bible",
+              "hits": 413,
+              "pages": 241
+            }
+          ]
+        },
+        {
+          "term": "scriptures",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 87,
+          "pages": 67,
+          "near_spellings": []
+        },
+        {
+          "term": "the bible",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 145,
+          "pages": 113,
+          "near_spellings": []
+        },
+        {
+          "term": "tanakh",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 12,
+          "pages": 12,
+          "near_spellings": []
+        },
+        {
+          "term": "pavitra shastra",
+          "lang": "hi",
+          "register": "common",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "scripture (323p)",
+        "scriptures (67p)",
+        "the bible (113p)",
+        "tanakh (12p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "biblia",
+        "pavitra shastra"
+      ]
+    },
+    {
+      "concept": "shabbat",
+      "gloss": "The seventh-day Sabbath.",
+      "terms": [
+        {
+          "term": "shabbat",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 37,
+          "pages": 20,
+          "near_spellings": []
+        },
+        {
+          "term": "sabat",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "sabbath",
+              "hits": 33,
+              "pages": 13
+            }
+          ]
+        },
+        {
+          "term": "sabbath",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 33,
+          "pages": 13,
+          "near_spellings": []
+        },
+        {
+          "term": "shabbos",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "shabbat (20p)",
+        "sabbath (13p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "sabat",
+        "shabbos"
+      ]
+    },
+    {
+      "concept": "shalom",
+      "gloss": "Peace, wholeness, completeness.",
+      "terms": [
+        {
+          "term": "shalom",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 193,
+          "pages": 59,
+          "near_spellings": [
+            {
+              "form": "shalem",
+              "hits": 19,
+              "pages": 9
+            },
+            {
+              "form": "shillem",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "pace",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 72,
+          "pages": 23,
+          "near_spellings": [
+            {
+              "form": "piece",
+              "hits": 368,
+              "pages": 207
+            },
+            {
+              "form": "peace",
+              "hits": 211,
+              "pages": 72
+            }
+          ]
+        },
+        {
+          "term": "peace",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 211,
+          "pages": 72,
+          "near_spellings": [
+            {
+              "form": "piece",
+              "hits": 368,
+              "pages": 207
+            },
+            {
+              "form": "pace",
+              "hits": 72,
+              "pages": 23
+            }
+          ]
+        },
+        {
+          "term": "shanti",
+          "lang": "hi",
+          "register": "common",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "wholeness",
+          "lang": "en",
+          "register": "common",
+          "is_primary": false,
+          "hits": 32,
+          "pages": 22,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "shalom (59p)",
+        "pace (23p)",
+        "peace (72p)",
+        "wholeness (22p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "shalem",
+          "hits": 19,
+          "pages": 9,
+          "from": "shalom"
+        },
+        {
+          "form": "shillem",
+          "hits": 2,
+          "pages": 1,
+          "from": "shalom"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "shanti"
+      ]
+    },
+    {
+      "concept": "shavuot",
+      "gloss": "Weeks; Pentecost.",
+      "terms": [
+        {
+          "term": "shavuot",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "shavat",
+              "hits": 2,
+              "pages": 1
+            },
+            {
+              "form": "shevut",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "cincizecimea",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "pentecost",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 6,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "feast of weeks",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 1,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "shavuos",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "sheaves",
+              "hits": 3,
+              "pages": 2
+            },
+            {
+              "form": "shoves",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "pentecost (1p)",
+        "feast of weeks (1p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "sheaves",
+          "hits": 3,
+          "pages": 2,
+          "from": "shavuos"
+        },
+        {
+          "form": "shavat",
+          "hits": 2,
+          "pages": 1,
+          "from": "shavuot"
+        },
+        {
+          "form": "shevut",
+          "hits": 2,
+          "pages": 1,
+          "from": "shavuot"
+        },
+        {
+          "form": "shoves",
+          "hits": 2,
+          "pages": 1,
+          "from": "shavuos"
+        }
+      ],
+      "status": "MISSPELLED-DOMINANT",
+      "dead_terms": [
+        "shavuot",
+        "cincizecimea",
+        "shavuos"
+      ]
+    },
+    {
+      "concept": "simcha",
+      "gloss": "Joy, gladness.",
+      "terms": [
+        {
+          "term": "simcha",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "joy",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 232,
+          "pages": 67,
+          "near_spellings": []
+        },
+        {
+          "term": "bucurie",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "joy (67p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "simcha",
+        "bucurie"
+      ]
+    },
+    {
+      "concept": "sukkot",
+      "gloss": "Tabernacles; Booths.",
+      "terms": [
+        {
+          "term": "sukkot",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 12,
+          "pages": 8,
+          "near_spellings": [
+            {
+              "form": "socket",
+              "hits": 16,
+              "pages": 8
+            }
+          ]
+        },
+        {
+          "term": "tabernacles",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 2,
+          "pages": 2,
+          "near_spellings": []
+        },
+        {
+          "term": "booths",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 10,
+          "pages": 7,
+          "near_spellings": []
+        },
+        {
+          "term": "corturi",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "succot",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "sukkot (8p)",
+        "tabernacles (2p)",
+        "booths (7p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "socket",
+          "hits": 16,
+          "pages": 8,
+          "from": "sukkot"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "corturi",
+        "succot"
+      ]
+    },
+    {
+      "concept": "talmid",
+      "gloss": "Disciple, one who learns by following.",
+      "terms": [
+        {
+          "term": "talmid",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 5,
+          "pages": 1,
+          "near_spellings": [
+            {
+              "form": "talmud",
+              "hits": 4,
+              "pages": 4
+            }
+          ]
+        },
+        {
+          "term": "ucenic",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "disciple",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 4,
+          "pages": 4,
+          "near_spellings": []
+        },
+        {
+          "term": "talmidim",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 3,
+          "pages": 2,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "talmid (1p)",
+        "disciple (4p)",
+        "talmidim (2p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "talmud",
+          "hits": 4,
+          "pages": 4,
+          "from": "talmid"
+        }
+      ],
+      "status": "MISSPELLED-DOMINANT",
+      "dead_terms": [
+        "ucenic"
+      ]
+    },
+    {
+      "concept": "tefillah",
+      "gloss": "Prayer.",
+      "terms": [
+        {
+          "term": "tefillah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 2,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "prayer",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 371,
+          "pages": 170,
+          "near_spellings": []
+        },
+        {
+          "term": "rugaciune",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "prarthana",
+          "lang": "hi",
+          "register": "common",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "tefillah (1p)",
+        "prayer (170p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "rugaciune",
+        "prarthana"
+      ]
+    },
+    {
+      "concept": "teshuvah",
+      "gloss": "Repentance, understood as turning and returning.",
+      "terms": [
+        {
+          "term": "teshuvah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 91,
+          "pages": 56,
+          "near_spellings": []
+        },
+        {
+          "term": "repentance",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 93,
+          "pages": 49,
+          "near_spellings": []
+        },
+        {
+          "term": "pocainta",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "repent",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 14,
+          "pages": 13,
+          "near_spellings": []
+        },
+        {
+          "term": "turning back",
+          "lang": "en",
+          "register": "common",
+          "is_primary": false,
+          "hits": 26,
+          "pages": 24,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "teshuvah (56p)",
+        "repentance (49p)",
+        "repent (13p)",
+        "turning back (24p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "pocainta"
+      ]
+    },
+    {
+      "concept": "torah",
+      "gloss": "Instruction, teaching; also the five books.",
+      "terms": [
+        {
+          "term": "torah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 756,
+          "pages": 224,
+          "near_spellings": [
+            {
+              "form": "tire",
+              "hits": 24,
+              "pages": 14
+            },
+            {
+              "form": "tore",
+              "hits": 18,
+              "pages": 16
+            },
+            {
+              "form": "teruah",
+              "hits": 8,
+              "pages": 2
+            },
+            {
+              "form": "teru",
+              "hits": 6,
+              "pages": 2
+            }
+          ]
+        },
+        {
+          "term": "the law",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 113,
+          "pages": 60,
+          "near_spellings": [
+            {
+              "form": "the low",
+              "hits": 33,
+              "pages": 22
+            }
+          ]
+        },
+        {
+          "term": "instruction",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 257,
+          "pages": 145,
+          "near_spellings": []
+        },
+        {
+          "term": "pentateuch",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "lege",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "logo",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "torah (224p)",
+        "the law (60p)",
+        "instruction (145p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "tire",
+          "hits": 24,
+          "pages": 14,
+          "from": "torah"
+        },
+        {
+          "form": "tore",
+          "hits": 18,
+          "pages": 16,
+          "from": "torah"
+        },
+        {
+          "form": "teruah",
+          "hits": 8,
+          "pages": 2,
+          "from": "torah"
+        },
+        {
+          "form": "teru",
+          "hits": 6,
+          "pages": 2,
+          "from": "torah"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "pentateuch",
+        "lege"
+      ]
+    },
+    {
+      "concept": "tzedakah",
+      "gloss": "Righteousness expressed as charity and just dealing.",
+      "terms": [
+        {
+          "term": "tzedakah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 6,
+          "pages": 2,
+          "near_spellings": [
+            {
+              "form": "tsedaqah",
+              "hits": 2,
+              "pages": 1
+            }
+          ]
+        },
+        {
+          "term": "righteousness",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 17,
+          "pages": 12,
+          "near_spellings": []
+        },
+        {
+          "term": "charity",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 35,
+          "pages": 19,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "tzedakah (2p)",
+        "righteousness (12p)",
+        "charity (19p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "tsedaqah",
+          "hits": 2,
+          "pages": 1,
+          "from": "tzedakah"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": []
+    },
+    {
+      "concept": "worship",
+      "gloss": "Worship, adoration.",
+      "terms": [
+        {
+          "term": "worship",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": true,
+          "hits": 89,
+          "pages": 65,
+          "near_spellings": []
+        },
+        {
+          "term": "inchinare",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "hishtachavah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "aradhana",
+          "lang": "hi",
+          "register": "common",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "worship (65p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "inchinare",
+        "hishtachavah",
+        "aradhana"
+      ]
+    },
+    {
+      "concept": "yahuah",
+      "gloss": "The divine Name. Rendered LORD in most English translations.",
+      "terms": [
+        {
+          "term": "yahuah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 2159,
+          "pages": 547,
+          "near_spellings": []
+        },
+        {
+          "term": "yahweh",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "yhwh",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "the lord",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 8,
+          "pages": 7,
+          "near_spellings": []
+        },
+        {
+          "term": "domnul",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "jehovah",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "yahuah (547p)",
+        "the lord (7p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "yahweh",
+        "yhwh",
+        "domnul",
+        "jehovah"
+      ]
+    },
+    {
+      "concept": "yeshua",
+      "gloss": "Jesus, by His Hebrew name.",
+      "terms": [
+        {
+          "term": "yeshua",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 455,
+          "pages": 247,
+          "near_spellings": [
+            {
+              "form": "yasha",
+              "hits": 8,
+              "pages": 3
+            },
+            {
+              "form": "yishai",
+              "hits": 6,
+              "pages": 5
+            },
+            {
+              "form": "yeshuah",
+              "hits": 2,
+              "pages": 2
+            }
+          ]
+        },
+        {
+          "term": "jesus",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "isus",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "issues",
+              "hits": 5,
+              "pages": 5
+            }
+          ]
+        },
+        {
+          "term": "yahushua",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "yehoshua",
+              "hits": 67,
+              "pages": 24
+            }
+          ]
+        },
+        {
+          "term": "iisus",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "issues",
+              "hits": 5,
+              "pages": 5
+            }
+          ]
+        },
+        {
+          "term": "yeshu",
+          "lang": "hi",
+          "register": "common",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": [
+            {
+              "form": "yeshua",
+              "hits": 455,
+              "pages": 247
+            },
+            {
+              "form": "yasha",
+              "hits": 8,
+              "pages": 3
+            },
+            {
+              "form": "yishai",
+              "hits": 6,
+              "pages": 5
+            },
+            {
+              "form": "yeshuah",
+              "hits": 2,
+              "pages": 2
+            }
+          ]
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "yeshua (247p)"
+      ],
+      "unlisted_spellings": [
+        {
+          "form": "yehoshua",
+          "hits": 67,
+          "pages": 24,
+          "from": "yahushua"
+        },
+        {
+          "form": "yasha",
+          "hits": 8,
+          "pages": 3,
+          "from": "yeshua"
+        },
+        {
+          "form": "yishai",
+          "hits": 6,
+          "pages": 5,
+          "from": "yeshua"
+        },
+        {
+          "form": "yeshuah",
+          "hits": 2,
+          "pages": 2,
+          "from": "yeshua"
+        }
+      ],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "jesus",
+        "isus",
+        "yahushua",
+        "iisus",
+        "yeshu"
+      ]
+    },
+    {
+      "concept": "yetzer_hara",
+      "gloss": "The inclination toward evil.",
+      "terms": [
+        {
+          "term": "yetzer hara",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "evil inclination",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        },
+        {
+          "term": "sinful nature",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": false,
+      "corpus_forms": [],
+      "unlisted_spellings": [],
+      "status": "UNCOVERED",
+      "dead_terms": [
+        "yetzer hara",
+        "evil inclination",
+        "sinful nature"
+      ]
+    },
+    {
+      "concept": "yom_kippur",
+      "gloss": "Day of Atonement.",
+      "terms": [
+        {
+          "term": "yom kippur",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 5,
+          "pages": 5,
+          "near_spellings": []
+        },
+        {
+          "term": "day of atonement",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 3,
+          "pages": 3,
+          "near_spellings": []
+        },
+        {
+          "term": "ziua ispasirii",
+          "lang": "ro",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "yom kippur (5p)",
+        "day of atonement (3p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "ziua ispasirii"
+      ]
+    },
+    {
+      "concept": "yom_teruah",
+      "gloss": "Day of Trumpets; Rosh Hashanah.",
+      "terms": [
+        {
+          "term": "yom teruah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": true,
+          "hits": 1,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "feast of trumpets",
+          "lang": "en",
+          "register": "CCI",
+          "is_primary": false,
+          "hits": 3,
+          "pages": 1,
+          "near_spellings": []
+        },
+        {
+          "term": "rosh hashanah",
+          "lang": "en",
+          "register": "OHI",
+          "is_primary": false,
+          "hits": 0,
+          "pages": 0,
+          "near_spellings": []
+        }
+      ],
+      "reachable": true,
+      "corpus_forms": [
+        "yom teruah (1p)",
+        "feast of trumpets (1p)"
+      ],
+      "unlisted_spellings": [],
+      "status": "REACHABLE",
+      "dead_terms": [
+        "rosh hashanah"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "label": "during-backfill-no-rerank",
+  "ran_at": "2026-09-10T11:50:17.416Z",
+  "base": "http://127.0.0.1:4038",
+  "seconds": 120,
+  "concurrency": 2,
+  "rpm": 55,
+  "requests": 110,
+  "ok": 110,
+  "failed": 0,
+  "cache_hit_rate": 0,
+  "all": {
+    "n": 110,
+    "p50": 1374.5,
+    "p95": 2287.8,
+    "p99": 2768.8,
+    "max": 2827.6
+  },
+  "cache_miss": {
+    "n": 110,
+    "p50": 1374.5,
+    "p95": 2287.8,
+    "p99": 2768.8,
+    "max": 2827.6
+  },
+  "cache_hit": {
+    "n": 0,
+    "p50": null,
+    "p95": null,
+    "p99": null,
+    "max": null
+  },
+  "errors": []
+}

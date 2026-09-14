@@ -98,6 +98,42 @@ body:has(.auth-row) {
   overflow-y: auto; scrollbar-gutter: stable;
   height: 100dvh;
 }
+/* ── The scrollbar ──
+   The door is its own root layout (app/(auth)/layout.tsx) and deliberately does
+   NOT import globals.css, so the scrollbar rules the rest of the site carries
+   never reach it — which is why this column was rendering the raw platform
+   scrollbar: a light track and a chunky grey thumb against a #2b2b2b panel.
+
+   Stated twice because the two engines take different properties: `scrollbar-width` and
+   `scrollbar-color` are the standard ones Firefox reads, and the ::-webkit-
+   pseudo-elements are what Chrome and Safari read. Neither alone covers both.
+   The ::-webkit- rules are left unscoped, the way globals.css writes them for
+   the rest of the site: the document bar belongs to html rather than to body,
+   and scoping them to .auth-form-panel would style the column and leave the
+   page bar platform-default.
+
+   The thumb is the panel lightened rather than the accent: a blue bar tracking
+   the scroll would read as a piece of the form, and this is furniture. */
+html { scrollbar-width: thin; scrollbar-color: #4a4a4a transparent; }
+.auth-form-panel { scrollbar-width: thin; scrollbar-color: #4a4a4a transparent; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+
+/* Transparent, not a colour: scrollbar-gutter:stable already reserves the
+   column, so a painted track would draw a permanent stripe beside a panel that
+   usually has nothing to scroll. */
+::-webkit-scrollbar-track { background: transparent; }
+
+::-webkit-scrollbar-thumb {
+  background: #4a4a4a; border-radius: 4px;
+  /* Inset from the 8px track so the thumb reads as narrower than the gutter. */
+  border: 2px solid transparent; background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: #5a5a5a; background-clip: padding-box; }
+
+/* The corner where two bars meet, which otherwise stays platform white. */
+::-webkit-scrollbar-corner { background: transparent; }
+
 /* `safe center` rather than plain `center`: when the content is TALLER than the
    column — which the create-a-Jubilee-ID screen is — centring pushes the first
    rows above the top of the scroll box, where no scrolling can reach them. */
@@ -200,6 +236,15 @@ body:has(.auth-row) {
 /* §5 The disclaimer sits on the button: 6.4px above. The button carries no
    margin of its own, so this one value is the whole gap. */
 .door-disclaimer { color: #b0b4bd; font-size: .84rem; text-align: center; margin-top: 6.4px; }
+
+/* ── Turnstile ──
+   The widget is a fixed 300px iframe, so the wrapper is measured and the widget
+   CSS-scaled into it (components/auth/Turnstile.tsx). `:empty` keeps the margin
+   from reserving space on a deployment with no site key, where the component
+   renders nothing at all. */
+.door-turnstile { width: 100%; margin: 0 0 1.35rem; overflow: hidden; }
+.door-turnstile:empty { margin: 0; }
+.door-turnstile-inner { width: 300px; transform-origin: top left; }
 
 /* ── Alerts ── */
 .auth-alert { border-radius: 8px; padding: 12px 16px; margin-bottom: 1.25rem; font-size: .875rem; line-height: 1.5; }

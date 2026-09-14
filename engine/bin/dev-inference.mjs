@@ -60,22 +60,46 @@ if (process.env.NODE_ENV && process.env.NODE_ENV !== 'development') {
 
 const PORT = Number(process.env.INFERENCE_PORT ?? 4032);
 const TARGET_DIM = 1024;              // halfvec(1024), from 002_core.sql
-const MODEL_ID = 'dev-minilm-l6-v2@padded1024';
 
-console.log('Loading the embedding model (first run downloads ~25MB)…');
+// Two models, because §12.3 requires the candidate and the incumbent to be
+// servable at the same time -- the backfill embeds with one while search is
+// still answering from the other. Selected by INFERENCE_MODEL; run a second
+// instance on another port to have both live at once.
+//
+// bge-m3 is what §6.1 actually specifies and is natively 1024-dimensional, so
+// nothing is padded. MiniLM is 384 and IS padded, which is why its model_id says
+// so: those vectors are 640 zeroes wide and must never be compared with bge-m3's.
+const MODELS = {
+  minilm: { id: 'dev-minilm-l6-v2@padded1024', repo: 'Xenova/all-MiniLM-L6-v2', dtype: undefined, note: '~25MB, 384-dim, zero-padded to 1024' },
+  'bge-m3': { id: 'bge-m3@onnx-int8',           repo: 'Xenova/bge-m3',          dtype: 'int8',    note: '~542MB, native 1024-dim' },
+};
+const CHOICE = process.env.INFERENCE_MODEL ?? 'minilm';
+const MODEL = MODELS[CHOICE];
+if (!MODEL) {
+  console.error(`INFERENCE_MODEL=${CHOICE} is unknown. Choose one of: ${Object.keys(MODELS).join(', ')}`);
+  process.exit(1);
+}
+const MODEL_ID = MODEL.id;
+
+console.log(`Loading ${CHOICE} (${MODEL.note})…`);
 const { pipeline } = await import('@huggingface/transformers');
-const embed = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
-console.log('Model ready.');
+const embed = await pipeline('feature-extraction', MODEL.repo,
+  MODEL.dtype ? { dtype: MODEL.dtype } : undefined);
+console.log(`Model ready: ${MODEL_ID} on :${PORT}`);
 
-/** Mean-pooled, L2-normalised, then zero-padded to the column's width. */
+/** Mean-pooled, L2-normalised, then zero-padded if the model is narrower. */
 async function embedAll(texts) {
   const out = await embed(texts, { pooling: 'mean', normalize: true });
   const [rows, dim] = out.dims;
   const data = out.data;
+  if (dim > TARGET_DIM) {
+    // Truncating would silently change the vector space. Fail instead.
+    throw new Error(`${MODEL_ID} returns ${dim} dimensions; chunks.embedding is halfvec(${TARGET_DIM}).`);
+  }
   const vectors = [];
   for (let r = 0; r < rows; r += 1) {
     const v = new Array(TARGET_DIM).fill(0);
-    for (let i = 0; i < dim && i < TARGET_DIM; i += 1) v[i] = data[r * dim + i];
+    for (let i = 0; i < dim; i += 1) v[i] = data[r * dim + i];
     vectors.push(v);
   }
   return vectors;
@@ -145,7 +169,7 @@ createServer((req, res) => {
   console.log(`
 Development inference stand-in on http://127.0.0.1:${PORT}
 
-  POST /v1/embeddings              REAL  all-MiniLM-L6-v2, 384 dims zero-padded to ${TARGET_DIM}
+  POST /v1/embeddings              REAL  ${MODEL.repo} — ${MODEL.note}
   POST /v1/rerank                  REAL  bi-encoder cosine, NOT the specified cross-encoder
   POST /v1/classify/family-safety  503   gate 3 needs the real API (P1 default deny holds)
 

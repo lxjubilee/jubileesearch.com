@@ -1,0 +1,18 @@
+{
+  "name": "jubilee-inference-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The Jubilee Inference API (spec 16). Embeddings, reranking and safety classification for every Jubilee service, behind one HTTP contract. Not a search component.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env bin/serve.js",
+    "dev": "node --env-file-if-exists=.env --watch bin/serve.js",
+    "test": "node --test \"test/**/*.test.js\"",
+    "bench": "node --env-file-if-exists=.env bin/bench.js",
+    "check": "node --env-file-if-exists=.env bin/check.js"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.7.6"
+  }
+}
