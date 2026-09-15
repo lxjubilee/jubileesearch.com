@@ -1,6 +1,7 @@
 import 'server-only';
 import type { SearchParams, SearchResponse } from './types';
 import { getSession } from './session';
+import { headers } from 'next/headers';
 
 // Server-side client for the engine (§14).
 //
@@ -17,6 +18,18 @@ import { getSession } from './session';
 const ENGINE = (process.env.ENGINE_API_URL ?? 'http://127.0.0.1:4038').replace(/\/$/, '');
 
 const TIMEOUT_MS = Number(process.env.ENGINE_TIMEOUT_MS ?? 5000);
+
+/** The visitor's address as nginx presented it, for the engine's rate limiter. */
+async function visitorIpHeader(): Promise<Record<string, string>> {
+  try {
+    const h = await headers();
+    const ip = h.get('x-forwarded-for')?.split(',')[0]?.trim() || h.get('x-real-ip') || '';
+    return ip ? { 'x-forwarded-for': ip } : {};
+  } catch {
+    // Not inside a request (a build-time render): no visitor to speak of.
+    return {};
+  }
+}
 
 export class EngineUnavailable extends Error {
   constructor(public readonly detail: string) {
@@ -62,7 +75,14 @@ export async function search(params: SearchParams): Promise<SearchResponse> {
   try {
     const res = await fetch(`${ENGINE}/api/v1/search?${toQuery(params)}`, {
       signal: controller.signal,
-      ...(session ? { headers: { authorization: `Bearer ${session.access_token}` } } : {}),
+      headers: {
+        ...(session ? { authorization: `Bearer ${session.access_token}` } : {}),
+        // The engine rate-limits anonymous searches per IP (§14). This call
+        // comes from the server, so without this every visitor to the site
+        // would share one bucket of sixty searches a minute. nginx sets
+        // X-Forwarded-For on the way in; pass it through.
+        ...(await visitorIpHeader()),
+      },
       // The engine has its own result cache keyed on far more than the URL
       // (§13.7: the expansion set, the filters, the index version). Caching the
       // same response again in Next would add a second, dumber layer that

@@ -61,7 +61,7 @@ const server = createServer(async (req, res) => {
       return send(res, 403, { error: 'requires the search_viewer or search_admin right' });
     }
 
-    if (route.rateLimit !== false) {
+    if (route.rateLimit !== false && !env.rateLimitExemptIps.includes(clientIp(req))) {
       const authed = Boolean(identity?.authenticated);
       const key = authed ? `id:${identity.jubilee_id}` : `ip:${clientIp(req)}`;
       const { allowed, remaining, retryAfter } =
@@ -120,7 +120,11 @@ function clientIp(req) {
   if (cf) return String(cf);
   const fwd = req.headers['x-forwarded-for'];
   if (fwd) return String(fwd).split(',')[0].trim();
-  return req.socket.remoteAddress ?? 'unknown';
+  // Node reports the loopback as ::1 or ::ffff:127.0.0.1 depending on how the
+  // socket was opened; one name for it, so an exemption list can say 127.0.0.1.
+  const raw = req.socket.remoteAddress ?? 'unknown';
+  if (raw === '::1') return '127.0.0.1';
+  return raw.startsWith('::ffff:') ? raw.slice(7) : raw;
 }
 
 function send(res, status, payload) {

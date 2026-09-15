@@ -23,6 +23,9 @@ export const env = {
   // took 2,750 ms, at 600 chars 376 ms. The title and heading come first and
   // are never cut.
   rerankTextChars: Number(process.env.RERANK_TEXT_CHARS ?? 700),
+  // Callers that skip the per-IP rate limit entirely: a load test on the box
+  // itself (eval/load.mjs). Empty in production unless a test is running.
+  rateLimitExemptIps: String(process.env.RATE_LIMIT_EXEMPT_IPS ?? '').split(',').map((s) => s.trim()).filter(Boolean),
   rerankModel: process.env.RERANK_MODEL ?? 'bge-reranker-v2-m3@v1',
   safetyModel: process.env.SAFETY_MODEL ?? '',
   jsvApiUrl: process.env.JSV_API_URL ?? '',
