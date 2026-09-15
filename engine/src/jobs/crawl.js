@@ -26,7 +26,7 @@ import { fetchPage, backoffMs } from '../crawl/fetcher.js';
 import { extract } from '../crawl/extractor.js';
 import { extractPdfText } from '../crawl/pdf.js';
 import { parseXRobotsTag } from '../crawl/robots.js';
-import { upsertCrawledPage, resolveNearDuplicates, markGoneByUrl, recordFailure } from '../crawl/store.js';
+import { upsertCrawledPage, resolveNearDuplicates, markGoneByUrl, recordFailure, siteBoilerplate } from '../crawl/store.js';
 import { loadRules, evaluate, VERDICTS } from '../safety/gates.js';
 import { urlHash, normalizeUrl } from '../ingest/markdown.js';
 
@@ -36,6 +36,20 @@ const WORKER_ID = `${process.env.HOSTNAME ?? 'worker'}:${process.pid}`;
  * Process one queue item end to end.
  * Exported so a single URL can be re-run from the admin console for diagnosis.
  */
+/**
+ * The domain's boilerplate block set (migration 038), loaded once per domain
+ * per run and refreshed every 50 pages so a site learns its own template as
+ * the run proceeds rather than only on the next one.
+ */
+async function boilerplateFor(db, domain, context) {
+  const cache = context.boilerplate ?? (context.boilerplate = new Map());
+  const entry = cache.get(domain.id);
+  if (entry && entry.uses < 50) { entry.uses += 1; return entry.set; }
+  const set = await siteBoilerplate(db, domain.id, 3);
+  cache.set(domain.id, { set, uses: 1 });
+  return set;
+}
+
 export async function processItem(db, item, context) {
   const { domains, rules, cfg } = context;
   const domain = domains.get(Number(item.domain_id));
@@ -114,6 +128,7 @@ export async function processItem(db, item, context) {
   } else {
     extracted = extract(fetched.body, fetched.final_url ?? item.url, {
       headers: { 'x-robots-tag': fetched.x_robots_tag },
+      boilerplate: await boilerplateFor(db, domain, context),
     });
   }
 

@@ -67,7 +67,16 @@ export function extract(html, url, options = {}) {
   const meta = extractMetadata(dom, url, options.headers ?? {});
 
   const root = pickMainContent(dom);
-  const markdown = root ? toMarkdown(root, url) : '';
+  const rawMarkdown = root ? toMarkdown(root, url) : '';
+  // Site boilerplate (migration 038): blocks this domain repeats across pages
+  // are template, not article, and leave before anything downstream reads the
+  // text. `block_hashes` reports every block as extracted so the caller can
+  // record this page's sightings and teach the set for the next page.
+  const blockHashes = splitBlocks(rawMarkdown).map(blockHash);
+  const stripped = options.boilerplate?.size
+    ? stripBoilerplate(rawMarkdown, options.boilerplate)
+    : { markdown: rawMarkdown, removed: 0 };
+  const markdown = stripped.markdown;
   const bodyText = markdownToText(markdown);
 
   const links = extractLinks(dom, url);
@@ -82,7 +91,10 @@ export function extract(html, url, options = {}) {
     links,
     outlink_count: links.filter((l) => !l.is_internal).length,
     internal_links: links.filter((l) => l.is_internal).map((l) => l.to_url),
+    block_hashes: blockHashes,
     extraction: {
+      boilerplate_removed: stripped.removed,
+      blocks: blockHashes.length,
       // Reported so a bad extraction is diagnosable from the admin console's
       // per-URL view rather than by re-fetching the page by hand.
       strategy: root ? root.__strategy ?? 'scored' : 'none',
@@ -460,4 +472,35 @@ export function detectCharset(buffer, contentTypeHeader) {
   const fromMeta = /<meta[^>]+charset=["']?([\w-]+)/i.exec(head)?.[1]
                 ?? /<meta[^>]+content=["'][^"']*charset=([\w-]+)/i.exec(head)?.[1];
   return (fromMeta ?? 'utf-8').toLowerCase();
+}
+
+// ---------------------------------------------------------------------------
+// Site boilerplate (migration 038)
+// ---------------------------------------------------------------------------
+//
+// The markdown is blank-line-separated blocks. A block is identified by its
+// text with markdown markers, case and whitespace removed, so "## Related
+// messages" and "Related messages" are the same block and a stray space does
+// not make a new one. Digits are kept: "10 min" lists differ from "12 min"
+// lists and both recur, so each is learned on its own.
+
+export function splitBlocks(markdown) {
+  return String(markdown ?? '').split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
+}
+
+export function blockHash(block) {
+  const key = String(block)
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^\s*-\s+/gm, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+  return createHash('sha1').update(key).digest('hex');
+}
+
+/** Drop the blocks whose hash is in `set`. Keeps block order and spacing. */
+export function stripBoilerplate(markdown, set) {
+  const blocks = splitBlocks(markdown);
+  const kept = blocks.filter((b) => !set.has(blockHash(b)));
+  return { markdown: kept.join('\n\n'), removed: blocks.length - kept.length };
 }

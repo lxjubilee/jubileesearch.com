@@ -95,6 +95,7 @@ export async function upsertCrawledPage(domain, fetched, extracted, verdict, cfg
       ]);
 
     const pageId = Number(rows[0].id);
+    await writePageBlocks(client, domain.id, pageId, extracted.block_hashes);
 
     if (unchanged) {
       return { page_id: pageId, status: 'unchanged' };
@@ -233,4 +234,28 @@ function hostOf(url) {
   } catch {
     return null;
   }
+}
+
+// ---------------------------------------------------------------------------
+// Site boilerplate (migration 038)
+// ---------------------------------------------------------------------------
+
+/** Replace this page's block sightings. Called inside the page transaction. */
+async function writePageBlocks(client, domainId, pageId, hashes) {
+  await client.query('DELETE FROM page_blocks WHERE page_id = $1', [pageId]);
+  const unique = [...new Set(hashes ?? [])];
+  if (unique.length === 0) return;
+  await client.query(
+    `INSERT INTO page_blocks (domain_id, page_id, hash)
+     SELECT $1, $2, h FROM unnest($3::text[]) AS h ON CONFLICT DO NOTHING`,
+    [domainId, pageId, unique]);
+}
+
+/**
+ * The block hashes this domain repeats on `minPages` or more pages: what the
+ * extractor strips. Loaded once per domain per crawl run (jobs/crawl.js).
+ */
+export async function siteBoilerplate(db, domainId, minPages = 3) {
+  const { rows } = await db.query('SELECT site_boilerplate_hashes($1, $2) AS hash', [domainId, minPages]);
+  return new Set(rows.map((r) => r.hash));
 }
