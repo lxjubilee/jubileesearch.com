@@ -473,11 +473,19 @@ gold pairs from search output instead of from articles. What the new set needs:
 
 ## 7. A MiniLM reranker reorders bge-m3 retrieval
 
+**Status 2026-09-15 (later): served in fp16.** The fp32 export is converted
+with ONNX Runtime's transformers optimizer (`convert_float_to_float16`,
+`keep_io_types`, external data) -- the only converter that survives the 2 GB
+protobuf limit; onnxconverter-common fails on deep copy and shape inference.
+The fp16 file is 1.1 GB, loads in 8.7 s (fp32: 17.5 s), scores identically
+(top pair -2.01 in both) and recall@10 is 59 against 60. `/v1/rerank`, 50
+documents: 2300 chars 2.2 s (was 2.75), 1200 chars 0.77 s, 600 chars 0.28 s
+(was 0.38). Serving as `bge-reranker-v2-m3@onnx-fp16`, `RERANK_DTYPE=fp16`.
+
 **Status 2026-09-15: the specified cross-encoder is serving.** `BAAI/bge-reranker-v2-m3`
 is exported to ONNX by `InferenceAPI/bin/export-reranker.py` (Optimum, fp32,
 2.2 GB) into the service's local model directory and runs on the RTX PRO 6000
-via DirectML: 50 pairs in 75 ms. A GPU-side fp16 export is in hand as an
-optimisation; the CPU-side fp16 conversion fails on the 2 GB protobuf limit.
+via DirectML: 50 pairs in 75 ms.
 Floor recalibrated on the new scale and left at -6.5: it already empties five
 of seventeen off-topic gold queries and costs four of ninety-five positives.
 
@@ -773,6 +781,7 @@ Three runs on production (bge-m3 fp16, cross-encoder rerank on, hybrid recall@10
 | `network-titles-2026-09-15` | same, titles kept | **54** | **54** | a page's own title and H1 are never stripped; cross-language 53% |
 | `network-v2m3-2026-09-15` | same | **61** | 58 | `bge-reranker-v2-m3` exported to ONNX (fp32, DirectML, 50 pairs in 75 ms); R@1 40, cross-language 67%, cross-register 60%, conversational 45% |
 | `network-v2m3-cap700-2026-09-15` | same | 60 | 57 | reranker reads title + heading + the first 700 chars of the best chunk (`RERANK_TEXT_CHARS`): cache-miss search 0.8-0.95 s instead of 1.2-2.1 s for one point of recall; migration 040 adds 88 Devanagari Hindi terms |
+| `network-v2m3-fp16-2026-09-15` | same | 59 | 57 | reranker served in fp16 (§7); R@1 39; the one-pair difference is float noise at the rerank boundary; cross-language 67%, conversational 40% |
 
 The restricted run matches the 600-page baseline (57.6 on 85 pairs), so the
 drop on the whole network is mostly competition: the gold targets are one
@@ -843,4 +852,41 @@ retrieval asks for 300. Retrieval now sets it per query (`SET LOCAL`) from the
 exactly, so the number did not move; it will matter the day the index is
 large enough for the planner to use the HNSW index, which is the day it would
 otherwise have silently returned 40.
+
+## 19. Load test at 50 concurrent: the engine is inference-bound; visitor IPs now reach the rate limiter
+
+**Status 2026-09-15.** `eval/load.mjs` runs acceptance 24 as written: 50
+concurrent clients for 30 s, first with unique queries (every one a cache
+miss), then with twenty repeated queries (every one a hit). Run on the Contabo
+box against localhost.
+
+| phase | requests | rps | p50 | p95 | p99 | budget |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| miss, reranker fp32 | 600 | 20 | 3,200 ms | 4,344 ms | 5,100 ms | 500 ms |
+| miss, reranker fp16 | 600 | 20 | 2,867 ms | **3,861 ms** | 4,835 ms | 500 ms |
+| hit, reranker fp32 | 11,800 | 401 | 105 ms | 135 ms | 240 ms | 100 ms |
+| hit, reranker fp16 | 11,865 | 396 | 115 ms | **180 ms** | 308 ms | 100 ms |
+
+Neither phase meets the budget at this concurrency. The miss phase is bound by
+the workstation GPU behind one SSH tunnel: fifty queries each need one query
+embedding and one 50-pair rerank, and the service batches them but runs them
+one batch at a time (throughput ~20 searches/s). A single cache-miss search
+in isolation is 0.8-0.95 s (§11). The hit phase is bound by the box's own
+CPU: a cached search still parses, normalises, expands and logs, and at 400
+rps the two vCPUs are saturated. fp16 made the miss phase 11% faster; the hit
+numbers moved within run-to-run noise.
+
+What was found and fixed on the way: every search reached the engine from the
+web tier's own address, so the whole site shared one anonymous bucket of sixty
+searches a minute and the first load test returned 429s. `web/lib/api.ts` now
+forwards the visitor's `X-Forwarded-For` as nginx presented it, and the engine
+normalises `::1` / `::ffff:127.0.0.1` to `127.0.0.1` so loopback is one
+address. `RATE_LIMIT_EXEMPT_IPS` exempts listed addresses from the limiter; it
+was set to `127.0.0.1` for the tests and removed afterwards.
+
+To meet 500 ms at 50 concurrent the reranker would need to be either nearer
+(the tunnel adds ~30 ms per call) and run in parallel sessions, or capped at
+fewer candidates per query; to meet 100 ms on hits the box needs more CPU or
+the result cache moved in front of the parser. Both are hosting decisions
+(§14, D8), not code.
 
