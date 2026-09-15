@@ -79,11 +79,18 @@ const SCRIPTS = [
   [/\p{Script=Han}/u, 'zh'],
 ];
 
+// "in" is NOT a Romanian marker although "in" (from "in" with a breve) is a
+// Romanian preposition: it is the third most common word of English, and
+// listing it for Romanian sent "chiasm in Hebrew writing" and "faith in God"
+// to the Romanian dictionary, where the English stems do not match (gold T01,
+// found 2026-09-15). Romanian is still recognised by its other markers.
 const STOPWORDS = {
   ro: ['si', 'de', 'la', 'cu', 'ce', 'este', 'sunt', 'care', 'pentru', 'din', 'nu',
-       'ca', 'lui', 'un', 'o', 'in', 'sa', 'se', 'mai', 'dumnezeu', 'cum'],
+       'ca', 'lui', 'un', 'o', 'sa', 'se', 'mai', 'dumnezeu', 'cum', 'pe', 'ma', 'imi'],
   en: ['the', 'and', 'of', 'is', 'are', 'what', 'why', 'how', 'for', 'from', 'not',
-       'that', 'this', 'with', 'do', 'does', 'god', 'about'],
+       'that', 'this', 'with', 'do', 'does', 'god', 'about', 'in', 'to', 'i', 'my',
+       'me', 'you', 'it', 'on', 'at', 'by', 'be', 'was', 'were', 'have', 'has',
+       'when', 'who', 'can', 'should', 'will', 'after', 'before', 'again', 'over'],
   es: ['el', 'los', 'las', 'una', 'que', 'por', 'para', 'como', 'dios', 'con'],
   fr: ['le', 'les', 'des', 'une', 'que', 'pour', 'dans', 'dieu', 'avec', 'est'],
   de: ['der', 'die', 'das', 'und', 'ist', 'nicht', 'gott', 'wie', 'was', 'mit'],

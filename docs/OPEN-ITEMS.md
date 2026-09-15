@@ -785,6 +785,8 @@ Three runs on production (bge-m3 fp16, cross-encoder rerank on, hybrid recall@10
 | `network-also-accept-2026-09-15` | same | **68** (strict 64) | 65 | gold set 1.1: 21 pairs accept more than one page (see below); R@1 45, conversational 60%, cross-register 65%, cross-language 73% |
 | `network-lexany-2026-09-15` | same | 69 (strict 65) | 65 | migration 041: the lexical arm also runs the query's lexemes OR'd at 0.3 weight; lexical-only R@10 39 -> 49, paraphrase 40 -> 50, conversational 60 -> 65 (§20) |
 | `network-rerank-desc-2026-09-15` | same | **80** (strict 77) | 77 | the reranker reads the page description as well as title, heading and best chunk; R@5 76, R@3 74; paraphrase 90 (top-5 8/10), conversational 75, topical 93, cross-register 70, cross-language 73 (§20) |
+| `network-armguard-2026-09-15` | same | 81 (strict 78) | 78 | migration 044: lexical scores normalised with a strict-match bonus, top 10 of each arm always reach the reranker, concepts dry_bones / seal_of_spirit / chiasm; lexical-only R@10 49 -> 64; cross-register 75, cross-language 80 |
+| `network-langfix-2026-09-15` | same | **82** (strict 79) | 79 | "in" no longer marks a query as Romanian (it sent "chiasm in Hebrew writing" and "faith in God" to the Romanian dictionary); topical 97 |
 
 The restricted run matches the 600-page baseline (57.6 on 85 pairs), so the
 drop on the whole network is mostly competition: the gold targets are one
@@ -956,8 +958,23 @@ weight on fusion position above 0.1 lowers R@3 and empties cross-language
 Romanian queries to English pages. The reranker keeps sole control of order;
 the script stays so the question can be re-asked after a model change.
 
-What still misses (hybrid, 20 pairs): T01 T10, C06 C08 C13 C16 C18, P05, X01
-X03 X05 X08 X12 X13, N04 N05, L01 L02 L07 L12. Most are pairs whose target page
+**Later the same day: three more retrieval faults, found by walking the
+misses.** (1) `ts_rank_cd` is unnormalised cover density, so a page that
+repeats "writing" forty times outscored the only page containing every word
+of "chiasm in Hebrew writing"; lexical scores now use normalisation 1|32 and a
+page matching the strict query gets a flat bonus no expansion can reach
+(§13.3, original terms at full weight). (2) RRF with k = 60 lets a page that
+is first in one arm fall outside the fifty the reranker sees; the top ten of
+each arm are now guaranteed in (`fusion_arm_guarantee`, migration 044). (3)
+The language detector listed "in" as a Romanian marker, and a tie goes to
+Romanian, so every English query with "in" ran against the Romanian
+dictionary. Hybrid R@10 80 -> 82, lexical-only 49 -> 68, topical 97.
+
+What still misses (hybrid, 18 pairs): T10, C06 C08 C13 C16 C18, P03 P05, X01
+X03 X05 X08 X12, N04 N05, L01 L02 L07. L02 and X01 are now retrieved (lexical
+2 and 8) and demoted by the cross-encoder scoring a Romanian or register-
+bridged query against an English page; the rest never enter the candidate
+set. Most are pairs whose target page
 never enters the 50-candidate set from either arm (C13 "why do people stop
 showing up after the crisis passes" -> "Comfort Was Never a Sentence"): a
 retrieval gap, not an ordering one, and the next lever is the lexicon (D9), not

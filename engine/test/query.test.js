@@ -53,6 +53,14 @@ describe('normalize', () => {
     assert.equal(detectLanguage('shalom', 'ro'), 'ro', 'falls back to the hint');
     assert.equal(detectLanguage('shalom'), 'en', 'then to English');
   });
+
+  test('"in" does not make an English query Romanian', () => {
+    assert.equal(detectLanguage('chiasm in hebrew writing'), 'en');
+    assert.equal(detectLanguage('faith in god'), 'en');
+    assert.equal(detectLanguage('why was i passed over again and again'), 'en');
+    assert.equal(detectLanguage('credinta in dumnezeu'), 'ro');
+    assert.equal(detectLanguage('de ce sunt trist'), 'ro');
+  });
 });
 
 describe('scripture reference parsing', () => {

@@ -102,10 +102,22 @@ function buildQuery(zone, ctx) {
     ...groups.map((g, i) => `to_tsquery(c.reg, ${g.param}) AS q${i + 1}`),
   ].join(', ');
 
+  // Scoring. ts_rank_cd is unnormalised cover density: a page that repeats
+  // one query word forty times scores 5.0 on the OR query while the only page
+  // that contains every word scores 0.1 on the strict one, and "chiasm in
+  // Hebrew writing" lost to a page about writing (gold T01, every run until
+  // 2026-09-15). Two things fix that. Normalisation 1|32 divides by the log of
+  // the document length and maps the rank into [0, 1), so no single component
+  // can run away. And a page that matches the strict query -- every original
+  // term, section 13.3 "original terms at full weight" -- gets a flat bonus that
+  // no combination of expansion and OR scores can reach, so a full match
+  // always leads the lexical arm and the density scores order within a band.
+  const rank = (q) => `ts_rank_cd(p.body_tsv, ${q}, 1|32)`;
   const lexScore = [
-    `ts_rank_cd(p.body_tsv, t.q0)`,
-    ...(useAny ? [`${p(anyWeight)}::float * ts_rank_cd(p.body_tsv, t.qany)`] : []),
-    ...groups.map((g, i) => `${g.weight} * ts_rank_cd(p.body_tsv, t.q${i + 1})`),
+    `(CASE WHEN p.body_tsv @@ t.q0 THEN 2 ELSE 0 END)`,
+    rank('t.q0'),
+    ...(useAny ? [`${p(anyWeight)}::float * ${rank('t.qany')}`] : []),
+    ...groups.map((g, i) => `${g.weight} * ${rank(`t.q${i + 1}`)}`),
   ].join(' + ');
 
   const anyMatch = ['t.q0', ...(useAny ? ['t.qany'] : []), ...groups.map((_, i) => `t.q${i + 1}`)].join(' || ');
@@ -193,6 +205,11 @@ function buildQuery(zone, ctx) {
   const halflife = p(cfg.freshness_halflife_days);
   const ctrQuery = p(ctx.normalized);
   const rerankCandidates = p(Math.max(1, cfg.rerank_candidates));
+  // Fusion arm guarantee (migration 044). With k = 60, a page ranked first by
+  // one arm alone (1/61) scores the same as a page ranked ~60th by both, so
+  // the top of one arm could fall outside the 50 the reranker sees -- gold
+  // X13 was lexical #1 and never reached it. The top N of each arm always do.
+  const armGuarantee = p(Math.max(0, cfg.fusion_arm_guarantee ?? 0));
 
   const sql = `
     WITH c AS (SELECT ts_config_for(${langParam}) AS reg)
@@ -222,6 +239,7 @@ function buildQuery(zone, ctx) {
         FROM lexical_ranked l
         FULL OUTER JOIN semantic s ON l.page_id = s.page_id
     )
+    , scored AS (
     SELECT p.id, p.url, p.title, p.description, p.tier, p.language,
            p.category, p.persona, p.office, p.related_slugs, p.characters,
            p.published_at, p.modified_at, p.quality_score, p.engagement_score,
@@ -250,8 +268,16 @@ function buildQuery(zone, ctx) {
     CROSS JOIN tsq t
     LEFT JOIN query_page_ctr ctr
            ON ctr.page_id = p.id AND ctr.normalized_query = ${ctrQuery}
+    )
+    , positioned AS (
+        SELECT sc.*, row_number() OVER (ORDER BY sc.score DESC) AS pos FROM scored sc
+    )
+    SELECT * FROM positioned
+    WHERE pos <= ${rerankCandidates}::int
+       OR lex_rank <= ${armGuarantee}::int
+       OR sem_rank <= ${armGuarantee}::int
     ORDER BY score DESC
-    LIMIT ${rerankCandidates}`;
+    LIMIT ${rerankCandidates}::int + 2 * ${armGuarantee}::int`;
 
   return { sql, params };
 }
