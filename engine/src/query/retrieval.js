@@ -31,8 +31,41 @@ const ZONE_VIEW = { A: 'zone_a_pages', B: 'zone_b_pages' };
 export async function retrieve(db, zone, ctx) {
   if (!ctx.normalized) return [];
   const { sql, params } = buildQuery(zone, ctx);
-  const { rows } = await db.query(sql, params);
+  const hasVector = Array.isArray(ctx.embedding) && ctx.embedding.length > 0;
+  const rows = hasVector
+    ? await withSearchWidth(db, ctx.cfg, sql, params)
+    : (await db.query(sql, params)).rows;
   return rows.map((r) => shape(r, zone, ctx));
+}
+
+/**
+ * Run the fused query with the HNSW search width the query actually needs.
+ *
+ * pgvector's HNSW scan returns at most `hnsw.ef_search` rows (Postgres default
+ * 40) regardless of LIMIT, so the semantic arm was quietly capped at 40 chunks
+ * while asking for retrieval_candidates * 3 (migration 039). SET LOCAL scopes
+ * the width to this transaction and this connection. If the GUC is missing
+ * (no pgvector, a test double) the query runs at whatever the default is.
+ */
+async function withSearchWidth(db, cfg, sql, params) {
+  const want = Math.max(1, Number(cfg.retrieval_candidates) || 100) * 3;
+  const width = Math.min(1000, Math.max(want, Number(cfg.hnsw_ef_search) || 0, 40));
+  const client = await db.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query(`SET LOCAL hnsw.ef_search = ${Math.round(width)}`);
+    const { rows } = await client.query(sql, params);
+    await client.query('COMMIT');
+    return rows;
+  } catch (err) {
+    try { await client.query('ROLLBACK'); } catch { /* already gone */ }
+    // No such parameter: no pgvector HNSW on this database (a test double).
+    // A failed SET aborts the transaction, so the query is re-run plainly.
+    if (/hnsw\.ef_search/i.test(String(err.message))) return (await db.query(sql, params)).rows;
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 function buildQuery(zone, ctx) {
