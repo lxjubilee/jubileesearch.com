@@ -76,6 +76,10 @@ export const env = {
       unsafeTopicThreshold: num(process.env.SAFETY_UNSAFE_TOPIC_THRESHOLD, 0.5),
     },
   },
+  // Where locally exported models live (a repo id with no Hub counterpart,
+  // e.g. `bge-reranker-v2-m3` converted with eval/export-reranker.py). Checked
+  // before the Hub for every role; unset means the package's own ./models.
+  localModelPath: process.env.INFERENCE_LOCAL_MODEL_PATH || new URL('../models/', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'),
   // DirectML enumerates adapters in its own order (not nvidia-smi's). On a
   // box with more than one GPU, this picks which one the ONNX sessions use.
   dmlDeviceId: process.env.INFERENCE_DML_DEVICE_ID === undefined || process.env.INFERENCE_DML_DEVICE_ID === ''

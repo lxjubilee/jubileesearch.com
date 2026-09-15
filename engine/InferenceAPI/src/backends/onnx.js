@@ -33,7 +33,14 @@ export function describe() {
 // there is no reason to pay that when the service is only answering /health.
 let transformers = null;
 async function lib() {
-  if (!transformers) transformers = await import('@huggingface/transformers');
+  if (!transformers) {
+    transformers = await import('@huggingface/transformers');
+    // Locally exported models (INFERENCE_LOCAL_MODEL_PATH) are tried before
+    // the Hub, so a repo id like `bge-reranker-v2-m3` resolves to
+    // <models>/bge-reranker-v2-m3/{config.json, tokenizer.json, onnx/}.
+    transformers.env.allowLocalModels = true;
+    transformers.env.localModelPath = env.localModelPath;
+  }
   return transformers;
 }
 

@@ -36,3 +36,6 @@ Thumbs.db
 
 # Local deploy target (host/paths) — never commit
 deploy.env
+
+# Locally exported ONNX models (gigabytes; rebuilt with eval/export-reranker.py)
+engine/InferenceAPI/models/
