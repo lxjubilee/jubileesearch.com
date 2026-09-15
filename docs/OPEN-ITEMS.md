@@ -473,6 +473,14 @@ gold pairs from search output instead of from articles. What the new set needs:
 
 ## 7. A MiniLM reranker reorders bge-m3 retrieval
 
+**Status 2026-09-15: the specified cross-encoder is serving.** `BAAI/bge-reranker-v2-m3`
+is exported to ONNX by `InferenceAPI/bin/export-reranker.py` (Optimum, fp32,
+2.2 GB) into the service's local model directory and runs on the RTX PRO 6000
+via DirectML: 50 pairs in 75 ms. A GPU-side fp16 export is in hand as an
+optimisation; the CPU-side fp16 conversion fails on the 2 GB protobuf limit.
+Floor recalibrated on the new scale and left at -6.5: it already empties five
+of seventeen off-topic gold queries and costs four of ninety-five positives.
+
 **Status 2026-09-14: RESOLVED.** The rerank slot is now a real cross-encoder,
 `Xenova/bge-reranker-base` (fp16, GPU). `bge-reranker-v2-m3` still ships no
 ONNX build; converting it is the upgrade path.
@@ -763,6 +771,7 @@ Three runs on production (bge-m3 fp16, cross-encoder rerank on, hybrid recall@10
 | `network-clean-2026-09-15` | whole network, 11,776 chunks | 50 | 49 | migration 038: boilerplate stripped at extraction; corpus 55k -> 11.8k chunks; two Romanian targets lost their own titles (see §17) |
 | `network-efsearch-2026-09-15` | same | 50 | 49 | migration 039: HNSW search width set per query; no change here because the planner scans this corpus exactly, but it removes a 40-candidate cap that bites at scale (§18) |
 | `network-titles-2026-09-15` | same, titles kept | **54** | **54** | a page's own title and H1 are never stripped; cross-language 53% |
+| `network-v2m3-2026-09-15` | same | **61** | 58 | `bge-reranker-v2-m3` exported to ONNX (fp32, DirectML, 50 pairs in 75 ms); R@1 40, cross-language 67%, cross-register 60%, conversational 45% |
 
 The restricted run matches the 600-page baseline (57.6 on 85 pairs), so the
 drop on the whole network is mostly competition: the gold targets are one
