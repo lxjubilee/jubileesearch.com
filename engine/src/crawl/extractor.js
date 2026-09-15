@@ -74,7 +74,7 @@ export function extract(html, url, options = {}) {
   // record this page's sightings and teach the set for the next page.
   const blockHashes = splitBlocks(rawMarkdown).map(blockHash);
   const stripped = options.boilerplate?.size
-    ? stripBoilerplate(rawMarkdown, options.boilerplate)
+    ? stripBoilerplate(rawMarkdown, options.boilerplate, { title: meta.title })
     : { markdown: rawMarkdown, removed: 0 };
   const markdown = stripped.markdown;
   const bodyText = markdownToText(markdown);
@@ -498,9 +498,25 @@ export function blockHash(block) {
   return createHash('sha1').update(key).digest('hex');
 }
 
-/** Drop the blocks whose hash is in `set`. Keeps block order and spacing. */
-export function stripBoilerplate(markdown, set) {
+const normalisedKey = (text) => String(text ?? '')
+  .replace(/^#{1,6}\s+/gm, '').replace(/^\s*-\s+/gm, '').toLowerCase().replace(/\s+/g, ' ').trim();
+
+/**
+ * Drop the blocks whose hash is in `set`. Keeps block order and spacing.
+ *
+ * Two blocks are never dropped, whatever the set says: a level-one heading,
+ * and any block whose text is the page's own title. An article's title
+ * appears in other pages' "related" lists, so its hash is legitimately
+ * boilerplate THERE -- and would strip the title off the one page that owns
+ * it. Measured: a Romanian article lost its H1 and fell from semantic rank 1
+ * to 82 for the query that names it.
+ */
+export function stripBoilerplate(markdown, set, { title = null } = {}) {
   const blocks = splitBlocks(markdown);
-  const kept = blocks.filter((b) => !set.has(blockHash(b)));
+  const own = normalisedKey(title);
+  // A list item is never the page's own title, even when its text matches:
+  // that is exactly the "related" entry the rule exists to remove.
+  const keep = (b) => /^#\s/.test(b) || (own && !/^\s*-\s/.test(b) && normalisedKey(b) === own);
+  const kept = blocks.filter((b) => keep(b) || !set.has(blockHash(b)));
   return { markdown: kept.join('\n\n'), removed: blocks.length - kept.length };
 }

@@ -48,6 +48,15 @@ describe('block hashing', () => {
     assert.equal(r.markdown, 'Intro paragraph.\n\nClosing paragraph.');
   });
 
+  test('a page keeps its own title even when other pages list it as boilerplate', () => {
+    const md = '# Am vrut putere si am primit un regulament\n\nIntro paragraph.\n\n- Am vrut putere si am primit un regulament\n\nClosing.';
+    const listed = new Set([ex.blockHash('- Am vrut putere si am primit un regulament')]);
+    const r = ex.stripBoilerplate(md, listed, { title: 'Am vrut putere si am primit un regulament' });
+    assert.ok(r.markdown.startsWith('# Am vrut putere'), 'the H1 stays');
+    assert.ok(!r.markdown.includes('- Am vrut putere'), 'the list item goes');
+    assert.equal(r.removed, 1);
+  });
+
   test('extract() reports every block and strips the known ones before hashing', () => {
     const clean = ex.extract(page(1), 'https://s.example/1');
     assert.ok(clean.block_hashes.length >= 3);
