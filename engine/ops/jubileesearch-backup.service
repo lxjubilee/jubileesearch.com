@@ -1,0 +1,7 @@
+[Unit]
+Description=JubileeSearch job: nightly backup (§16)
+After=postgresql.service
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env bash /var/www/jubileesearch/engine/ops/backup.sh
+TimeoutStartSec=2h

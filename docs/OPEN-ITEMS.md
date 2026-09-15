@@ -1010,3 +1010,36 @@ in the console (Domains -> add as T2), after which the crawl timer fetches
 them behind gates 1, 2 and 4, discovery starts nominating their outbound
 links for T3, and gate 3 runs on what it promotes.
 
+## 22. Backups exist now; the first restore drill found a real gap
+
+**Status 2026-09-15.** Until today there was no backup of any kind: no dump,
+no WAL archive, no copy of the `.env` files. §16 asks for "nightly full plus
+WAL archiving, unlogged cache tables excluded, restore drill quarterly,
+documented"; acceptance 28 for a documented restore into a clean environment.
+
+`engine/ops/backup.sh` runs nightly at 00:30 (`jubileesearch-backup.timer`):
+a custom-format `pg_dump` with the three unlogged cache tables schema-only,
+`pg_dumpall -g` for the roles, a `pg_basebackup` tarball, and a 0600 tarball
+of the three `.env` files, the nginx site, the systemd units and the postgres
+config. Postgres now archives WAL (`archive_mode = on`, five-minute
+`archive_timeout`) into `/var/backups/jubileesearch/wal`, so the base backup
+plus the archive give point-in-time recovery. Retention: 14 dumps, 7 base
+backups, WAL back to the oldest base. First run: 74 s, 118 MB dump, 366 MB
+base.
+
+The drill (`engine/ops/restore-drill.sh`, report in `docs/RESTORE-DRILL.md`)
+restored the dump into a new database and failed the first time: pgvector is
+not a trusted extension, the dump's `CREATE EXTENSION` ran as the application
+role and failed, and pg_restore silently skipped the chunks table and both
+HNSW indexes while restoring everything else. The script now creates the
+extensions as the superuser first; the second run restored every table to the
+live row count in 24 s, and the engine's own `search()` answered against the
+copy. Next drill December 2026.
+
+**Still open, and a hosting decision (D8):** the backups sit on the same disk
+as the database. Nothing copies them off the box. A destination -- object
+storage, a second machine, anything -- turns `backup.sh`'s last step into an
+rsync; without one, a disk failure loses the database and its backups
+together. Point-in-time recovery has a written procedure but has not been
+exercised.
+
