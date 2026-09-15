@@ -40,7 +40,7 @@ const DIM = 1024;   // halfvec(1024), 002_core.sql
  * @param {'live'|'prev'} column  which embedding column the caller will read
  * @returns {Promise<{model_id: string, chunks: number, column: string}>}
  */
-export async function preflight({ column = 'live' } = {}) {
+export async function preflight({ column = 'live', rerank: wantRerank = true } = {}) {
   const fail = (m) => {
     console.error(`\nPREFLIGHT FAILED: ${m}\n`);
     console.error('  Run it through npm (`npm run eval -- <label>`), not `node eval/...`:');
@@ -86,14 +86,18 @@ export async function preflight({ column = 'live' } = {}) {
     + 'hundred people and counts the weeks since anyone said his name.';
   const probeDocs = Array.from({ length: 50 }, () => doc);
   const t0 = performance.now();
-  const { reranked } = await rerank('why does nobody say my name anymore', probeDocs);
+  // A run with --rerank=off is measuring fusion order on purpose (the CPU-only
+  // deployment, OPEN-ITEMS 23); a reranker that cannot answer is then not a
+  // fault of the run, only reported.
+  const { reranked } = wantRerank ? await rerank('why does nobody say my name anymore', probeDocs) : { reranked: false };
   const ms = Math.round(performance.now() - t0);
-  if (!reranked) {
+  if (!reranked && !wantRerank) console.log('  rerank: off for this run (--rerank=off)');
+  else if (!reranked) {
     fail(`the reranker did not answer for 50 realistic documents in ${ms} ms, so every `
       + 'rerank in this run would silently be a no-op. Either point RERANK_API_URL at a '
       + 'provider that can meet TIMEOUTS.rerank, or raise that timeout deliberately.');
   }
-  console.log(`  rerank: 50 documents in ${ms} ms`);
+  else console.log(`  rerank: 50 documents in ${ms} ms`);
 
   // The query embedding and the stored chunk vectors must come from the SAME
   // model, or every cosine in the run compares two different vector spaces —

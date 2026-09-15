@@ -20,7 +20,7 @@ const rerankOverride = rerankArg === 'on' ? true : rerankArg === 'off' ? false :
 const gold = JSON.parse(readFileSync(new URL('./gold-set.json', import.meta.url), 'utf8'));
 const { byId } = await targetIndex();
 const cfg = await ranking();
-const models = await preflight({ column });
+const models = await preflight({ column, rerank: rerankOverride !== false });
 
 // The reranker must be the SAME provider on both sides of a model comparison.
 // Swapping the embedder by pointing INFERENCE_API_URL at a second server also

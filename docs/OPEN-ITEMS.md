@@ -16,6 +16,8 @@ Ordered by what they cost.
 
 ## 0. No Jubilee Inference API exists — models run locally
 
+**Status 2026-09-15: moved to the Contabo box, CPU, reranker off for Zone A -- see §23.**
+
 **Status 2026-09-14: RESOLVED for embeddings, reranking and safety.** The
 Inference API (`engine/InferenceAPI`) now runs on the RTX PRO 6000 workstation
 (DirectML adapter 0, fp16) and production reaches it over a reverse SSH tunnel
@@ -1070,6 +1072,27 @@ together. Point-in-time recovery has a written procedure but has not been
 exercised.
 
 ## 23. Where inference should live: the decision the search now waits on (D8)
+
+**Status 2026-09-15, later: DECIDED, option A, and done.** The Inference API
+now runs on the Contabo box itself (`jubileesearch-inference.service`, port
+4032, CPU, 16 vCPUs): bge-m3 fp32 for embeddings, bge-reranker-v2-m3
+dynamically quantised to int8 (`models/.../onnx/model_quantized.onnx`, 570
+MB, made on the workstation with onnxruntime `quantize_dynamic`), toxic-bert
++ nli-deberta for safety. Measured on the box: query embedding 95 ms warm,
+32 chunks 8.7 s, classification 0.9 s, **rerank of 50 x 700-char documents
+9.9 s** (20 x 700: 2.8 s; 50 x 300: 4.4 s). The reranker is therefore OFF for
+Zone A (`rerank_zone_a = 0`); it stays available for the eval harness and for
+Zone B, where a slow answer is acceptable. The engine points at
+`127.0.0.1:4032`; `EMBEDDING_MODEL` is `bge-m3@onnx-fp32` and the corpus was
+re-embedded on the CPU (about three hours; the old vectors stayed searchable
+until each was overwritten). The workstation launchers and the tunnel are
+removed; the workstation service is retired.
+
+What this costs, from the blend table in §20 (fusion order alone = w 1.0):
+hybrid R@10 64 instead of 82, cross-language 13 instead of 80, paraphrase
+top-5 40 instead of 80. A cache-miss search is now ~0.3 s instead of ~0.9 s.
+The `network-cpu-norerank` run below is the number of record. Reversing the
+decision is one config value and a GPU host (option B).
 
 **Status 2026-09-15: written up for a decision, not decided.** Every model
 the search uses -- embeddings, the cross-encoder, the safety classifier --
