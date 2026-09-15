@@ -760,6 +760,9 @@ Three runs on production (bge-m3 fp16, cross-encoder rerank on, hybrid recall@10
 | `network-jvonly-2026-09-14` | retrieval restricted to jubileeverse.com | 55 | 55 | `EVAL_SITE=jubileeverse.com` |
 | `network-chunkrerank-2026-09-14` | whole network | **55** | 51 | reranker reads the best chunk + heading, not the snippet |
 | `network-ro-lexicon-2026-09-14` | whole network | 54 | 51 | migration 037: 153 Romanian terms (was 36); cross-language 53% (was 60%: L05 lost to a broader `porunci` expansion), kept because the terms are what readers type |
+| `network-clean-2026-09-15` | whole network, 11,776 chunks | 50 | 49 | migration 038: boilerplate stripped at extraction; corpus 55k -> 11.8k chunks; two Romanian targets lost their own titles (see §17) |
+| `network-efsearch-2026-09-15` | same | 50 | 49 | migration 039: HNSW search width set per query; no change here because the planner scans this corpus exactly, but it removes a 40-candidate cap that bites at scale (§18) |
+| `network-titles-2026-09-15` | same, titles kept | **54** | **54** | a page's own title and H1 are never stripped; cross-language 53% |
 
 The restricted run matches the 600-page baseline (57.6 on 85 pairs), so the
 drop on the whole network is mostly competition: the gold targets are one
@@ -798,4 +801,36 @@ date-stamped JSON and CSV under `REPORTS_DIR` (`/var/lib/jubileesearch/reports`)
 with a `latest` copy, and live on the console's Search analytics screen from
 the same builder (`GET /api/v1/admin/reports/content-gap`). Delivery to the
 writing team is still a file on the server: nobody has said where it should go.
+
+## 17. Site boilerplate is now removed at extraction (migration 038)
+
+**Status 2026-09-15.** Migration 036 only hid repeated chunks from the vector
+index; `pages.body_text`, the tsvector and the snippets still carried the
+template. Now every markdown block is hashed per page (`page_blocks`), a block
+on three or more pages of one domain is boilerplate, and the extractor drops
+it before body_text, content_hash and the chunker (`extractor.js
+stripBoilerplate`, `store.js siteBoilerplate`, `jobs/crawl.js boilerplateFor`).
+The block table was seeded from the text already indexed (1,652 pages, 3,669
+repeated blocks) and every crawled page was re-extracted: crawled pages went
+from 33.5 chunks each to about 4, which is what a 2,000-word article chunks to.
+A site's first two pages keep everything until the third teaches the set; a
+forced reingest cleans them afterwards.
+
+The first pass cost recall (54 -> 50): an article's title appears in other
+pages' "related" lists, so its block hash was legitimately boilerplate there
+and the extractor stripped the H1 off the page that owns it -- a Romanian
+target fell from semantic rank 1 to 82. Headings and title matches are now
+exempt (list items never are), and after the second re-crawl hybrid recall@10
+is 54 with the semantic arm at 54, its best figure on this corpus, on a fifth
+of the chunks and with snippets that no longer show menus.
+
+## 18. The vector arm was capped at 40 candidates by a Postgres default
+
+**Status 2026-09-15: fixed (migration 039).** pgvector's HNSW scan returns at
+most `hnsw.ef_search` rows -- default 40 -- whatever the query's LIMIT, and
+retrieval asks for 300. Retrieval now sets it per query (`SET LOCAL`) from the
+`hnsw_ef_search` ranking key (320). On today's 11.8k chunks the planner scans
+exactly, so the number did not move; it will matter the day the index is
+large enough for the planner to use the HNSW index, which is the day it would
+otherwise have silently returned 40.
 
