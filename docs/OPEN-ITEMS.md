@@ -1107,6 +1107,28 @@ re-embedded on the CPU (about three hours; the old vectors stayed searchable
 until each was overwritten). The workstation launchers and the tunnel are
 removed; the workstation service is retired.
 
+**Three things the cutover then forced, same afternoon.** (1) The nightly
+embed batches (32 chunks, ~9 s each on CPU) went through the same queue as
+query embeddings, and a query stuck behind a batch waited 6-29 s and fell
+back to lexical-only. A second instance of the service now runs on port 4034
+(`jubileesearch-inference-batch`, Nice 15) and takes the embed backfill and
+gate-3 classification (`INFERENCE_BATCH_API_URL`); the query instance on 4032
+only ever sees queries. Query embedding under the backfill: 0.16-0.36 s.
+(2) `rerank_zone_b` was still 1, so every cache-miss search waited out the
+2 s rerank timeout for Zone B; it is 0 now and a cache-miss search is 0.5-0.9
+s while the backfill runs. (3) With no cross-encoder there was no relevance
+gate at all: "who is michael jackson" showed two Zone A pages because
+"michael" matched the archangel and the fused RRF score cleared the floor
+(RRF is not relevance; both arms always return something, "best pizza
+recipe" fuses to 0.028). `coverage.js vectorGate` (migration 045,
+`zone_a_cosine_floor` 0.68) empties Zone A unless one of the top five has a
+best-chunk cosine at or above the floor or matched every query term.
+Calibrated with `eval/gate-calibrate.mjs` on the gold set: 12 of 17
+off-topic queries empty, none of 95 positives lost; the five that survive do
+so on a literal match ("translation", "office hours"). Zone B has no gate,
+per the spec's "always rendered", so those queries still show two thin
+wider-web results.
+
 What this costs, from the blend table in §20 (fusion order alone = w 1.0):
 hybrid R@10 64 instead of 82, cross-language 13 instead of 80, paraphrase
 top-5 40 instead of 80. A cache-miss search is now ~0.3 s instead of ~0.9 s.

@@ -15,6 +15,12 @@ export const env = {
   // embedder without also swapping the reranker, or the comparison moves two
   // variables at once and the delta belongs to neither of them.
   rerankUrl: process.env.RERANK_API_URL || process.env.INFERENCE_API_URL || '',
+  // Where ingest-time work goes: the nightly embed backfill and gate-3
+  // classification. On the CPU deployment (OPEN-ITEMS 23) one 32-chunk batch
+  // holds the model for ~9 s, and a query embedding queued behind it blew its
+  // 800 ms timeout and fell back to lexical-only. A second service instance
+  // takes the batches; the query service only ever sees queries.
+  inferenceBatchUrl: process.env.INFERENCE_BATCH_API_URL || process.env.INFERENCE_API_URL || '',
   inferenceKey: process.env.INFERENCE_API_KEY ?? '',
   embeddingModel: process.env.EMBEDDING_MODEL ?? 'bge-m3@v1',
   // How much of the best chunk the cross-encoder reads per candidate

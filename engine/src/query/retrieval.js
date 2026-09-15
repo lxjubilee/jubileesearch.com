@@ -320,6 +320,11 @@ function shape(row, zone, ctx) {
     // where you are told to be quiet" is answered by the description of a page
     // whose best chunk is about a night cleaner. Without it the reranker sent
     // pages the vectors ranked first to 27th (OPEN-ITEMS §20).
+    // Two more internal signals, for the rerank-free Zone A gate (coverage.js
+    // vectorGate): the best chunk's cosine and whether the page matched every
+    // original term. Stripped by assembly like rerank_score.
+    cosine: row.dist === null || row.dist === undefined ? null : 1 - Number(row.dist),
+    lex_strict: Number(row.lex_score ?? 0) >= 2,
     rerank_text: [
       row.title,
       row.description,

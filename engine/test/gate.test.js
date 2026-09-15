@@ -52,3 +52,49 @@ describe('Zone A cross-encoder gate', () => {
     assert.equal('rerank_score' in zone.results[0], false, 'internal score must not leak');
   });
 });
+
+import { vectorGate } from '../src/query/coverage.js';
+
+describe('Zone A vector gate (reranker off)', () => {
+  const vcfg = { ...cfg, zone_a_cross_encoder_floor: -1, zone_a_cosine_floor: 0.68 };
+  const v = (host, score, cosine, lex_strict = false) => ({ host, score, page_id: Math.random(), cosine, lex_strict });
+
+  test('off at 0', () => {
+    const g = vectorGate([v('a', 0.03, 0.5)], { ...vcfg, zone_a_cosine_floor: 0 });
+    assert.equal(g.gated, false);
+  });
+
+  test('an off-topic query with weak cosines and no full match empties Zone A', () => {
+    const out = assembleZoneA([v('a', 0.028, 0.64), v('b', 0.02, 0.61)], vcfg, {});
+    assert.equal(out.coverage, 'none');
+    assert.equal(out.empty_state, true);
+  });
+
+  test('one strong cosine in the top five keeps the block', () => {
+    const out = assembleZoneA([v('a', 0.028, 0.64), v('b', 0.02, 0.71)], vcfg, {});
+    assert.equal(out.results.length, 2);
+    assert.equal(out.coverage, 'moderate');
+  });
+
+  test('a page that matched every query term keeps the block on its own', () => {
+    const out = assembleZoneA([v('a', 0.028, 0.60, true)], vcfg, {});
+    assert.equal(out.results.length, 1);
+  });
+
+  test('a lexicon hit bypasses it, like the cross-encoder gate', () => {
+    const out = assembleZoneA([v('a', 0.028, 0.60)], vcfg, { lexiconHit: true });
+    assert.equal(out.results.length, 1);
+  });
+
+  test('it does not run when the cross-encoder gate already did', () => {
+    const results = [{ ...v('a', 0.028, 0.60), rerank_score: 1.5 }];
+    const out = assembleZoneA(results, { ...vcfg, zone_a_cross_encoder_floor: -2 }, {});
+    assert.equal(out.results.length, 1);
+  });
+
+  test('the signals never reach the payload', () => {
+    const out = assembleZoneA([v('a', 0.028, 0.75, true)], vcfg, {});
+    assert.equal('cosine' in out.results[0], false);
+    assert.equal('lex_strict' in out.results[0], false);
+  });
+});

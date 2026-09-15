@@ -122,8 +122,35 @@ export function crossEncoderGate(results, cfg, { lexiconHit = false } = {}) {
   return { results: kept, gated: kept.length < results.length };
 }
 
+/**
+ * The gate for when the cross-encoder did not run (OPEN-ITEMS 23: CPU-only
+ * deployment, rerank off). The fused RRF score cannot tell "best of a good
+ * set" from "best of nothing" -- "best pizza recipe" fuses to 0.028, which
+ * reads as strong -- so it asks the two signals that can: does any of the
+ * top five have a chunk whose cosine to the query is at least
+ * `zone_a_cosine_floor`, or a body that matched every original term? If
+ * neither, Zone A is emptied and says so. Calibrated 2026-09-15 on the gold
+ * set (eval/gate-calibrate.mjs): at 0.68, 12 of 17 off-topic queries empty,
+ * no positive is lost; the five that survive do so on a literal match
+ * ("translation", "office hours"), which is a real if thin answer.
+ * 0 = off. Skipped when the cross-encoder gate already ran, and on a lexicon
+ * hit for the same reason that gate is.
+ */
+export function vectorGate(results, cfg, { lexiconHit = false, alreadyGated = false } = {}) {
+  const floor = Number(cfg.zone_a_cosine_floor ?? 0);
+  if (!(floor > 0) || alreadyGated || lexiconHit || results.length === 0) return { results, gated: false };
+  const top = results.slice(0, 5);
+  const ok = top.some((r) => (Number.isFinite(r.cosine) && r.cosine >= floor) || r.lex_strict === true);
+  return { results: ok ? results : [], gated: true, emptied: !ok };
+}
+
 export function assembleZoneA(results, cfg, { preferHost = null, lexiconHit = false } = {}) {
-  const gate = crossEncoderGate(results, cfg, { lexiconHit });
+  const ce = crossEncoderGate(results, cfg, { lexiconHit });
+  // "Already gated" means the cross-encoder ran at all (its scores are on the
+  // results), not that it dropped something: when it ran, its order and its
+  // floor are the judgement, and this gate stands down.
+  const reranked = results.some((r) => Number.isFinite(r.rerank_score));
+  const gate = vectorGate(ce.results, cfg, { lexiconHit, alreadyGated: reranked });
   const diverse = diversify(gate.results, cfg.zone_a_max_per_host);
   const { size, coverage } = zoneASize(diverse[0]?.score ?? null, cfg);
   return {
@@ -153,4 +180,4 @@ export function assembleZoneB(results, cfg, { page = 1 } = {}) {
 
 // `rerank_score` is an internal signal for the gate above; the debug block
 // already carries the cross-encoder score for anyone entitled to see it.
-const withPosition = ({ rerank_score: _score, rerank_text: _text, ...r }, i) => ({ ...r, position: i + 1 });
+const withPosition = ({ rerank_score: _score, rerank_text: _text, cosine: _cos, lex_strict: _strict, ...r }, i) => ({ ...r, position: i + 1 });

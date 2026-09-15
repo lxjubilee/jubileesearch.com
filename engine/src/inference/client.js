@@ -111,7 +111,7 @@ export async function embedBatch(texts, priority = 100) {
     model: env.embeddingModel,
     input: texts,
     priority: priority === 1 ? 'realtime' : 'batch',
-  }, TIMEOUTS.embedBatch);
+  }, TIMEOUTS.embedBatch, priority === 1 ? env.inferenceUrl : env.inferenceBatchUrl);
   const vectors = json?.data?.map((d) => d.embedding) ?? json?.embeddings;
   if (!Array.isArray(vectors) || vectors.length !== texts.length) {
     throw new Error(`inference returned ${vectors?.length ?? 0} vectors for ${texts.length} inputs`);
@@ -156,7 +156,7 @@ export async function classifyContent(text) {
       model: env.safetyModel || undefined,
       text: text.slice(0, 20_000),
       priority: 'batch',
-    }, TIMEOUTS.classify);
+    }, TIMEOUTS.classify, env.inferenceBatchUrl);
     if (typeof json?.safe_for_family !== 'boolean' || typeof json?.confidence !== 'number') {
       throw new Error('classifier response missing safe_for_family/confidence');
     }
