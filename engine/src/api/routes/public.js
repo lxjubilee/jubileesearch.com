@@ -237,7 +237,7 @@ export const routes = [
           SELECT
             (SELECT count(*) FROM pages WHERE status = 'indexed') AS indexed_pages,
             (SELECT count(*) FROM chunks WHERE embedded_at IS NOT NULL) AS embedded_chunks,
-            (SELECT count(*) FROM chunks WHERE embedded_at IS NULL) AS embedding_backlog,
+            (SELECT count(*) FROM chunks WHERE embedded_at IS NULL AND NOT boilerplate) AS embedding_backlog,
             (SELECT count(*) FROM safety_reviews WHERE reviewed_at IS NULL) AS safety_queue,
             (SELECT count(*) FROM domains WHERE status = 'active') AS active_domains,
             (SELECT count(*) FROM domains WHERE consecutive_failures >= 3) AS failing_domains,

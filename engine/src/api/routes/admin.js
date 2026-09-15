@@ -42,7 +42,7 @@ export const routes = [
             AS pages_by_tier,
           (SELECT count(*) FROM pages
             WHERE last_indexed_at > now() - interval '24 hours')      AS indexed_24h,
-          (SELECT count(*) FROM chunks WHERE embedded_at IS NULL)     AS embedding_backlog,
+          (SELECT count(*) FROM chunks WHERE embedded_at IS NULL AND NOT boilerplate) AS embedding_backlog,
           (SELECT count(*) FROM safety_reviews WHERE reviewed_at IS NULL) AS safety_queue,
           (SELECT count(*) FROM domains WHERE consecutive_failures >= 3)  AS failing_domains,
           (SELECT count(*) FROM domains WHERE status = 'pending')     AS pending_domains,
