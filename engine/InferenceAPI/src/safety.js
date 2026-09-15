@@ -20,6 +20,17 @@ export const UNSAFE_LABELS = [
   'gambling',
   'illegal drugs',
   'profanity or crude language',
+  // Added 2026-09-15 after the acceptance-20 run: a ghost-gun kit listing
+  // read as "news" at 0.67 because no label named what it was. §11.1's gate-2
+  // categories are adult, gambling, drugs, weapons sales, hate speech and
+  // self-harm; the label set now covers all six.
+  'weapons sales or explosives',
+  'self-harm or suicide encouragement',
+  // And two more from the same run: a bank-credential phishing page and a
+  // child-marriage listing both read as "christian teaching" because nothing
+  // in the set named fraud or the exploitation of children.
+  'scams, phishing or fraud',
+  'child exploitation or abuse',
 ];
 export const SAFE_LABELS = [
   'christian teaching or devotional',

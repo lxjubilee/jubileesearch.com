@@ -54,8 +54,12 @@ describe('verdict()', () => {
   test('a safe page with some unsafe mass lands in the human-review band, not the index', () => {
     // Roughly a quarter of the topic mass on unsafe labels and a mild toxic head: safe, but
     // the engine's 0.70-0.89 band exists for exactly this.
+    // Spelled out per label rather than spread evenly, so the fixture does not
+    // change meaning every time a label is added to the set.
     const labels = ['bible study or scripture', 'profanity or crude language', ...ZERO_SHOT_LABELS.filter((l) => !['bible study or scripture', 'profanity or crude language'].includes(l))];
-    const scores = [0.6, 0.15, ...labels.slice(2).map(() => 0.25 / (labels.length - 2))];
+    const restUnsafe = labels.slice(2).filter((l) => UNSAFE_LABELS.includes(l)).length;
+    const restSafe = labels.length - 2 - restUnsafe;
+    const scores = [0.6, 0.15, ...labels.slice(2).map((l) => (UNSAFE_LABELS.includes(l) ? 0.01 : (0.25 - 0.01 * restUnsafe) / restSafe))];
     const v = verdict(heads({ toxic: 0.4 }), { labels, scores });
     assert.equal(v.safe_for_family, true);
     assert.ok(v.confidence >= 0.7 && v.confidence < 0.9, `confidence ${v.confidence}`);

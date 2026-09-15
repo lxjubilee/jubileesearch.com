@@ -163,7 +163,7 @@ export async function screenCandidates(db, { limit = 100 } = {}) {
   let blocked = 0;
 
   for (const candidate of rows) {
-    const verdict = gateDomain(candidate.host, rules);
+    const verdict = await gateDomain(candidate.host, rules);
     const outcome = verdict.blocked ? 'blocked'
       : verdict.allowlisted ? 'allowlisted'
       : 'clear';

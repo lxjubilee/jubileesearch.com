@@ -22,23 +22,43 @@ import { classifyContent } from '../inference/client.js';
 
 export const VERDICTS = { SAFE: 'safe', UNSAFE: 'unsafe', REVIEW: 'review', UNCLASSIFIED: 'unclassified' };
 
-// §11.1 gate 1 and gate 2 both read blocklist_entries. Loaded once per pass
-// rather than per URL: at T3 volumes this is a few thousand rows and re-reading
-// them per page would dominate the cost of classification.
+// §11.1 gate 1 and gate 2 both read blocklist_entries. The small rule sets
+// (keywords, regexes, suffixes, the scripture allow-list) are loaded once per
+// pass. The host lists are not: with UT1 and StevenBlack loaded they run to
+// millions of rows, and a linear scan per URL over an in-memory copy would
+// have made gate 1 the slowest gate instead of the cheapest. A host is checked
+// with one indexed query for itself and every parent domain (a.b.example.com
+// asks for a.b.example.com, b.example.com, example.com).
 export async function loadRules(db) {
   const { rows } = await db.query(
-    'SELECT pattern, match_type, category, severity FROM blocklist_entries');
+    `SELECT pattern, match_type, category, severity FROM blocklist_entries
+      WHERE match_type <> 'host' OR severity = 0`);
   return {
     // severity 0 is the allow convention (migration 024): a host whose whole
     // purpose is publishing the text the keyword rules trip on.
     allowHosts: new Set(rows.filter((r) => r.severity === 0 && r.match_type === 'host')
                             .map((r) => r.pattern.toLowerCase())),
-    hosts: rows.filter((r) => r.severity > 0 && r.match_type === 'host'),
+    // In-memory host rules are for callers that build rules by hand (tests);
+    // the database-backed lookup below is what production uses.
+    hosts: [],
+    hostLookup: async (candidates) => (await db.query(
+      `SELECT pattern, category, severity FROM blocklist_entries
+        WHERE match_type = 'host' AND severity > 0 AND pattern = ANY($1::text[])`,
+      [candidates])).rows,
     suffixes: rows.filter((r) => r.severity > 0 && r.match_type === 'suffix'),
     regexes: rows.filter((r) => r.severity > 0 && r.match_type === 'regex')
                  .map((r) => ({ ...r, re: safeRegex(r.pattern) })).filter((r) => r.re),
     keywords: rows.filter((r) => r.severity > 0 && r.match_type === 'keyword'),
   };
+}
+
+/** a.b.example.com -> [a.b.example.com, b.example.com, example.com] */
+export function hostCandidates(host) {
+  const h = String(host ?? '').toLowerCase().replace(/^www\./, '').replace(/\.$/, '');
+  const parts = h.split('.').filter(Boolean);
+  const out = [];
+  for (let i = 0; i < parts.length - 1; i++) out.push(parts.slice(i).join('.'));
+  return out;
 }
 
 function safeRegex(pattern) {
@@ -47,17 +67,19 @@ function safeRegex(pattern) {
 
 /**
  * Gate 1: domain reputation, before a single request is spent.
- * @returns {{blocked: boolean, reasons: object[]}}
+ * @returns {Promise<{blocked: boolean, reasons: object[], allowlisted: boolean}>}
  */
-export function gateDomain(host, rules) {
+export async function gateDomain(host, rules) {
   const h = String(host ?? '').toLowerCase().replace(/^www\./, '');
   if (rules.allowHosts.has(h)) return { blocked: false, reasons: [], allowlisted: true };
 
   const reasons = [];
-  for (const rule of rules.hosts) {
-    if (h === rule.pattern.toLowerCase() || h.endsWith(`.${rule.pattern.toLowerCase()}`)) {
-      reasons.push({ gate: 1, rule: rule.pattern, category: rule.category, severity: rule.severity });
-    }
+  const candidates = hostCandidates(h);
+  const hostRules = rules.hostLookup
+    ? await rules.hostLookup(candidates)
+    : rules.hosts.filter((rule) => candidates.includes(rule.pattern.toLowerCase()));
+  for (const rule of hostRules) {
+    reasons.push({ gate: 1, rule: rule.pattern, category: rule.category, severity: rule.severity });
   }
   for (const rule of rules.suffixes) {
     if (h.endsWith(rule.pattern.toLowerCase())) {
@@ -111,8 +133,13 @@ export function gateHeuristics({ url, title, description }, rules, { allowlisted
  *
  * All three thresholds are runtime configurable, per the spec.
  */
-export async function gateContent(bodyText, cfg) {
-  const result = await classifyContent(bodyText);
+export async function gateContent(bodyText, cfg, { title = '', description = '' } = {}) {
+  // The title and description go in front of the body. They are the page's
+  // own statement of what it is, and the classifier reads a bounded prefix
+  // of what it is given: a weapons listing whose body opens with shipping
+  // terms read as "news" until its title ("Ghost gun kits shipped anywhere")
+  // was in the text (acceptance-20 run, 2026-09-15).
+  const result = await classifyContent([title, description, bodyText].filter(Boolean).join('\n'));
 
   if (!result) {
     // The classifier could not be reached or answered malformed. P1: uncertain
@@ -157,7 +184,7 @@ export async function evaluate({ tier, host, url, title, description, bodyText }
   }
 
   try {
-    const domain = gateDomain(host, rules);
+    const domain = await gateDomain(host, rules);
     if (domain.blocked) {
       return { verdict: VERDICTS.UNSAFE, score: 0, reasons: domain.reasons, blockDomain: true };
     }
@@ -178,7 +205,7 @@ export async function evaluate({ tier, host, url, title, description, bodyText }
       };
     }
 
-    const content = await gateContent(bodyText, cfg);
+    const content = await gateContent(bodyText, cfg, { title, description });
     return {
       ...content,
       reasons: [...domain.reasons, ...heuristics.reasons, ...content.reasons],

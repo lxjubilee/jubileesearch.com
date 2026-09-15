@@ -21,12 +21,22 @@
 //   domains  one host per line, which is what UT1's category archives contain
 //   urls     one full URL per line, stored as a regex match on the path
 //
+// Archives: a source with `"archive": "tar.gz"` is unpacked in flight and the
+// member named by `"member"` (default "domains") is read. UT1 publishes
+// `adult.tar.gz` containing `adult/domains`, and that file is 4.6 million
+// lines, so nothing here holds a list in memory: bytes stream from the fetch
+// through gunzip and the tar reader into 5,000-row inserts. The unique index
+// from migration 042 does the de-duplication that used to happen in a Set.
+//
 // Run:  npm run blocklists -- [--source=<name>] [--dry-run]
 
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { Readable } from 'node:stream';
+import { createGunzip } from 'node:zlib';
 import { pool } from '../src/db.js';
+import { splitLines, tarMember, parseLine } from '../src/safety/list-stream.js';
 import { USER_AGENT } from '../src/crawl/fetcher.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -62,10 +72,9 @@ for (const source of sources) {
   const loadId = loadRow[0].id;
 
   try {
-    const body = await download(source.url);
-    const entries = parse(body, source);
+    const { parsed, written } = await load(source, { dryRun: Boolean(flags['dry-run']) });
 
-    if (entries.length === 0) {
+    if (parsed === 0) {
       // An empty list is nearly always a dead feed answering with a redirect or
       // an error page, not a category that suddenly has no members. Refusing to
       // load it is what stops a silent unblocking of an entire category.
@@ -76,17 +85,16 @@ for (const source of sources) {
     }
 
     if (flags['dry-run']) {
-      await finishLoad(loadId, { parsed: entries.length, written: 0, outcome: 'dry_run' });
-      console.log(`${entries.length} entries (not written)`);
-      report.push({ source: source.name, parsed: entries.length, written: 0 });
-      total += entries.length;
+      await finishLoad(loadId, { parsed, written: 0, outcome: 'dry_run' });
+      console.log(`${parsed} entries (not written)`);
+      report.push({ source: source.name, parsed, written: 0 });
+      total += parsed;
       continue;
     }
 
-    const written = await store(source, entries);
-    await finishLoad(loadId, { parsed: entries.length, written, outcome: 'ok' });
-    console.log(`${written} entries`);
-    report.push({ source: source.name, parsed: entries.length, written });
+    await finishLoad(loadId, { parsed, written, outcome: 'ok' });
+    console.log(`${written} entries (${parsed} parsed)`);
+    report.push({ source: source.name, parsed, written });
     total += written;
   } catch (err) {
     await finishLoad(loadId, { outcome: 'failed', error: err.message });
@@ -122,116 +130,81 @@ async function finishLoad(id, { parsed = null, written = null, outcome, error = 
     [id, parsed, written, outcome, error ? String(error).slice(0, 500) : null]);
 }
 
-async function download(url) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 120_000);
+/**
+ * Stream one source into the table.
+ *
+ * Replace rather than merge: a host that a list has dropped should stop being
+ * blocked by that list. Merging would make every load permanent and the
+ * blocklist would only ever grow, which over a few years turns into a long tail
+ * of sites blocked for reasons nobody can reconstruct. The delete and the
+ * inserts share one transaction, so a download that dies halfway leaves the
+ * previous load in place rather than an empty category.
+ */
+async function load(source, { dryRun }) {
+  const CHUNK = 5000;
+  let parsed = 0;
+  let written = 0;
+  let batch = [];
+
+  const client = dryRun ? null : await pool.connect();
+  const flush = async () => {
+    if (batch.length === 0 || dryRun) { batch = []; return; }
+    const { rowCount } = await client.query(
+      `INSERT INTO blocklist_entries (pattern, match_type, category, source, severity)
+       SELECT u.pattern, u.match_type, $3, $4, $5
+         FROM unnest($1::text[], $2::text[]) AS u(pattern, match_type)
+       ON CONFLICT DO NOTHING`,
+      [batch.map((e) => e.pattern), batch.map((e) => e.matchType),
+       source.category, source.name, source.severity ?? 100]);
+    written += rowCount;
+    batch = [];
+  };
+
   try {
-    const res = await fetch(url, {
+    if (client) {
+      await client.query('BEGIN');
+      await client.query('DELETE FROM blocklist_entries WHERE source = $1', [source.name]);
+    }
+    for await (const line of lines(source)) {
+      const entry = parseLine(line, source);
+      if (!entry) continue;
+      parsed++;
+      batch.push(entry);
+      if (batch.length >= CHUNK) await flush();
+    }
+    await flush();
+    if (client) {
+      if (parsed === 0) await client.query('ROLLBACK'); // keep the previous load
+      else await client.query('COMMIT');
+    }
+    return { parsed, written };
+  } catch (err) {
+    if (client) await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client?.release();
+  }
+}
+
+/** The lines of the list, whether it arrives as text or inside a tar.gz. */
+async function* lines(source) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 600_000);
+  try {
+    const res = await fetch(source.url, {
       headers: { 'user-agent': USER_AGENT },
       signal: controller.signal,
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.text();
+    let stream = Readable.fromWeb(res.body);
+    if (source.archive === 'tar.gz') {
+      stream = tarMember(stream.pipe(createGunzip()), source.member ?? 'domains');
+    }
+    yield* splitLines(stream);
   } finally {
     clearTimeout(timer);
   }
 }
 
-function parse(body, source) {
-  const out = [];
-  const seen = new Set();
-
-  for (const rawLine of body.split(/\r?\n/)) {
-    const line = rawLine.replace(/#.*$/, '').trim();
-    if (!line) continue;
-
-    let host = null;
-    let matchType = 'host';
-
-    switch (source.format) {
-      case 'hosts': {
-        // "0.0.0.0 example.com" or "127.0.0.1 example.com"
-        const parts = line.split(/\s+/);
-        if (parts.length < 2) continue;
-        host = parts[1];
-        // The sinkhole entries for localhost itself are not blocklist content.
-        if (['localhost', 'localhost.localdomain', 'broadcasthost', 'ip6-localhost'].includes(host)) continue;
-        break;
-      }
-      case 'domains':
-        host = line.split(/\s+/)[0];
-        break;
-      case 'urls': {
-        try {
-          const url = new URL(line.includes('://') ? line : `http://${line}`);
-          host = url.hostname;
-          // A URL list is usually blocking a section of an otherwise fine site,
-          // so blocking the whole host would be too broad.
-          if (url.pathname && url.pathname !== '/') {
-            out.push({
-              pattern: `^https?://(www\\.)?${escapeRegex(url.hostname)}${escapeRegex(url.pathname)}`,
-              matchType: 'regex',
-            });
-            continue;
-          }
-        } catch { continue; }
-        break;
-      }
-      default:
-        throw new Error(`unknown format '${source.format}'`);
-    }
-
-    if (!host) continue;
-    host = host.toLowerCase().replace(/^www\./, '').replace(/\.$/, '');
-    if (!/^[a-z0-9.-]+\.[a-z]{2,}$/.test(host)) continue;
-    if (seen.has(host)) continue;
-    seen.add(host);
-
-    out.push({ pattern: host, matchType });
-  }
-
-  return out;
-}
-
-const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-/**
- * Replace this source's rows, in one transaction.
- *
- * Replace rather than merge: a host that a list has dropped should stop being
- * blocked by that list. Merging would make every load permanent and the
- * blocklist would only ever grow, which over a few years turns into a long tail
- * of sites blocked for reasons nobody can reconstruct.
- *
- * The `source` column is what scopes the delete, so a category can also be
- * disabled with a single UPDATE, exactly as the v0 engine's README described.
- */
-async function store(source, entries) {
-  const client = await pool.connect();
-  try {
-    await client.query('BEGIN');
-    await client.query('DELETE FROM blocklist_entries WHERE source = $1', [source.name]);
-
-    const CHUNK = 5000;
-    let written = 0;
-    for (let i = 0; i < entries.length; i += CHUNK) {
-      const slice = entries.slice(i, i + CHUNK);
-      const { rowCount } = await client.query(
-        `INSERT INTO blocklist_entries (pattern, match_type, category, source, severity)
-         SELECT u.pattern, u.match_type, $3, $4, $5
-           FROM unnest($1::text[], $2::text[]) AS u(pattern, match_type)
-         ON CONFLICT DO NOTHING`,
-        [slice.map((e) => e.pattern), slice.map((e) => e.matchType),
-         source.category, source.name, source.severity ?? 100]);
-      written += rowCount;
-    }
-
-    await client.query('COMMIT');
-    return written;
-  } catch (err) {
-    await client.query('ROLLBACK');
-    throw err;
-  } finally {
-    client.release();
-  }
-}
+// splitLines, tarMember and parseLine live in src/safety/list-stream.js so
+// they can be tested without a network.

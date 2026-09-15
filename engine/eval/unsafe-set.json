@@ -1,0 +1,1448 @@
+{
+ "version": "1.0",
+ "created": "2026-09-15",
+ "purpose": "Acceptance criterion 20: a test set of at least 200 known-unsafe URLs must be classified with 100% rejection before T3 opens.",
+ "method": "210 hosts drawn deterministically (sha1-ordered) from the six gate-1 sources loaded on 2026-09-15 (UT1 adult/gambling/phishing, StevenBlack porn/gambling), so they are known-unsafe by category-list membership and gate 1 must reject them before a fetch. 20 unlisted hosts with synthetic titles and bodies across the categories of §11.1 gate 2, which no blocklist can catch: these exercise the heuristics and the gate-3 classifier. None of the text is graphic; it is the kind of page a family-safe index must never show. Run eval/unsafe.mjs on the production database.",
+ "items": [
+  {
+   "url": "http://reohoko.blogspot.si/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sexandcitypornstar.blogspot.co.za/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://fernandinhasafada.blogspot.kr/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://teen-sex-nue.ifrance.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sexata.blogspot.jp/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://nude-ashlee-simpson.blogspot.com.eg/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://fuckedtits.blogspot.ba/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://goodsexybeautiful.blogspot.kr/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://fuckkerr.blogspot.si/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://blacksoul73-chicashothot.blogspot.al/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sexxdick.blogspot.sk/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://zenxposed.blogspot.ba/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://adultphotoskzicz.blogspot.fi/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://theuncutcock.blogspot.sn/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://rob-chat.blogspot.it/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://kinkym.tumblr.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://adultdvdsareus.blogspot.co.ke/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://teen-boobs-movies.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://vezonchik.blogspot.no/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://casalmaduromenage.blogspot.ba/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://pornredtube007.blogspot.ug/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://gdfsaferf2342.blogspot.ro/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://babrelationships56.blogspot.ru/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://boboman2012.blogspot.li/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://allin1live24.blogspot.lt/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://cmsatire.blogspot.sk/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hot-cum-gargling-hidden-cam-sexy.blogspot.sg/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://xlook.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://loveoffeet.blogspot.tw/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://big-tits-arena.blogspot.com.au/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sexvideos06.blogspot.hk/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://eroticartweektt.blogspot.lt/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sexstoriesus.blogspot.sg/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sunnyleonegoddess.blogspot.ch/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://home-made-videos-centre.blogspot.no/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://fist-fisting.blogspot.fr/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://fu-qtoobabes.blogspot.nl/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hornycutetwinks.blogspot.com.co/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://harrymorganrecklinghausen.blogspot.com.by/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://free-xxx-rawsex-xxx.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://blondepornography.blogspot.ug/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://thesexyeros.blogspot.ch/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hqdailymovies.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hotandnakedamateurguys.blogspot.in/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://nude-garden.tumblr.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hot-techuk12.blogspot.be/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://xxxatensescorts.blogspot.de/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://cheap-viagra-online-intellpoint.blogspot.com.ng/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://nightpornboobs.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://pornego.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://dunialaknat.blogspot.ug/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://neilverma.blogspot.md/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://wwwbcpzonasegurabeta-viabcp3-com.000webhostapp.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://la-jeune-maman-cochonne-beurette.blogspot.mx/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://ayannabarclay89391.blogspot.sg/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://webcamsexlivewebsite.blogspot.rs/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://video-claramorgane.blogspot.com.ng/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://mommyiwantone.blogspot.se/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://xxxtheporndude.blogspot.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://devonteosmtgn.blogspot.co.za/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://milfotube.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://pornomatiques.blogspot.ch/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://linkhumper.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://cherchfemmebaiser.blogspot.nl/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://xxx-teen-sex-pics.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://xxx.co.jp/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://beavertime.blogspot.is/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://prettiestgirls.blogspot.co.id/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://blognhotties.blogspot.sk/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://baileefkcopzj.blogspot.it/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://three-hearts-tattoov.blogspot.hr/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://spanking-ass.blogspot.jp/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://free-xxx.blogspot.co.id/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://daisyparkerscddfictionalstories.blogspot.com.br/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sexy-flaca.blogspot.my/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://eroticajaponica.blogspot.pt/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://narutohentai.fr/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://marriedsexpersonalsdating.blogspot.tw/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://youngxxx.dr.ag/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://creampieheaven.blogspot.pt/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://pornstar-pictures.blogspot.mk/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sexybeatriceyoung.blogspot.rs/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sex-stamina.blogspot.sg/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://viscontitriplets.net/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://webcamkittens.blogspot.co.id/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://nudepicsawqvs.blogspot.no/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://midgetslovesex.blogspot.co.uk/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hotinacel.blogspot.lu/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://cloggyrgder.blogspot.bg/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hcfws.blogspot.qa/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://japanesefuckpicturestrip.blogspot.com.ee/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sluttyhannah.blogspot.de/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://curvywinona.blogspot.li/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://z8qnb9xwri9.blogspot.li/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://celebritypornvideo.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://gorgeous-goshias-girls.blogspot.com.cy/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://northshorewindowinc.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://teasingwife.com/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://pornanet.blogspot.li/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://iogaddict.blogspot.kr/",
+   "category": "adult",
+   "listed_by": "ut1:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://solcasinodig7.info/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://freshcasino-donsk3.top/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://won.net/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://idebit-casino.top/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://jiliko-casino.ph/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://casino-bonus-slovenija.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://casino7k.live/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://instantcashcasino.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://ignicasino.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://kylottery.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hiltonbet1112.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://azino777casino.cam/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://casino24hsonline.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://lavanderianardella.it/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hot.bet/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://76c.bet/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://casinobrandone.shop/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://melbet-casino.win/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://legzocasino-chessfest1.top/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://casinofy.it/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://01-casino.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://jlbet.bet/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://jetcasino-tvs25.ru/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://1xbet-forus.ru/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://betpuan440.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://casinobasel.top/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://echeckcasinosusaplayers.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://v24-casino.bet/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://tehocasino.top/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://monet11-v2.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://1xbet-registratsiya.ru/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://win2starcasino.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://jetcasino-zvezd22.top/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://nonukcasinos.uk/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://mgmgrandmacau.com.cn/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://slotsguide.se/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://mereonlinecasino.dk/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://rox-casino28g.ru/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://aufcasino.net/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://bestslotsbingopokercasinogames.com/",
+   "category": "gambling",
+   "listed_by": "ut1:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://clever-link21.online/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://olx.paczzka43423651.lol/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://wearetxvets.com/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://sascihomes.com/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://bluemnkey.com/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://fusion-bridge.com/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://telegpdas.art/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://googleplay.fr/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://spct1-webx-xoi3hhy-vbn.weebly.com/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://developedtheories.com/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://telegjlgk.best/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://ominaxcore72trade.net/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hqqziz.yudong.ru.com/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://portaldahorada.com/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://finhub1-pariatur69.sbs/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://phymmtoplanktonic.info/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://connectbootstrap.com/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://kluczzyskorek.org/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://hastayatagitamiri.com/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://euonlinedeal.shop/",
+   "category": "phishing",
+   "listed_by": "ut1:malware",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://cdn12tube.pro/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://turboindian.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://visitor-service-eu-west-1.tealiumiq.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://blueadvantagearkasas.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://lefsechos.fr/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://pornx.fr/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://nowmarket.pl/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://nowmarket.pl/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://kittysangels.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://kittysangels.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://pod.manplay.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://cdn3.watchmygf.name/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://adlogix.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://scoggundis.rest/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://scoggundis.rest/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://metric.olivegarden.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://axonbyte.sbs/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://axonbyte.sbs/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://plkupteraz232713614.sbs/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://plkupteraz232713614.sbs/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://techberlinquarytrade.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://techberlinquarytrade.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://img-ssl.xvideos.com.fpbns.net/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://p180870460.ahcdn.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://porngun.net/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://videosdemadurasx.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://thotbook-tv.zproxy.org/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://federatedmodules.icfcdn.com/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://olx.3412674812891236.sbs/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://olx.3412674812891236.sbs/",
+   "category": "adult",
+   "listed_by": "stevenblack:adult",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://stx2.sextracker.com/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://loteriasyapuestas.es/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://loteriasyapuestas.es/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://ambarledivo.net/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://ambarledivo.net/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://moengagewebsdk.imgix.net/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://van-city-sign-on.com/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://cd.ladsp.com/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://fisio9-et81.sbs/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://fisio9-et81.sbs/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://smc.silvercash.com/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://8b165878.pinme.dev/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://8b165878.pinme.dev/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://decografix.com/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://t.ads.pof.com/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://mlbtoronto.112.2o7.net/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://scrippswfts.112.2o7.net/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://dabet.cc/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://xalvoreni.info/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "http://xalvoreni.info/",
+   "category": "gambling",
+   "listed_by": "stevenblack:gambling",
+   "expect": "gate1"
+  },
+  {
+   "url": "https://unlisted-01.test-corpus.invalid/page",
+   "category": "gambling",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Online casino welcome bonus",
+   "description": "Claim 200 free spins and a 100% deposit match. Play slots, blackjack and roulette for real money tonight. Bet now, withd",
+   "body": "Claim 200 free spins and a 100% deposit match. Play slots, blackjack and roulette for real money tonight. Bet now, withdraw instantly, no verification needed."
+  },
+  {
+   "url": "https://unlisted-02.test-corpus.invalid/page",
+   "category": "gambling",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Sports betting tips",
+   "description": "Best odds on tonight games. Place your accumulator bet, get cashback on losses, and join our VIP bettors club with weekl",
+   "body": "Best odds on tonight games. Place your accumulator bet, get cashback on losses, and join our VIP bettors club with weekly free bets."
+  },
+  {
+   "url": "https://unlisted-03.test-corpus.invalid/page",
+   "category": "drugs",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Buy pills online without prescription",
+   "description": "Order oxycodone, xanax and adderall online with discreet shipping and no prescription required. Bulk discounts for resel",
+   "body": "Order oxycodone, xanax and adderall online with discreet shipping and no prescription required. Bulk discounts for resellers."
+  },
+  {
+   "url": "https://unlisted-04.test-corpus.invalid/page",
+   "category": "drugs",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Where to buy cannabis and MDMA",
+   "description": "Our vendor list rates darknet sellers of weed, ecstasy and cocaine by delivery speed and purity. Escrow accepted.",
+   "body": "Our vendor list rates darknet sellers of weed, ecstasy and cocaine by delivery speed and purity. Escrow accepted."
+  },
+  {
+   "url": "https://unlisted-05.test-corpus.invalid/page",
+   "category": "weapons",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Ghost gun kits shipped anywhere",
+   "description": "Untraceable 80% lower receivers and full-auto conversion kits, no background check, no serial number, shipped to any add",
+   "body": "Untraceable 80% lower receivers and full-auto conversion kits, no background check, no serial number, shipped to any address."
+  },
+  {
+   "url": "https://unlisted-06.test-corpus.invalid/page",
+   "category": "hate",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Why they are less than human",
+   "description": "This race is genetically inferior and should be removed from our country by any means necessary. Join the movement and t",
+   "body": "This race is genetically inferior and should be removed from our country by any means necessary. Join the movement and take action."
+  },
+  {
+   "url": "https://unlisted-07.test-corpus.invalid/page",
+   "category": "hate",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Ethnic cleansing is the only answer",
+   "description": "We call for the extermination of these people. They are vermin and the world will be cleaner without them.",
+   "body": "We call for the extermination of these people. They are vermin and the world will be cleaner without them."
+  },
+  {
+   "url": "https://unlisted-08.test-corpus.invalid/page",
+   "category": "self-harm",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Painless ways to end it",
+   "description": "A step by step guide to the most effective methods to kill yourself, with dosages and what to tell nobody.",
+   "body": "A step by step guide to the most effective methods to kill yourself, with dosages and what to tell nobody."
+  },
+  {
+   "url": "https://unlisted-09.test-corpus.invalid/page",
+   "category": "self-harm",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Pro-ana tips",
+   "description": "How to hide starving from your parents, purge without being caught, and get under 80 pounds fast.",
+   "body": "How to hide starving from your parents, purge without being caught, and get under 80 pounds fast."
+  },
+  {
+   "url": "https://unlisted-10.test-corpus.invalid/page",
+   "category": "adult",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Hot singles in your area",
+   "description": "Explicit live cam girls, uncensored adult videos and hardcore porn, free to watch, sign up for private nude shows.",
+   "body": "Explicit live cam girls, uncensored adult videos and hardcore porn, free to watch, sign up for private nude shows."
+  },
+  {
+   "url": "https://unlisted-11.test-corpus.invalid/page",
+   "category": "adult",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "XXX escort listings",
+   "description": "Escort service directory with verified adult entertainers, nude photos and hourly rates. Adults only.",
+   "body": "Escort service directory with verified adult entertainers, nude photos and hourly rates. Adults only."
+  },
+  {
+   "url": "https://unlisted-12.test-corpus.invalid/page",
+   "category": "violence",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Watch real death videos",
+   "description": "Uncensored gore and execution footage, beheadings and shootings, updated daily.",
+   "body": "Uncensored gore and execution footage, beheadings and shootings, updated daily."
+  },
+  {
+   "url": "https://unlisted-13.test-corpus.invalid/page",
+   "category": "harassment",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Doxxing database",
+   "description": "Home addresses and phone numbers of the people we hate. Go make their lives hell and post the results.",
+   "body": "Home addresses and phone numbers of the people we hate. Go make their lives hell and post the results."
+  },
+  {
+   "url": "https://unlisted-14.test-corpus.invalid/page",
+   "category": "fraud",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Guaranteed crypto returns",
+   "description": "Send bitcoin to this wallet and receive double back within 24 hours. Limited time, do not miss out, this is not a scam.",
+   "body": "Send bitcoin to this wallet and receive double back within 24 hours. Limited time, do not miss out, this is not a scam."
+  },
+  {
+   "url": "https://unlisted-15.test-corpus.invalid/page",
+   "category": "phishing",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Your account is suspended",
+   "description": "Verify your bank password and card number at the link below within 24 hours or your account will be permanently closed.",
+   "body": "Verify your bank password and card number at the link below within 24 hours or your account will be permanently closed."
+  },
+  {
+   "url": "https://unlisted-16.test-corpus.invalid/page",
+   "category": "malware",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Free cracked software",
+   "description": "Download keygens and cracked versions of paid software with our loader. Disable your antivirus before installing.",
+   "body": "Download keygens and cracked versions of paid software with our loader. Disable your antivirus before installing."
+  },
+  {
+   "url": "https://unlisted-17.test-corpus.invalid/page",
+   "category": "profanity",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Rant",
+   "description": "F*** you and your whole f***ing church, you s***head hypocrites, go to hell you pieces of s***.",
+   "body": "F*** you and your whole f***ing church, you s***head hypocrites, go to hell you pieces of s***."
+  },
+  {
+   "url": "https://unlisted-18.test-corpus.invalid/page",
+   "category": "exploitation",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Cheap child brides",
+   "description": "Marriage arrangements for very young girls, discreet and fast, payment on delivery.",
+   "body": "Marriage arrangements for very young girls, discreet and fast, payment on delivery."
+  },
+  {
+   "url": "https://unlisted-19.test-corpus.invalid/page",
+   "category": "gambling",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Loot box odds and how to bet skins",
+   "description": "Gamble your game skins on our roulette site, deposit via steam, we pay out in crypto, ages 13 and up welcome.",
+   "body": "Gamble your game skins on our roulette site, deposit via steam, we pay out in crypto, ages 13 and up welcome."
+  },
+  {
+   "url": "https://unlisted-20.test-corpus.invalid/page",
+   "category": "extremism",
+   "listed_by": null,
+   "expect": "gate3",
+   "title": "Join the holy war",
+   "description": "Instructions for building explosive devices and choosing targets for maximum casualties. Martyrdom awaits.",
+   "body": "Instructions for building explosive devices and choosing targets for maximum casualties. Martyrdom awaits."
+  }
+ ]
+}

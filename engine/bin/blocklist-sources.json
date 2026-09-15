@@ -2,6 +2,8 @@
   "_readme": [
     "Sources for bin/load-blocklists.mjs (spec 11.1, gate 1).",
     "",
+    "Verified 2026-09-15 (see each row's `verified`). Re-verify if a load reports 0 entries or the timer starts failing.",
+    "",
     "EVERY SOURCE HERE IS DISABLED AND MUST STAY DISABLED UNTIL SOMEONE HAS",
     "CHECKED IT. The specification is explicit: 'Verification required: confirm",
     "current availability, license terms, and update cadence for each list before",
@@ -26,12 +28,11 @@
     "unambiguous should carry a lower severity, not a hard block -- see the",
     "scripture problem in migration 024."
   ],
-
   "sources": [
     {
       "name": "stevenblack:adult",
-      "enabled": false,
-      "verified": null,
+      "enabled": true,
+      "verified": "2026-09-15: URL serves the hosts-format list (porn 154,421 / gambling 85,001 sinkhole lines on 14 Sep 2026); MIT licence (license.txt in the repository); regenerated daily (the file's Date header). Weekly refresh is enough.",
       "url": "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn/hosts",
       "format": "hosts",
       "category": "adult",
@@ -40,8 +41,8 @@
     },
     {
       "name": "stevenblack:gambling",
-      "enabled": false,
-      "verified": null,
+      "enabled": true,
+      "verified": "2026-09-15: URL serves the hosts-format list (porn 154,421 / gambling 85,001 sinkhole lines on 14 Sep 2026); MIT licence (license.txt in the repository); regenerated daily (the file's Date header). Weekly refresh is enough.",
       "url": "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling/hosts",
       "format": "hosts",
       "category": "gambling",
@@ -49,41 +50,50 @@
     },
     {
       "name": "ut1:adult",
-      "enabled": false,
-      "verified": null,
-      "url": "",
+      "enabled": true,
+      "verified": "2026-09-15: dsi.ut-capitole.fr/blacklists/download/<category>.tar.gz serves a tar.gz with <category>/domains inside (Last-Modified 14 Sep 2026); Creative Commons BY-SA 4.0 per the index page; rebuilt daily. Loaded in flight by the archive reader.",
+      "url": "https://dsi.ut-capitole.fr/blacklists/download/adult.tar.gz",
       "format": "domains",
       "category": "adult",
       "severity": 100,
-      "note": "University of Toulouse categorised lists. Published as compressed archives rather than plain text, so the URL here must point at an extracted `domains` file that operations unpacks on a schedule. Fill in the URL as part of verifying the source."
+      "note": "4.6 million domains, 18 MB compressed. Streams; expect the load to take a few minutes.",
+      "archive": "tar.gz",
+      "member": "domains"
     },
     {
       "name": "ut1:malware",
-      "enabled": false,
-      "verified": null,
-      "url": "",
+      "enabled": true,
+      "verified": "2026-09-15: dsi.ut-capitole.fr/blacklists/download/<category>.tar.gz serves a tar.gz with <category>/domains inside (Last-Modified 14 Sep 2026); Creative Commons BY-SA 4.0 per the index page; rebuilt daily. Loaded in flight by the archive reader.",
+      "url": "https://dsi.ut-capitole.fr/blacklists/download/malware.tar.gz",
       "format": "domains",
       "category": "malware",
-      "severity": 100
+      "severity": 100,
+      "archive": "tar.gz",
+      "member": "domains",
+      "note": "UT1 ships this category as phishing/domains inside malware.tar.gz; the member is matched by base name so the directory does not matter."
     },
     {
       "name": "ut1:gambling",
-      "enabled": false,
-      "verified": null,
-      "url": "",
+      "enabled": true,
+      "verified": "2026-09-15: dsi.ut-capitole.fr/blacklists/download/<category>.tar.gz serves a tar.gz with <category>/domains inside (Last-Modified 14 Sep 2026); Creative Commons BY-SA 4.0 per the index page; rebuilt daily. Loaded in flight by the archive reader.",
+      "url": "https://dsi.ut-capitole.fr/blacklists/download/gambling.tar.gz",
       "format": "domains",
       "category": "gambling",
-      "severity": 100
+      "severity": 100,
+      "archive": "tar.gz",
+      "member": "domains"
     },
     {
       "name": "ut1:drugs",
-      "enabled": false,
-      "verified": null,
-      "url": "",
+      "enabled": true,
+      "verified": "2026-09-15: dsi.ut-capitole.fr/blacklists/download/<category>.tar.gz serves a tar.gz with <category>/domains inside (Last-Modified 14 Sep 2026); Creative Commons BY-SA 4.0 per the index page; rebuilt daily. Loaded in flight by the archive reader.",
+      "url": "https://dsi.ut-capitole.fr/blacklists/download/drogue.tar.gz",
       "format": "domains",
       "category": "drugs",
       "severity": 60,
-      "note": "Deliberately not a hard block. A recovery ministry, an addiction counselling resource and a sermon on Proverbs 23 all land in this category, and all three belong in the index. Severity 60 sends them to the review queue instead."
+      "note": "Deliberately not a hard block. A recovery ministry, an addiction counselling resource and a sermon on Proverbs 23 all land in this category, and all three belong in the index. Severity 60 sends them to the review queue instead.",
+      "archive": "tar.gz",
+      "member": "domains"
     }
   ]
 }

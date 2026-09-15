@@ -17,7 +17,7 @@ specification and the arbiter of anything this README and the code disagree on.
 | **3. Search v1** | Lexical search, lexicon expansion, best bets, two-zone assembly, public UI, impression and click logging | **built** — lexicon is a starter seed pending **D9** |
 | **4. Semantic** | Chunking, embedding service, pgvector HNSW, hybrid fusion, rerank, two-layer cache | **built** — served by the Inference API on the RTX PRO 6000 workstation (fp16, DirectML) |
 | **5. Intelligence** | Intent router with scripture card, click loop with position-bias correction, engagement scoring | **built** — cards need the JSV API, engagement needs Analytics |
-| **6. Whitelist and open web** | T2 approval workflow, trust-graph discovery, full safety pipeline, crawler, review queue, abuse reporting | **built** — Gate 3 classifier now served (`InferenceAPI/src/safety.js`); blocklist sources ship disabled pending verification |
+| **6. Whitelist and open web** | T2 approval workflow, trust-graph discovery, full safety pipeline, crawler, review queue, abuse reporting | **built** — Gate 3 classifier served (`InferenceAPI/src/safety.js`); six blocklist sources verified and loaded (5.06 M hosts, weekly timer); acceptance 20 at 228/230 rejected, 2 quarantined (OPEN-ITEMS §21). Zone B waits on the first T2 approvals |
 | **7. Distribution and panels** | Embeddable widget, entity panels, thread continuation, content-gap reporting | **built** — the JubileePedia sync needs a URL to pull from |
 
 Still not built:

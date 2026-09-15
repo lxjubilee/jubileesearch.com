@@ -954,3 +954,59 @@ showing up after the crisis passes" -> "Comfort Was Never a Sentence"): a
 retrieval gap, not an ordering one, and the next lever is the lexicon (D9), not
 the ranker.
 
+## 21. Gate 1 is loaded, acceptance 20 measured: T3 can open when there is something to crawl
+
+**Status 2026-09-15.** Everything §11.1 needs before a T3 page can be admitted
+is now in place and measured; what is missing is the T2 whitelist itself,
+which is an editorial decision (§11.3), and with no T2 domains the trust graph
+has nothing to nominate.
+
+**Blocklist sources verified and loaded.** All six rows in
+`bin/blocklist-sources.json` were checked on 2026-09-15 and enabled:
+StevenBlack porn and gambling (hosts format, MIT, regenerated daily) and UT1
+adult, gambling, malware (published as `phishing/domains`) and drogue
+(tar.gz archives, CC BY-SA 4.0, rebuilt daily). The loader streams: fetch ->
+gunzip -> a 60-line tar reader -> 5,000-row inserts, so the 4.6-million-line
+UT1 adult list never sits in memory. Migration 042 puts a unique index on
+(source, match_type, pattern), which is both the de-duplication and the
+lookup index. `blocklist_entries` holds 5.06 M rows. A `jubileesearch-
+blocklists.timer` refreshes them Saturdays 04:00.
+
+**Gate 1 is a query, not a scan.** `loadRules` used to pull every host rule
+into an array and walk it per URL; at five million rows that would have made
+the cheapest gate the slowest. It now loads only the small rule sets and
+checks a host with one indexed query for itself and each parent domain.
+`gateDomain` is async; the two callers await it. 14 new tests cover the gates
+and the stream helpers on buffers.
+
+**Acceptance 20 (`eval/unsafe.mjs`, `eval/unsafe-set.json`).** 230 items: 210
+hosts drawn deterministically from the six lists, and 20 unlisted pages with
+synthetic titles and bodies across the gate-2 categories. Result on
+production: 228 of 230 rejected outright (210 at gate 1 before any fetch, 4
+at gate 2, 14 at gate 3), 2 quarantined for human review, 0 admitted.
+
+| run | rejected | not rejected | what changed |
+| --- | ---: | --- | --- |
+| first | 227 | 2 hosts (a sampler bug: `www` stripped as characters), 1 weapons listing read as "news" 0.67 | -- |
+| second | 229 | the weapons listing | set regenerated; labels `weapons sales or explosives`, `self-harm or suicide encouragement` added to the classifier |
+| third | 228 | a bank-credential phishing page and a child-marriage listing, both "christian teaching" | title and description now precede the body in what gate 3 reads (fixed the weapons page; surfaced these two); migration 043 hard terms for weapons sales and self-harm |
+| fourth | 228 | the same two, now at 0.73 and 0.72 | labels `scams, phishing or fraud`, `child exploitation or abuse` added; they moved the two toward the reject line but not over it |
+
+On the strict reading the criterion fails: two pages reach the review queue
+instead of the reject pile. On the reading that matters -- can a child see
+them -- neither can: review means `status = 'quarantined'`, which no serving
+view includes, until a human approves it. The limit is the gate-3 model. The
+spec describes "a local LLM call"; the service runs a zero-shot NLI classifier
+(`nli-deberta-v3-base`) as the stand-in, and it does not know what a phishing
+page or a child-marriage listing is. Swapping in an instruction-following
+model behind the same `/v1/classify/family-safety` contract is the fix, and
+`eval/unsafe.mjs` is how to prove it. The thresholds were NOT moved to make
+the number 230.
+
+**What opens Zone B.** Nothing in the code. `npm run discover -- --dry-run`
+nominates zero candidates because the 46k recorded links point at 24 hosts,
+all inside the network. The first T2 domains have to be approved by an editor
+in the console (Domains -> add as T2), after which the crawl timer fetches
+them behind gates 1, 2 and 4, discovery starts nominating their outbound
+links for T3, and gate 3 runs on what it promotes.
+

@@ -1,0 +1,2393 @@
+{
+  "ran_at": "2026-09-15T10:17:13.127Z",
+  "set_version": "1.0",
+  "items": 230,
+  "rejected": 228,
+  "rejection_rate": 99.1,
+  "rejected_by_gate": {
+    "1": 210,
+    "2": 4,
+    "3": 14
+  },
+  "acceptance_20": {
+    "min_items_200": true,
+    "all_rejected": false,
+    "pass": false
+  },
+  "failures": [
+    {
+      "url": "https://unlisted-15.test-corpus.invalid/page",
+      "category": "phishing",
+      "expect": "gate3",
+      "verdict": "review",
+      "score": 73.4,
+      "gate": 3,
+      "ms": 1169,
+      "rejected": false,
+      "reasons": [
+        {
+          "gate": 3,
+          "safe_for_family": true,
+          "confidence": 0.734,
+          "categories": [
+            "christian-teaching",
+            "bible-study",
+            "adult"
+          ],
+          "flags": [],
+          "reason": "Classified as christian teaching or devotional (0.46). No adult, violent, hateful or exploitative content detected."
+        }
+      ]
+    },
+    {
+      "url": "https://unlisted-18.test-corpus.invalid/page",
+      "category": "exploitation",
+      "expect": "gate3",
+      "verdict": "review",
+      "score": 71.6,
+      "gate": 3,
+      "ms": 1196,
+      "rejected": false,
+      "reasons": [
+        {
+          "gate": 3,
+          "safe_for_family": true,
+          "confidence": 0.716,
+          "categories": [
+            "christian-teaching"
+          ],
+          "flags": [],
+          "reason": "Classified as christian teaching or devotional (0.59). No adult, violent, hateful or exploitative content detected."
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "url": "http://reohoko.blogspot.si/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 3,
+      "rejected": true
+    },
+    {
+      "url": "http://sexandcitypornstar.blogspot.co.za/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://fernandinhasafada.blogspot.kr/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://teen-sex-nue.ifrance.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://sexata.blogspot.jp/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://nude-ashlee-simpson.blogspot.com.eg/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://fuckedtits.blogspot.ba/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://goodsexybeautiful.blogspot.kr/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://fuckkerr.blogspot.si/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://blacksoul73-chicashothot.blogspot.al/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://sexxdick.blogspot.sk/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://zenxposed.blogspot.ba/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://adultphotoskzicz.blogspot.fi/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://theuncutcock.blogspot.sn/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://rob-chat.blogspot.it/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://kinkym.tumblr.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://adultdvdsareus.blogspot.co.ke/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://teen-boobs-movies.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://vezonchik.blogspot.no/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://casalmaduromenage.blogspot.ba/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://pornredtube007.blogspot.ug/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://gdfsaferf2342.blogspot.ro/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://babrelationships56.blogspot.ru/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://boboman2012.blogspot.li/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://allin1live24.blogspot.lt/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://cmsatire.blogspot.sk/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://hot-cum-gargling-hidden-cam-sexy.blogspot.sg/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://xlook.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://loveoffeet.blogspot.tw/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://big-tits-arena.blogspot.com.au/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://sexvideos06.blogspot.hk/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://eroticartweektt.blogspot.lt/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://sexstoriesus.blogspot.sg/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://sunnyleonegoddess.blogspot.ch/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://home-made-videos-centre.blogspot.no/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://fist-fisting.blogspot.fr/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://fu-qtoobabes.blogspot.nl/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://hornycutetwinks.blogspot.com.co/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://harrymorganrecklinghausen.blogspot.com.by/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://free-xxx-rawsex-xxx.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://blondepornography.blogspot.ug/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://thesexyeros.blogspot.ch/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://hqdailymovies.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://hotandnakedamateurguys.blogspot.in/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://nude-garden.tumblr.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://hot-techuk12.blogspot.be/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://xxxatensescorts.blogspot.de/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://cheap-viagra-online-intellpoint.blogspot.com.ng/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://nightpornboobs.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://pornego.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://dunialaknat.blogspot.ug/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://neilverma.blogspot.md/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://wwwbcpzonasegurabeta-viabcp3-com.000webhostapp.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://la-jeune-maman-cochonne-beurette.blogspot.mx/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://ayannabarclay89391.blogspot.sg/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://webcamsexlivewebsite.blogspot.rs/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://video-claramorgane.blogspot.com.ng/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://mommyiwantone.blogspot.se/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://xxxtheporndude.blogspot.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://devonteosmtgn.blogspot.co.za/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://milfotube.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://pornomatiques.blogspot.ch/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://linkhumper.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://cherchfemmebaiser.blogspot.nl/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://xxx-teen-sex-pics.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://xxx.co.jp/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://beavertime.blogspot.is/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://prettiestgirls.blogspot.co.id/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://blognhotties.blogspot.sk/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://baileefkcopzj.blogspot.it/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://three-hearts-tattoov.blogspot.hr/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://spanking-ass.blogspot.jp/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://free-xxx.blogspot.co.id/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://daisyparkerscddfictionalstories.blogspot.com.br/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://sexy-flaca.blogspot.my/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://eroticajaponica.blogspot.pt/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://narutohentai.fr/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://marriedsexpersonalsdating.blogspot.tw/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://youngxxx.dr.ag/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://creampieheaven.blogspot.pt/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://pornstar-pictures.blogspot.mk/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://sexybeatriceyoung.blogspot.rs/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://sex-stamina.blogspot.sg/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://viscontitriplets.net/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://webcamkittens.blogspot.co.id/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://nudepicsawqvs.blogspot.no/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://midgetslovesex.blogspot.co.uk/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://hotinacel.blogspot.lu/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://cloggyrgder.blogspot.bg/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://hcfws.blogspot.qa/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://japanesefuckpicturestrip.blogspot.com.ee/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://sluttyhannah.blogspot.de/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://curvywinona.blogspot.li/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://z8qnb9xwri9.blogspot.li/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://celebritypornvideo.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://gorgeous-goshias-girls.blogspot.com.cy/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://northshorewindowinc.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://teasingwife.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://pornanet.blogspot.li/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://iogaddict.blogspot.kr/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://solcasinodig7.info/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://freshcasino-donsk3.top/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://won.net/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://idebit-casino.top/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://jiliko-casino.ph/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://casino-bonus-slovenija.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://casino7k.live/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://instantcashcasino.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://ignicasino.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://kylottery.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://hiltonbet1112.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://azino777casino.cam/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://casino24hsonline.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://lavanderianardella.it/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://hot.bet/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://76c.bet/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://casinobrandone.shop/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://melbet-casino.win/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://legzocasino-chessfest1.top/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://casinofy.it/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://01-casino.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://jlbet.bet/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://jetcasino-tvs25.ru/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://1xbet-forus.ru/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://betpuan440.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://casinobasel.top/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://echeckcasinosusaplayers.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://v24-casino.bet/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://tehocasino.top/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://monet11-v2.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://1xbet-registratsiya.ru/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://win2starcasino.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://jetcasino-zvezd22.top/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://nonukcasinos.uk/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://mgmgrandmacau.com.cn/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://slotsguide.se/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://mereonlinecasino.dk/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://rox-casino28g.ru/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://aufcasino.net/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://bestslotsbingopokercasinogames.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://clever-link21.online/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://olx.paczzka43423651.lol/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://wearetxvets.com/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://sascihomes.com/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://bluemnkey.com/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://fusion-bridge.com/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://telegpdas.art/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://googleplay.fr/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://spct1-webx-xoi3hhy-vbn.weebly.com/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://developedtheories.com/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://telegjlgk.best/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://ominaxcore72trade.net/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://hqqziz.yudong.ru.com/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://portaldahorada.com/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://finhub1-pariatur69.sbs/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://phymmtoplanktonic.info/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://connectbootstrap.com/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://kluczzyskorek.org/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://hastayatagitamiri.com/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://euonlinedeal.shop/",
+      "category": "phishing",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://cdn12tube.pro/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://turboindian.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://visitor-service-eu-west-1.tealiumiq.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://blueadvantagearkasas.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://lefsechos.fr/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://pornx.fr/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://nowmarket.pl/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://nowmarket.pl/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://kittysangels.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://kittysangels.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://pod.manplay.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://cdn3.watchmygf.name/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://adlogix.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://scoggundis.rest/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://scoggundis.rest/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://metric.olivegarden.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://axonbyte.sbs/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://axonbyte.sbs/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://plkupteraz232713614.sbs/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://plkupteraz232713614.sbs/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://techberlinquarytrade.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://techberlinquarytrade.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://img-ssl.xvideos.com.fpbns.net/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://p180870460.ahcdn.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://porngun.net/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://videosdemadurasx.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://thotbook-tv.zproxy.org/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://federatedmodules.icfcdn.com/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://olx.3412674812891236.sbs/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://olx.3412674812891236.sbs/",
+      "category": "adult",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://stx2.sextracker.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://loteriasyapuestas.es/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://loteriasyapuestas.es/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://ambarledivo.net/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://ambarledivo.net/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://moengagewebsdk.imgix.net/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://van-city-sign-on.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://cd.ladsp.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://fisio9-et81.sbs/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://fisio9-et81.sbs/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://smc.silvercash.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://8b165878.pinme.dev/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://8b165878.pinme.dev/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://decografix.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://t.ads.pof.com/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://mlbtoronto.112.2o7.net/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "http://scrippswfts.112.2o7.net/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://dabet.cc/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://xalvoreni.info/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "http://xalvoreni.info/",
+      "category": "gambling",
+      "expect": "gate1",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 1,
+      "ms": 0,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-01.test-corpus.invalid/page",
+      "category": "gambling",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 2,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-02.test-corpus.invalid/page",
+      "category": "gambling",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 1045,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-03.test-corpus.invalid/page",
+      "category": "drugs",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 1120,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-04.test-corpus.invalid/page",
+      "category": "drugs",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 1155,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-05.test-corpus.invalid/page",
+      "category": "weapons",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 2,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-06.test-corpus.invalid/page",
+      "category": "hate",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 63.8,
+      "gate": 3,
+      "ms": 1112,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-07.test-corpus.invalid/page",
+      "category": "hate",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 1214,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-08.test-corpus.invalid/page",
+      "category": "self-harm",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 43.2,
+      "gate": 3,
+      "ms": 1193,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-09.test-corpus.invalid/page",
+      "category": "self-harm",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 2,
+      "ms": 2,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-10.test-corpus.invalid/page",
+      "category": "adult",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 2,
+      "ms": 1,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-11.test-corpus.invalid/page",
+      "category": "adult",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 1177,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-12.test-corpus.invalid/page",
+      "category": "violence",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 1104,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-13.test-corpus.invalid/page",
+      "category": "harassment",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 1068,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-14.test-corpus.invalid/page",
+      "category": "fraud",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 51,
+      "gate": 3,
+      "ms": 1017,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-15.test-corpus.invalid/page",
+      "category": "phishing",
+      "expect": "gate3",
+      "verdict": "review",
+      "score": 73.4,
+      "gate": 3,
+      "ms": 1169,
+      "rejected": false,
+      "reasons": [
+        {
+          "gate": 3,
+          "safe_for_family": true,
+          "confidence": 0.734,
+          "categories": [
+            "christian-teaching",
+            "bible-study",
+            "adult"
+          ],
+          "flags": [],
+          "reason": "Classified as christian teaching or devotional (0.46). No adult, violent, hateful or exploitative content detected."
+        }
+      ]
+    },
+    {
+      "url": "https://unlisted-16.test-corpus.invalid/page",
+      "category": "malware",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 1215,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-17.test-corpus.invalid/page",
+      "category": "profanity",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 1022,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-18.test-corpus.invalid/page",
+      "category": "exploitation",
+      "expect": "gate3",
+      "verdict": "review",
+      "score": 71.6,
+      "gate": 3,
+      "ms": 1196,
+      "rejected": false,
+      "reasons": [
+        {
+          "gate": 3,
+          "safe_for_family": true,
+          "confidence": 0.716,
+          "categories": [
+            "christian-teaching"
+          ],
+          "flags": [],
+          "reason": "Classified as christian teaching or devotional (0.59). No adult, violent, hateful or exploitative content detected."
+        }
+      ]
+    },
+    {
+      "url": "https://unlisted-19.test-corpus.invalid/page",
+      "category": "gambling",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 997,
+      "rejected": true
+    },
+    {
+      "url": "https://unlisted-20.test-corpus.invalid/page",
+      "category": "extremism",
+      "expect": "gate3",
+      "verdict": "unsafe",
+      "score": 0,
+      "gate": 3,
+      "ms": 1101,
+      "rejected": true
+    }
+  ]
+}
