@@ -1031,7 +1031,26 @@ model behind the same `/v1/classify/family-safety` contract is the fix, and
 `eval/unsafe.mjs` is how to prove it. The thresholds were NOT moved to make
 the number 230.
 
-**What opens Zone B.** Nothing in the code. `npm run discover -- --dry-run`
+**Zone B opened 2026-09-15.** The user delegated the first T2 picks, so
+eight domains were approved with the tier defaults (weekly, 5,000 pages,
+depth 4, 1.5 s between requests), each with a note saying why and
+`approved_by = claude-fable-5.1 (delegated by user 2026-09-15)`:
+gotquestions.org (question-and-answer, the shape of conversational queries),
+hebrew4christians.com (the network's Hebraic register), desiringgod.org
+(articles, messages, interviews only), ourdailybread.org, ccel.org
+(public-domain classics), hymnary.org (hymn, text, tune and person pages,
+for Gospel by Music readers), biblehub.com (commentaries, topical and
+dictionary sections only; the verse pages would be millions), and
+resursecrestine.ro (Romanian teaching, for the pocaieste.com readers). All
+are editorial sites without open forums; the sectioned ones carry
+`allow_patterns`. robots.txt was checked on all eight; the only `Disallow: /`
+lines (ccel, hymnary) are for Meta's agent. A weekly `jubileesearch-crawl-
+t2.timer` (Saturday 06:00) recrawls them; the first crawl ran the same day
+and had 111 Got Questions pages indexed within minutes, every one through
+gates 1, 2 and 4. Discovery now has an outbound link graph to nominate T3
+candidates from on Sunday. Swapping any of the eight is a console edit.
+
+**What opened Zone B, before that.** Nothing in the code. `npm run discover -- --dry-run`
 nominates zero candidates because the 46k recorded links point at 24 hosts,
 all inside the network. The first T2 domains have to be approved by an editor
 in the console (Domains -> add as T2), after which the crawl timer fetches
