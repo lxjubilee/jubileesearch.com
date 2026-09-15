@@ -234,6 +234,18 @@ function shape(row, zone, ctx) {
     // there is no headline to make, so the best-matching chunk stands in.
     snippet: pickSnippet(row),
     snippet_source: row.lex_rank !== null ? 'headline' : 'chunk',
+    // What the cross-encoder reads (orchestrator maybeRerank). The best-matching
+    // chunk in full, with its heading path, rather than the 200-character
+    // snippet: a reranker judging a question against a snippet was scoring
+    // register-bridged pairs like "ruach hakodesh" below the Zone A floor
+    // because the snippet did not carry the words. A lexical-only hit has no
+    // chunk, so it falls back to the headline and then the description.
+    // Internal: stripped by assembly, never in the payload.
+    rerank_text: [
+      row.title,
+      row.heading_path,
+      row.chunk_text ?? pickSnippet(row),
+    ].filter(Boolean).join('\n'),
   };
 
   // P4: "Every result row must be able to answer 'why was this returned, in

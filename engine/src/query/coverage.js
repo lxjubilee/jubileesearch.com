@@ -153,4 +153,4 @@ export function assembleZoneB(results, cfg, { page = 1 } = {}) {
 
 // `rerank_score` is an internal signal for the gate above; the debug block
 // already carries the cross-encoder score for anyone entitled to see it.
-const withPosition = ({ rerank_score: _internal, ...r }, i) => ({ ...r, position: i + 1 });
+const withPosition = ({ rerank_score: _score, rerank_text: _text, ...r }, i) => ({ ...r, position: i + 1 });

@@ -103,7 +103,7 @@ async function rerankList(results, queryText, cfg, force = null) {
   // against a toy input: the number looks fine and describes something else.
   const on = force === null ? cfg.rerank_zone_a === 1 : force;
   if (!on || results.length === 0) return results;
-  const docs = results.map((r) => [r.title, r.snippet].filter(Boolean).join('\n'));
+  const docs = results.map((r) => r.rerank_text ?? [r.title, r.snippet].filter(Boolean).join('\n'));
   const { order, reranked } = await rerankCall(queryText, docs);
   if (!reranked) return results;
   return order.map(({ index, score }, newPosition) => {

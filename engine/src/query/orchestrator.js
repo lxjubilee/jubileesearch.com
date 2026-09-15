@@ -192,7 +192,8 @@ export async function search(params) {
 async function maybeRerank(results, queryText, enabled, ctx) {
   if (!enabled || results.length === 0) return results;
 
-  const docs = results.map((r) => [r.title, r.snippet].filter(Boolean).join('\n'));
+  // The full best chunk with its heading, not the snippet (retrieval.js rerank_text).
+  const docs = results.map((r) => r.rerank_text ?? [r.title, r.snippet].filter(Boolean).join('\n'));
   const { order, reranked } = await rerankCall(queryText, docs);
   if (!reranked) return results;
 
