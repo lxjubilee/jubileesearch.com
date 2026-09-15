@@ -44,8 +44,7 @@ export default function HomePage() {
 
         <SearchBox autoFocus>
           <div className="search-copyright">
-            Copyright &copy; 2026 JubileeSearch.com | All Rights Reserved.
-            Jubilee and AI can make mistakes.&nbsp;|&nbsp;
+            Copyright &copy; 2026 JubileeSearch.com | All Rights Reserved.&nbsp;|&nbsp;
             <Link href="/privacy">Privacy Policy</Link>&nbsp;|&nbsp;
             <Link href="/terms">Terms of Use</Link>
           </div>

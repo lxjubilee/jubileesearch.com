@@ -76,10 +76,10 @@ export function validateDob(dob: string): string | null {
  * `storeAuth` puts it in `localStorage` for the radio player and the rail to
  * read. Here two things forbid it:
  *
- *   * The engine verifies the bearer token against the authority's JWKS and
- *     reads `search_admin` from its claims. It is the authority's token or
- *     nothing works -- and an authority token in localStorage is readable by
- *     any XSS on any Jubilee property.
+ *   * The engine verifies the bearer token at the authority (GET /api/auth/me;
+ *     see engine/src/api/auth.js). It is the authority's token or nothing
+ *     works -- and an authority token in localStorage is readable by any XSS
+ *     on any Jubilee property.
  *   * §14 gates the admin console on that right. A token the browser can read
  *     is a token an attacker can lift and replay against /api/v1/admin/*.
  *
@@ -127,7 +127,10 @@ export async function respondSignedIn(
     access_token: tokens.access_token,
     refresh_token: tokens.refresh_token ?? null,
     expires_at: expiresAt(tokens),
-  }, rememberMe);
+    // Inside the seal, so a later re-seal (a name edit, a renewal in proxy.ts)
+    // keeps the choice rather than silently upgrading to thirty days.
+    remember: rememberMe,
+  });
 
   // AND OPEN THE FAMILY SESSION. Signing in here is proof of identity for the
   // whole family, so the authority is told and the 90-day session is sealed into

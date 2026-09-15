@@ -195,12 +195,51 @@ lib/sso.ts                       the service-token client (ported from kJubilee'
 lib/sso-door.ts                  what more than one route needs
 app/api/sso/**                   lookup · login · register
 lib/session.ts                   the AES-256-GCM sealed, httpOnly cookie
+lib/session-crypto.ts            the sealing, shared with the proxy and the tests
+lib/session-policy.ts            cookie lifetimes and the renewal rule
+lib/session-renew.ts             a fresh token from the family session
+proxy.ts                         runs the renewal before a page renders
 ```
 
 The server mints a **service token** from `SSO_CLIENT_ID` + `SSO_CLIENT_SECRET`,
 then calls the authority on the reader's behalf — `/api/auth/lookup`,
-`/api/auth/login`, `/api/auth/register`, `/api/auth/session/open`. Identical to
-kJubilee's client, so the two sites speak one protocol to one authority.
+`/api/auth/login`, `/api/auth/register`, `/api/auth/session/open`,
+`/api/auth/session/exchange`. Identical to kJubilee's client, so the two sites
+speak one protocol to one authority.
+
+### Sessions, and "Keep me signed in on this device"
+
+The authority's access token lasts about fifteen minutes and it issues no
+refresh token. What outlives it is the **90-day family session** opened at
+sign-in and sealed into `jubilee_family`. `proxy.ts` runs before every page
+render: when the sealed token is expired or within `SESSION_RENEW_WINDOW_S` of
+it, the proxy posts the family session to `/api/auth/session/exchange`, receives
+a fresh token for the same identity, re-seals the session, rewrites the request
+cookie so the *same* render is signed in, and sets the new cookie on the
+response. The engine only ever sees authority-issued tokens.
+
+The checkbox decides cookie lifetime, and the choice travels inside the seal as
+`remember` so a name edit or a renewal cannot lose it:
+
+| box     | `jubilee_session`                  | `jubilee_family`                     |
+|---------|------------------------------------|--------------------------------------|
+| ticked  | 30 days, sliding on every re-seal  | up to 90 days, as the authority slides it |
+| unticked| dies with the browser              | dies with the browser                |
+
+A dead family session (revoked, or past 90 days) makes the exchange answer 401;
+the proxy then clears both cookies so it is not retried on every request. An
+authority outage clears nothing: the person is signed out for that render only
+and back in on the first request after recovery. Renewal is de-duplicated per
+person and failures are remembered for ten seconds, so an outage costs one call
+per person per ten seconds.
+
+To watch it locally: `SSO_TOKEN_TTL_S=30 npm run dev:sso`, sign in, wait half a
+minute, reload — the avatar stays. `npm test` covers the sealing and the rules.
+
+**Authority contract** (`POST /api/auth/session/exchange`, service-token gated):
+`{ sessionToken, site }` → `200 { user, token, expiresAt, session: { expiresAt } }`
+or `401 { error: "session_invalid" }`. The token is an ordinary user token, the
+session token is not rotated, and earlier access tokens stay valid.
 
 **§14 is not weakened by any of this.** The password is typed here and verified
 *at the authority*; this application stores no password, has no user table, and
@@ -213,9 +252,9 @@ writes it to `localStorage`, because its radio player and rail read it there.
 **This port seals it in the httpOnly cookie instead**, for two reasons that are
 specific to search:
 
-* The engine verifies every bearer token against the authority's JWKS and reads
-  `search_admin` out of the claims. It has to be the *authority's* token — a
-  locally minted one would be refused, and the admin console with it.
+* The engine verifies every bearer token at the authority (`GET /api/auth/me`).
+  It has to be the *authority's* token — a locally minted one would be refused,
+  and the admin console with it.
 * §14 gates that console on the right. A token the browser can read is a token
   an XSS on any Jubilee property can lift and replay against `/api/v1/admin/*`.
 

@@ -9,10 +9,15 @@
  *   POST /api/auth/service/token   client_id + client_secret -> service token
  *   POST /api/auth/lookup          does this email have a Jubilee ID?
  *   POST /api/auth/login           verify a password, issue tokens
+ *   POST /api/auth/service/password set a new password (the reset flow's last step)
  *   POST /api/auth/register        create a Jubilee ID, issue tokens
- *   POST /api/auth/session/open    open a 90-day family session
- *   POST /api/auth/session/revoke  end one
- *   GET  /jwks.json                the key the ENGINE verifies against
+ *   POST /api/auth/session/open      open a 90-day family session
+ *   POST /api/auth/session/exchange  a fresh access token from a live family session
+ *   POST /api/auth/session/revoke    end one
+ *   GET  /jwks.json                  the key the ENGINE verifies against
+ *
+ * SSO_TOKEN_TTL_S shortens the access token (default 900) so the renewal in
+ * web/proxy.ts can be watched in seconds rather than a quarter of an hour.
  *
  * The last one is why this replaces bin/dev-idp.mjs rather than sitting beside
  * it. The engine verifies every bearer token against the authority's JWKS and
@@ -79,6 +84,8 @@ function seed(email, password, first, last, rights) {
 seed('zev@jubileesearch.com', 'jubilee123', 'Zev', 'Inspire', ['search_admin']);
 seed('viewer@jubileesearch.com', 'jubilee123', 'Vera', 'Viewer', ['search_viewer']);
 seed('reader@jubileesearch.com', 'jubilee123', 'Ruth', 'Reader', []);
+// A real mailbox, so the password-reset flow can be watched end to end.
+seed('sandeep.agarwal@jubileeintelligence.com', 'jubilee123', 'Sandeep', 'Agarwal', []);
 
 const serviceTokens = new Set();
 const familySessions = new Map();
@@ -90,11 +97,14 @@ const publicUser = (u) => ({
   rights: u.rights,
 });
 
+const TOKEN_TTL_S = Number(process.env.SSO_TOKEN_TTL_S ?? 900);
+const FAMILY_TTL_MS = 90 * 24 * 3600 * 1000;
+
 function tokensFor(u) {
   return {
-    access_token: signJwt({ sub: u.id, email: u.email, name: `${u.first_name} ${u.last_name}`, rights: u.rights }, 900),
+    access_token: signJwt({ sub: u.id, email: u.email, name: `${u.first_name} ${u.last_name}`, rights: u.rights }, TOKEN_TTL_S),
     refresh_token: randomBytes(32).toString('base64url'),
-    expires_in: 900,
+    expires_in: TOKEN_TTL_S,
   };
 }
 
@@ -188,8 +198,43 @@ const server = createServer((req, res) => {
     if (route === 'POST /api/auth/session/open') {
       if (!users.has(email)) return send(res, 404, { error: 'no such identity' });
       const sessionToken = randomBytes(32).toString('base64url');
-      familySessions.set(sessionToken, email);
+      familySessions.set(sessionToken, { email, expiresAt: Date.now() + FAMILY_TTL_MS });
       return send(res, 200, { sessionToken, expiresIn: 90 * 24 * 3600 });
+    }
+
+    // The contract web/lib/sso.ts `ssoExchangeSession` is written against: a
+    // live family session buys a fresh access token for its identity, and the
+    // session slides. One 401 for unknown, expired and revoked alike. The
+    // session token is NOT rotated and earlier access tokens stay valid, so two
+    // tabs renewing at once cannot sign each other out.
+    if (route === 'POST /api/auth/session/exchange') {
+      const key = String(body.sessionToken ?? '');
+      const fam = familySessions.get(key);
+      if (!fam || fam.expiresAt <= Date.now()) {
+        familySessions.delete(key);
+        return send(res, 401, { error: 'session_invalid' });
+      }
+      const u = users.get(fam.email);
+      if (!u) return send(res, 401, { error: 'session_invalid' });
+      fam.expiresAt = Date.now() + FAMILY_TTL_MS;
+      return send(res, 200, {
+        user: publicUser(u),
+        ...tokensFor(u),
+        session: { expiresAt: new Date(fam.expiresAt).toISOString() },
+      });
+    }
+
+    // --- password reset (web/lib/password-reset.js completeReset) ------------
+    // The authority takes the new password on the strength of the service
+    // token alone: the web tier has already verified the one-time link.
+    if (route === 'POST /api/auth/service/password') {
+      const u = users.get(email);
+      if (!u) return send(res, 404, { error: 'no such identity' });
+      if (!body.new_password || String(body.new_password).length < 8) {
+        return send(res, 400, { error: 'password must be at least 8 characters' });
+      }
+      u.password = String(body.new_password);
+      return send(res, 200, { changed: true });
     }
 
     if (route === 'POST /api/auth/session/revoke') {
@@ -207,12 +252,14 @@ Development Jubilee ID authority on ${ISSUER}
 
   service token   POST ${ISSUER}/api/auth/service/token
   jwks            GET  ${ISSUER}/jwks.json
+  access tokens   ${TOKEN_TTL_S}s (SSO_TOKEN_TTL_S); the web renews them from the family session
 
 Sign in with any of these (password: jubilee123):
 
   zev@jubileesearch.com       search_admin   — the admin console
   viewer@jubileesearch.com    search_viewer  — the console, read-only
   reader@jubileesearch.com    no rights      — 300 searches a minute, nothing else
+  sandeep.agarwal@jubileeintelligence.com  no rights — a real inbox, for /forgot-password
 
 Point the two apps at it:
 

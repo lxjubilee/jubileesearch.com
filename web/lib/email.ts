@@ -115,7 +115,17 @@ const BRAND = {
   support: 'https://jubileeverse.com/support',
 };
 
-const LOGO_URL = () => `${SITE_URL}/images/personas/jubilee.png`;
+// Where a MAIL CLIENT fetches the logo from. Not SITE_URL: in development that
+// is localhost, which the reader's mail client cannot reach, and the message
+// then shows a broken image. Point it at the public site unless told otherwise.
+const ASSET_URL = (process.env.EMAIL_ASSET_URL || 'https://jubileesearch.com').replace(/\/+$/, '');
+const LOGO_URL = () => `${ASSET_URL}/images/personas/jubilee.png`;
+
+// The wordmark's face, restated from app/(auth)/jubilee-id.css. No mail client
+// loads a web font, so the chain matters: Agency FB where it is installed,
+// Cambria and the rest where it is not, the same fallbacks the site uses.
+const FONT_LOGO = "'Agency FB', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif";
+const FONT_BODY = 'Arial, Helvetica, sans-serif';
 
 const escapeHtml = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -143,9 +153,9 @@ function buildEmailHtml(
     <tr><td align="center" style="padding:40px 20px;">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="${BRAND.card}" style="width:600px; max-width:600px; background-color:${BRAND.card}; border-radius:16px; border:3px solid ${BRAND.accent}; border-collapse:separate;">
         <tr><td align="center" style="padding:48px 40px;">
-          <img src="${LOGO_URL()}" alt="JubileeSearch" width="72" height="72" style="display:block; border:3px solid ${BRAND.accent}; border-radius:50%;" />
-          <div style="font-family:Arial,Helvetica,sans-serif; font-size:40px; font-weight:bold; color:${BRAND.ink}; line-height:1; padding-top:12px;">
-            Jubilee<span style="color:${BRAND.accent};">Search</span>.com
+          <img src="${LOGO_URL()}" alt="JubileeSearch" width="69" height="69" style="display:block; margin:0 auto; width:69px; height:69px; border:2px solid ${BRAND.accent}; border-radius:50%; box-shadow:0 0 15px rgba(61,165,255,.4);" />
+          <div style="font-family:${FONT_LOGO}; font-size:32px; font-weight:bold; letter-spacing:1px; color:${BRAND.ink}; line-height:1; padding-top:12px; mso-line-height-rule:exactly;">
+            <span style="color:${BRAND.ink};">Jubilee</span><span style="color:${BRAND.accent};">Search</span><span style="color:${BRAND.ink};">.com</span>
           </div>
           <h1 style="margin:32px 0 16px 0; font-family:Arial,Helvetica,sans-serif; font-size:28px; font-weight:600; color:${BRAND.ink}; line-height:1.3;">${heading}</h1>
           <p style="margin:0 0 24px 0; font-family:Arial,Helvetica,sans-serif; font-size:16px; color:${BRAND.ink}; line-height:1.5;">${subheading}</p>

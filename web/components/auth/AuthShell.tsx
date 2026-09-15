@@ -112,8 +112,8 @@ export default function AuthShell({ children }: { children: React.ReactNode }) {
 
           <div className="auth-footer">
             <p className="copyright">
-              Copyright &copy; {new Date().getFullYear()} Jubilee Software, Inc. All rights reserved.{' '}
-              <a href="/terms">Terms of Use</a> ·{' '}
+              Copyright &copy; {new Date().getFullYear()} Jubilee Software |{' '}
+              <a href="/terms">Terms of Use</a> |{' '}
               <a href="/privacy">Privacy Policy</a>
             </p>
           </div>

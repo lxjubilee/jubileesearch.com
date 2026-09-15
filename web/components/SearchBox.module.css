@@ -54,3 +54,35 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* The clear (X) button, shown only while the field has text. Sits inside the
+   box before the search button, the way Google's does: quiet, then a separator
+   before the accent-coloured action. */
+.clear {
+  width: 38px;
+  height: 32px;
+  min-width: 38px;
+  min-height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px 0 0;
+  margin-right: 2px;
+  border: none;
+  border-right: 1px solid #6a6a6a;
+  background: transparent;
+  color: #bdc1c6;
+  cursor: pointer;
+}
+
+.clear:hover {
+  color: #fff;
+}
+
+.clear svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+

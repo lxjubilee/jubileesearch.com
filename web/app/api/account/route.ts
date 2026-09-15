@@ -40,6 +40,8 @@ export async function PATCH(request: Request) {
 
   // The header greets people by this name and reads it from the cookie, not
   // the authority. Without this it keeps the old one until the next sign-in.
+  // `remember` travels in the spread, so the cookie keeps the lifetime the
+  // person chose at the door instead of being upgraded to thirty days here.
   await setSession({ ...session, name, first_name: first, last_name: last || null });
 
   // Best effort, as at sign-in: the mirror is reporting, not identity.

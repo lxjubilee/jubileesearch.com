@@ -46,8 +46,12 @@ export type SsoResult<T = Record<string, unknown>> =
   | { ok: true; data: T }
   | { ok: false; status: number; error: string };
 
-async function fetchWithTimeout(url: string, init: RequestInit): Promise<Response> {
-  return fetch(url, { ...init, signal: AbortSignal.timeout(TIMEOUT_MS), cache: 'no-store' });
+// The renewal in proxy.ts runs inside a page request, so it may not wait the
+// door's ten seconds: a slow authority must cost one render, not hang it.
+const RENEW_TIMEOUT_MS = Number.parseInt(process.env.SSO_RENEW_TIMEOUT_MS || '3000', 10);
+
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs = TIMEOUT_MS): Promise<Response> {
+  return fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs), cache: 'no-store' });
 }
 
 async function getServiceToken(): Promise<string> {
@@ -69,7 +73,7 @@ async function getServiceToken(): Promise<string> {
 
 /** All service calls return the same discriminated shape as kJubilee's client. */
 async function callSso<T = Record<string, unknown>>(
-  path: string, payload: unknown,
+  path: string, payload: unknown, timeoutMs = TIMEOUT_MS,
 ): Promise<SsoResult<T>> {
   if (!isConfigured()) {
     return { ok: false, status: 503, error: 'SSO_CLIENT_SECRET is not configured' };
@@ -89,7 +93,7 @@ async function callSso<T = Record<string, unknown>>(
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${svc}` },
       body: JSON.stringify(payload),
-    });
+    }, timeoutMs);
   } catch {
     return { ok: false, status: 503, error: 'SSO authority unreachable' };
   }
@@ -97,7 +101,9 @@ async function callSso<T = Record<string, unknown>>(
   // Deliberately NOT clearing the cached service token on a 401. On these
   // endpoints a 401 means the PERSON's password was wrong, not ours -- and
   // evicting the token there would make every mistyped password mint a new
-  // service token at the authority.
+  // service token at the authority. The same holds for session/exchange: a
+  // 401 there means the FAMILY SESSION is dead (revoked or expired), which is
+  // an answer about the person, not about our service credential.
   let data: unknown = null;
   try { data = await res.json(); } catch { /* empty or non-JSON body */ }
 
@@ -130,9 +136,9 @@ export interface SsoUser {
  * This is where JubileeSearch differs from kJubilee, and it is not cosmetic.
  * kJubilee mints its OWN HS256 token here (lib/auth.js `signJWT`) against a
  * local `kj_users` row. JubileeSearch has no user table to mint against, and
- * its engine verifies every bearer token against the authority's JWKS and reads
- * `search_admin` / `search_viewer` out of the claims -- so a locally minted
- * token would be refused by the engine, and the whole admin console with it.
+ * its engine verifies every bearer token at the authority (GET /api/auth/me,
+ * engine/src/api/auth.js) -- so a locally minted token would be refused by
+ * the engine, and the whole admin console with it.
  *
  * The authority's own access token is therefore what a sign-in keeps.
  */
@@ -166,7 +172,8 @@ export interface SsoTokens {
  *
  * There is no refresh token: this authority issues none from these endpoints.
  * The 90-day family session opened separately is what outlives the access
- * token, not a refresh grant.
+ * token, not a refresh grant -- and `ssoExchangeSession` below is how a fresh
+ * access token is obtained from it.
  */
 type SsoUserTokens = { user: SsoUser } & SsoTokens;
 
@@ -220,6 +227,28 @@ export const ssoRegister = async (input: {
  */
 export const ssoOpenSession = (email: string) =>
   callSso<{ sessionToken: string }>('/api/auth/session/open', { email, site: SITE });
+
+/** What session/exchange adds to the login shape: the family session's own expiry, after sliding. */
+export type SsoExchange = { user: SsoUser } & SsoTokens & { session?: { expiresAt?: string } };
+
+/**
+ * A fresh access token for the person behind a live family session.
+ *
+ * This is what makes "Keep me signed in on this device" true. The authority's
+ * access token lasts about fifteen minutes and it issues no refresh token; the
+ * 90-day family session is the only credential that outlives it. proxy.ts calls
+ * this when the sealed token is expired or about to be, and re-seals the answer.
+ *
+ * Authority contract (POST /api/auth/session/exchange, service-token gated):
+ *   { sessionToken, site }  ->  200 { user, token, expiresAt, session: { expiresAt } }
+ *                               401 { error: 'session_invalid' }  revoked, expired or unknown
+ * The token is an ordinary user token, so GET /api/auth/me -- and therefore the
+ * engine -- accepts it unchanged. Answered with the same adapter as login.
+ */
+export const ssoExchangeSession = async (sessionToken: string) =>
+  adoptJubileeTokens(
+    await callSso<SsoExchange>('/api/auth/session/exchange', { sessionToken, site: SITE }, RENEW_TIMEOUT_MS),
+  ) as SsoResult<SsoExchange>;
 
 /**
  * Service-gated identity update BY EMAIL, as kJubilee's lib/sso.js does it.

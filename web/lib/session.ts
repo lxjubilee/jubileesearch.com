@@ -1,6 +1,11 @@
 import 'server-only';
-import { createCipheriv, createDecipheriv, hkdfSync, randomBytes, timingSafeEqual } from 'node:crypto';
+import { timingSafeEqual } from 'node:crypto';
 import { cookies } from 'next/headers';
+import { seal, unseal } from './session-crypto';
+import {
+  SESSION_COOKIE as COOKIE, FAMILY_COOKIE, FLOW_COOKIE,
+  cookieSecure, sessionCookieOptions, familyCookieOptions,
+} from './session-policy';
 
 // The signed-in session.
 //
@@ -16,10 +21,12 @@ import { cookies } from 'next/headers';
 // rather than in localStorage: `lib/api.ts` attaches the access token to the
 // server-side call to the engine, so a token is never in a place an XSS on any
 // Jubilee property could read it.
+//
+// The sealing lives in ./session-crypto and the lifetimes in ./session-policy,
+// because proxy.ts renews the token before a page renders and cannot use
+// `next/headers` to do it. Both are re-exported here so existing imports hold.
 
-const COOKIE = 'jubilee_session';
-const FLOW_COOKIE = 'jubilee_auth_flow';
-const FAMILY_COOKIE = 'jubilee_family';
+export { seal, unseal };
 
 /** What the SSO authority told us, plus the tokens to keep asking it. */
 export interface Session {
@@ -36,6 +43,12 @@ export interface Session {
   refresh_token: string | null;
   /** Unix seconds. */
   expires_at: number;
+  /**
+   * "Keep me signed in on this device", carried INSIDE the seal so that every
+   * re-seal (a name edit, a renewal) keeps the choice. Absent means remembered:
+   * that was the only behaviour before the field existed.
+   */
+  remember?: boolean;
 }
 
 /** The short-lived state that has to survive the redirect to the SSO. */
@@ -48,78 +61,29 @@ export interface AuthFlow {
 }
 
 // ---------------------------------------------------------------------------
-// Cookie sealing
-//
-// A secret is required. There is no development default and no fallback to a
-// constant: a predictable key on a cookie that carries an access token is the
-// same as no encryption, and it would be the kind of thing that ships because
-// it worked locally.
-// ---------------------------------------------------------------------------
-function key(): Buffer {
-  const secret = process.env.SESSION_SECRET;
-  if (!secret || secret.length < 32) {
-    throw new Error(
-      'SESSION_SECRET must be set to at least 32 characters before anyone can sign in. '
-      + 'Generate one with:  node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'base64url\'))"',
-    );
-  }
-  // HKDF rather than using the secret directly, so the same secret can derive
-  // other keys later without them being related.
-  return Buffer.from(hkdfSync('sha256', secret, 'jubilee-search-session', 'aes-256-gcm', 32));
-}
-
-export function seal(value: unknown): string {
-  const iv = randomBytes(12);
-  const cipher = createCipheriv('aes-256-gcm', key(), iv);
-  const body = Buffer.concat([cipher.update(JSON.stringify(value), 'utf8'), cipher.final()]);
-  return [iv, cipher.getAuthTag(), body].map((b) => b.toString('base64url')).join('.');
-}
-
-export function unseal<T>(sealed: string | undefined): T | null {
-  if (!sealed) return null;
-  const parts = sealed.split('.');
-  if (parts.length !== 3) return null;
-  try {
-    const [iv, tag, body] = parts.map((p) => Buffer.from(p, 'base64url'));
-    const decipher = createDecipheriv('aes-256-gcm', key(), iv!);
-    decipher.setAuthTag(tag!);
-    const plain = Buffer.concat([decipher.update(body!), decipher.final()]).toString('utf8');
-    return JSON.parse(plain) as T;
-  } catch {
-    // A tampered, truncated or stale-key cookie is simply not a session. It is
-    // never worth an error page: the reader is signed out, which is a state the
-    // whole site already handles because search never requires sign-in.
-    return null;
-  }
-}
-
-// ---------------------------------------------------------------------------
-
-const secure = process.env.NODE_ENV === 'production';
 
 export async function getSession(): Promise<Session | null> {
   const store = await cookies();
   const session = unseal<Session>(store.get(COOKIE)?.value);
   if (!session) return null;
 
-  // An expired access token is not a session. `lib/sso.ts` refreshes ahead of
-  // this where it can; reaching here with an expired one means the refresh
-  // failed or there was no refresh token, and the honest answer is signed out.
+  // An expired access token is not a session. proxy.ts renews the token from
+  // the family session before this runs, so reaching here with an expired one
+  // means there was no family session to renew from, or the authority refused
+  // or could not be reached -- and the honest answer is signed out.
   if (session.expires_at <= Math.floor(Date.now() / 1000)) return null;
 
   return session;
 }
 
 /**
- * @param rememberMe "Keep me signed in on this device", from the door.
- *
- * It is enforced where it actually counts -- the cookie's lifetime -- rather
- * than being a checkbox that changes nothing. Off means a session cookie that
- * dies with the browser; on means thirty days. kJubilee spends the same flag on
- * the token lifetime it mints; JubileeSearch does not mint tokens, so the cookie
- * carrying the authority's one is where the choice lands.
+ * The cookie's lifetime follows `session.remember`: off means a session cookie
+ * that dies with the browser; on means thirty days, sliding on every re-seal.
+ * kJubilee spends the same flag on the token lifetime it mints; JubileeSearch
+ * does not mint tokens, so the cookie carrying the authority's one is where the
+ * choice lands -- and proxy.ts keeps the token inside it fresh.
  */
-export async function setSession(session: Session, rememberMe = true): Promise<void> {
+export async function setSession(session: Session): Promise<void> {
   const store = await cookies();
   const value = seal(session);
 
@@ -133,18 +97,7 @@ export async function setSession(session: Session, rememberMe = true): Promise<v
     );
   }
 
-  store.set(COOKIE, value, {
-    httpOnly: true,
-    secure,
-    // Lax, not Strict: a link arriving from a sibling Jubilee site is a
-    // top-level GET, and Strict would withhold the cookie on exactly that
-    // navigation.
-    sameSite: 'lax',
-    path: '/',
-    // The cookie outlives the access token so a refresh can still happen; the
-    // access token's own expiry is what getSession() enforces.
-    ...(rememberMe ? { maxAge: 60 * 60 * 24 * 30 } : {}),
-  });
+  store.set(COOKIE, value, sessionCookieOptions(session, cookieSecure()));
 }
 
 /**
@@ -153,16 +106,12 @@ export async function setSession(session: Session, rememberMe = true): Promise<v
  * A 90-day token from the authority saying this person is signed in across the
  * family. It is sealed exactly like the session and never readable by script:
  * what travels between sites is a one-time ticket minted from it, not this.
+ * It is also what proxy.ts spends to renew the access token, so "keep me
+ * signed in" survives the token's fifteen minutes.
  */
-export async function setFamilySession(token: string, rememberMe = true): Promise<void> {
+export async function setFamilySession(token: string, remember = true, maxAgeS?: number): Promise<void> {
   const store = await cookies();
-  store.set(FAMILY_COOKIE, seal({ token, at: Date.now() }), {
-    httpOnly: true,
-    secure,
-    sameSite: 'lax',
-    path: '/',
-    ...(rememberMe ? { maxAge: 60 * 60 * 24 * 90 } : {}),
-  });
+  store.set(FAMILY_COOKIE, seal({ token, at: Date.now() }), familyCookieOptions(remember, cookieSecure(), maxAgeS));
 }
 
 export async function getFamilySession(): Promise<string | null> {
@@ -185,7 +134,7 @@ export async function setAuthFlow(flow: AuthFlow): Promise<void> {
   const store = await cookies();
   store.set(FLOW_COOKIE, seal(flow), {
     httpOnly: true,
-    secure,
+    secure: cookieSecure(),
     sameSite: 'lax',
     path: '/',
     // Ten minutes is generous for "click the button, sign in, come back". A

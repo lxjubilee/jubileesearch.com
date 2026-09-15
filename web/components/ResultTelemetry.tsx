@@ -11,8 +11,14 @@
 // is data that cannot be recovered." A click the engine never hears about is a
 // gap in the position-bias correction that no later work can fill.
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Zone } from '@/lib/types';
+import ReportDialog from './ReportDialog';
+
+interface Reporting {
+  url: string;
+  button: HTMLButtonElement;
+}
 
 export default function ResultTelemetry({
   queryId,
@@ -22,6 +28,13 @@ export default function ResultTelemetry({
   children: React.ReactNode;
 }) {
   const root = useRef<HTMLDivElement>(null);
+
+  // The report in progress, if any. The dialog is rendered by this component
+  // rather than by the card so the card can stay a server component; the
+  // button that opened it is kept so its label can say what happened after.
+  const [reporting, setReporting] = useState<Reporting | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const node = root.current;
@@ -55,33 +68,52 @@ export default function ResultTelemetry({
       }
 
       const report = target.closest<HTMLButtonElement>('[data-report-url]');
-      if (report) void submitReport(report);
+      if (report && !report.disabled) {
+        setError(null);
+        setReporting({ url: report.dataset.reportUrl ?? '', button: report });
+      }
     };
 
     node.addEventListener('click', onClick);
     return () => node.removeEventListener('click', onClick);
   }, [queryId]);
 
-  return <div ref={root}>{children}</div>;
-}
+  const submit = async (reason: string) => {
+    if (!reporting) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/v1/report', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ url: reporting.url, reason }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      // The engine tells the reporter nothing about whether the URL is in the
+      // index or how many others have reported it -- that would be a probe of
+      // the index dressed up as a form -- so the page says only that it arrived.
+      reporting.button.textContent = 'Reported — thank you';
+      reporting.button.disabled = true;
+      setReporting(null);
+    } catch {
+      setError('The report could not be sent. Please try again.');
+    } finally {
+      setBusy(false);
+    }
+  };
 
-async function submitReport(button: HTMLButtonElement) {
-  const reason = window.prompt('What is wrong with this result? A short reason is enough.');
-  if (!reason) return;
-
-  button.disabled = true;
-  try {
-    await fetch('/api/v1/report', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ url: button.dataset.reportUrl, reason }),
-    });
-    // The engine tells the reporter nothing about whether the URL is in the
-    // index or how many others have reported it -- that would be a probe of the
-    // index dressed up as a form -- so the page says only that it arrived.
-    button.textContent = 'Reported — thank you';
-  } catch {
-    button.textContent = 'Could not send the report';
-    button.disabled = false;
-  }
+  return (
+    <div ref={root}>
+      {children}
+      {reporting && (
+        <ReportDialog
+          url={reporting.url}
+          busy={busy}
+          error={error}
+          onSubmit={submit}
+          onClose={() => { if (!busy) setReporting(null); }}
+        />
+      )}
+    </div>
+  );
 }

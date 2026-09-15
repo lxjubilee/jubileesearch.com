@@ -285,15 +285,38 @@ html, body {
 
 /* ========== Search Results Page - Google Style ========== */
 .results-container {
+  /* A column the height of the window at least, with the footer pushed to
+     its end (margin-top: auto below). So a page with three results still has
+     its footer at the bottom of the screen, not floating under the last card;
+     a long page scrolls, and the footer's sticky rule keeps it in view. */
   min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   background-color: #202124;
 }
 
+.results-container > .results-footer {
+  margin-top: auto;
+}
+
 /* Results Header */
+/* One left gutter for the whole page: header, stats and results share it, so
+   the wordmark, the count and the first title sit on a single vertical line. */
+:root {
+  --results-gutter: 48px;
+  /* The wordmark column and the gap after it. The results are indented by the
+     same two amounts so they start exactly under the search box, as Google
+     does; a fixed column is what makes that offset exact. */
+  --results-logo-col: 200px;   /* 32px mark + 8px + the wordmark */
+  --results-gap: 12px;
+  --results-indent: calc(var(--results-gutter) + var(--results-logo-col) + var(--results-gap));
+}
+
 .results-header {
   background-color: #202124;
   border-bottom: 1px solid #3c4043;
-  padding: 12px 24px;
+  padding: 12px var(--results-gutter);
   position: sticky;
   top: 0;
   z-index: 50;
@@ -302,10 +325,16 @@ html, body {
 .results-header-inner {
   display: flex;
   align-items: center;
-  max-width: 1000px;
+  gap: var(--results-gap);
+}
+
+/* The account control sits at the right edge of the bar; the search box takes
+   what is between it and the wordmark, up to the width the results run at. */
+.results-account {
   margin-left: auto;
-  margin-right: auto;
-  gap: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
 .results-logo {
@@ -315,6 +344,17 @@ html, body {
   cursor: pointer;
   text-decoration: none;
   color: #fff;
+  flex: 0 0 var(--results-logo-col);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.results-logo-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   flex-shrink: 0;
 }
 
@@ -324,14 +364,16 @@ html, body {
 
 .results-search-box {
   flex: 1;
-  max-width: none;
+  /* Google's width, near enough: a query is a line of text, not a banner. */
+  max-width: 690px;
+  margin-top: 0;   /* the home composer's 10px has no business in a bar */
 }
 
 .results-search-box .search-box {
-  padding: 12px 14px;
+  padding: 5px 10px 5px 16px;   /* a 44px bar: the buttons set the height */
   background-color: #5a5a5a;
   border: 1px solid #6a6a6a;
-  border-radius: 8px;
+  border-radius: 23px;
 }
 
 .results-search-box .search-box:focus-within {
@@ -341,21 +383,21 @@ html, body {
 }
 
 /* Results Stats - Google style */
+/* Stats and results start at the left, in line with the wordmark above them,
+   the way Google lays a results page out; the 1000px cap keeps the line
+   length readable on a wide screen. */
 .results-stats {
-  padding: 8px 0 0 0;
+  padding: 8px var(--results-gutter) 0 var(--results-indent);
   color: #9aa0a6;
   font-size: 14px;
   max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* Search Results - Google style layout */
 .results-list {
   max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 20px 0 40px;
+  padding: 20px var(--results-gutter) 40px var(--results-indent);
+  box-sizing: content-box;   /* 1000px of text, whatever the indent */
 }
 
 /* Individual Result Item - Google style */
@@ -575,7 +617,7 @@ html, body {
 .results-footer {
   background-color: #171717;
   border-top: 1px solid #3c4043;
-  padding: 16px 24px;
+  padding: 8px 24px;
   text-align: center;
   position: sticky;
   bottom: 0;
@@ -587,7 +629,7 @@ html, body {
 .footer-location {
   color: #9aa0a6;
   font-size: 14px;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 }
 
 .location-separator {
@@ -681,25 +723,24 @@ html, body {
     max-width: 100%;
   }
 
-  .results-stats,
-  .results-list {
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
+  :root { --results-gutter: 16px; --results-indent: 16px; }
 
-  .results-header {
-    padding: 12px 16px;
-  }
+  .results-logo { flex-basis: auto; }
 
+  /* Wordmark and account share the first row; the search box takes a full
+     second row beneath them. */
   .results-header-inner {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-wrap: wrap;
     gap: 12px;
   }
 
+  .results-account {
+    order: 2;
+  }
+
   .results-search-box {
+    order: 3;
+    flex-basis: 100%;
     width: 100%;
     max-width: 100%;
   }

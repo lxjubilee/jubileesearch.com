@@ -1,0 +1,163 @@
+/* The report dialog, in the results page's palette: the suggestion dropdown's
+   panel colour and border, the site accent for the one primary action, and
+   the gold focus ring the search box uses. */
+
+.dialog {
+  /* Centred explicitly: the global `* { margin: 0 }` reset cancels the
+     browser's own `margin: auto` on a modal dialog, which left this panel
+     pinned to the top-left corner. */
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  max-width: min(480px, calc(100vw - 32px));
+  height: fit-content;
+  max-height: calc(100vh - 32px);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #e8eaed;
+  overflow: visible;
+}
+
+.dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+.panel {
+  background: #303134;
+  border: 1px solid #3f3f3f;
+  border-radius: 14px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+  padding: 22px 24px 20px;
+  margin: 0;
+}
+
+.title {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.lede {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #bdc1c6;
+}
+
+.host {
+  color: #e8eaed;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #9aa0a6;
+  margin-bottom: 6px;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 84px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #f0f0f0;
+  background: #202124;
+  border: 1px solid #5f6368;
+  border-radius: 8px;
+  outline: none;
+}
+
+.input::placeholder { color: #80868b; }
+
+.input:focus {
+  border-color: #ffbd59;
+  box-shadow: 0 0 0 1px #ffbd59;
+}
+
+.input:disabled { opacity: 0.6; }
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+  min-height: 18px;
+  font-size: 12px;
+}
+
+.count { color: #80868b; margin-left: auto; }
+
+.error { color: #f28b82; order: -1; }
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.primary,
+.secondary {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.primary {
+  background: var(--accent, #3DA5FF);
+  color: #fff;
+}
+
+.primary:hover:not(:disabled) { background: #5FB6FF; }
+
+.primary:disabled {
+  background: #3f4043;
+  color: #80868b;
+  cursor: default;
+}
+
+.secondary {
+  background: transparent;
+  color: #bdc1c6;
+  border-color: #5f6368;
+}
+
+.secondary:hover:not(:disabled) {
+  color: #fff;
+  border-color: #9aa0a6;
+  background: #3a3b3e;
+}
+
+.secondary:disabled { opacity: 0.5; cursor: default; }
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid #ffbd59;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .panel { padding: 18px 16px 16px; border-radius: 12px; }
+  .actions { flex-direction: column-reverse; }
+  .primary, .secondary { width: 100%; }
+}

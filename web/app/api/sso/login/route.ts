@@ -29,6 +29,8 @@ export async function POST(request: Request) {
   const body = await readJson(request);
   const email = normalizeEmail(body.email);
   const password = String(body.password ?? '');
+  // Only an explicit `false` unticks "Keep me signed in": the door defaults the
+  // box to on (JubileeIdDoor useState(true)), so a missing field means on too.
   const rememberMe = body.rememberMe !== false;
   // Sent ONLY by the create-account screen the redirect below opens. The
   // password screen never sends it, so signing in cannot resurrect an account

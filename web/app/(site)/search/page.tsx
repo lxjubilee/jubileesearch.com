@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { search, EngineUnavailable } from '@/lib/api';
 import SearchBox from '@/components/SearchBox';
@@ -7,6 +8,7 @@ import ResultTelemetry from '@/components/ResultTelemetry';
 import { ZoneA, ZoneB } from '@/components/Zones';
 import { BestBets, ScriptureCard, EntityPanel, Navigational } from '@/components/Panels';
 import SiteFooter from '@/components/SiteFooter';
+import ResultsSkeleton from '@/components/ResultsSkeleton';
 import AccountMenu from '@/components/AccountMenu';
 
 // The results page.
@@ -59,6 +61,22 @@ export default async function SearchPage({ searchParams }: Props) {
     );
   }
 
+  // The header goes out at once with the query in it; the results stream in
+  // behind it. So pressing Enter lands on this page immediately, with the
+  // skeleton below standing in until the engine answers -- rather than the
+  // browser sitting on the previous page with nothing to show for the click.
+  return (
+    <div className="results-container">
+      <ResultsHeader query={query} />
+      <Suspense fallback={<ResultsSkeleton />}>
+        <Results query={query} scope={scope} />
+      </Suspense>
+      <SiteFooter />
+    </div>
+  );
+}
+
+async function Results({ query, scope }: { query: string; scope: 'jubilee' | 'all' }) {
   let response;
   try {
     response = await search({
@@ -71,19 +89,15 @@ export default async function SearchPage({ searchParams }: Props) {
     // them the network has nothing on a subject it may cover well.
     const detail = error instanceof EngineUnavailable ? error.detail : String(error);
     return (
-      <div className="results-container">
-        <ResultsHeader query={query} />
-        <main id="results" className="results-list">
-          <div className="no-results">
-            <p>Search is temporarily unavailable.</p>
-            <p>Nothing is wrong with what you searched for. Please try again shortly.</p>
-            {process.env.NODE_ENV !== 'production' && (
-              <p style={{ marginTop: 16, fontSize: 12, color: '#5f6368' }}>{detail}</p>
-            )}
-          </div>
-        </main>
-        <SiteFooter />
-      </div>
+      <main id="results" className="results-list">
+        <div className="no-results">
+          <p>Search is temporarily unavailable.</p>
+          <p>Nothing is wrong with what you searched for. Please try again shortly.</p>
+          {process.env.NODE_ENV !== 'production' && (
+            <p style={{ marginTop: 16, fontSize: 12, color: '#5f6368' }}>{detail}</p>
+          )}
+        </div>
+      </main>
     );
   }
 
@@ -93,9 +107,7 @@ export default async function SearchPage({ searchParams }: Props) {
   const seconds = (response.took_ms / 1000).toFixed(2);
 
   return (
-    <div className="results-container">
-      <ResultsHeader query={query} />
-
+    <>
       <div id="stats" className="results-stats">
         {total === 0
           ? `No results (${seconds} seconds)`
@@ -125,9 +137,7 @@ export default async function SearchPage({ searchParams }: Props) {
           </div>
         )}
       </main>
-
-      <SiteFooter />
-    </div>
+    </>
   );
 }
 
@@ -137,11 +147,17 @@ function ResultsHeader({ query }: { query: string }) {
     <header className="results-header">
       <div className="results-header-inner">
         <Link href="/" className="results-logo">
-          Jubilee<span className="highlight">Search</span>
+          {/* The Jubilee mark, the same disc the home page and the rail carry. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/personas/jubilee.png" alt="" className="results-logo-mark" />
+          <span>Jubilee<span className="highlight">Search</span></span>
         </Link>
         <SearchBox initialQuery={query} variant="results" />
-        {/* Signing in returns the reader to the search they were doing. */}
-        <AccountMenu next={here} />
+        {/* Signing in returns the reader to the search they were doing. Pinned
+            to the right edge of the bar, where an account control is expected. */}
+        <div className="results-account">
+          <AccountMenu next={here} />
+        </div>
       </div>
     </header>
   );

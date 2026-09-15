@@ -31,6 +31,7 @@ export async function POST(request: Request) {
   const last_name = str(body.last_name, 50);
   const date_of_birth = str(body.date_of_birth, 10);
   const password = String(body.password ?? '');
+  // Only an explicit `false` unticks "Keep me signed in"; the door defaults it on.
   const rememberMe = body.rememberMe !== false;
 
   if (!email || !EMAIL_RE.test(email)) {

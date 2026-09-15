@@ -1,0 +1,44 @@
+/* The results placeholder. Same gutter and indent as .results-stats and
+   .results-list in globals.css, so the real results land exactly on top. */
+.wrap {
+  max-width: 1000px;
+  padding: 8px var(--results-gutter, 24px) 40px var(--results-indent, 24px);
+  box-sizing: content-box;
+}
+
+.bar {
+  height: 12px;
+  border-radius: 6px;
+  background: #3a3b3e;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.stats   { width: 180px; height: 14px; margin: 6px 0 24px; }
+.chips   { display: flex; gap: 10px; margin-bottom: 28px; }
+.chip    { width: 96px; height: 34px; border-radius: 17px; background: #303134; animation: pulse 1.4s ease-in-out infinite; }
+.heading { width: 120px; height: 14px; margin-bottom: 26px; }
+
+.card { margin-bottom: 40px; }
+.titleRow { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+.disc  { width: 40px; height: 40px; border-radius: 50%; background: #303134; animation: pulse 1.4s ease-in-out infinite; flex-shrink: 0; }
+.title { width: 46%; height: 20px; }
+.url   { width: 38%; height: 12px; margin-bottom: 14px; }
+.line  { width: 78%; margin-bottom: 10px; }
+.lineShort { width: 52%; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar, .chip, .disc { animation: none; }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

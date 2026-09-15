@@ -97,10 +97,25 @@ export default function SearchBox({
     return () => document.removeEventListener('click', onClickAway);
   }, []);
 
+  // The X in the box. It empties the field and hands focus back so the next
+  // query can be typed at once; it does not navigate, so the results already
+  // on the page stay until a new search replaces them.
+  const clear = () => {
+    setQuery('');
+    setTyped(false);
+    setSuggestions([]);
+    setOpen(false);
+    setSelected(-1);
+    inputRef.current?.focus();
+  };
+
   const submit = (value: string) => {
     const q = value.trim();
     if (!q) return;
     setOpen(false);
+    // The results page streams: its header arrives at once and
+    // components/ResultsSkeleton stands in until the engine answers, so the
+    // navigation itself is the loading state.
     router.push(`/search?q=${encodeURIComponent(q)}`);
   };
 
@@ -171,6 +186,19 @@ export default function SearchBox({
             aria-activedescendant={selected >= 0 ? `${listId}-${selected}` : undefined}
           />
           <div className="search-actions">
+            {query.length > 0 && (
+              <button
+                type="button"
+                className={styles.clear}
+                onClick={clear}
+                title="Clear search"
+                aria-label="Clear search"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+              </button>
+            )}
             <button type="submit" className="voice-button" title="Search" aria-label="Search">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
