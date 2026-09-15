@@ -758,6 +758,8 @@ Three runs on production (bge-m3 fp16, cross-encoder rerank on, hybrid recall@10
 | `network-2026-09-14` | 2,038 pages, 55,338 chunks | 30 | 9 | before migration 036 |
 | `network-boilerplate-2026-09-14` | same, 16,776 live chunks | 38 | 17 | boilerplate flagged |
 | `network-jvonly-2026-09-14` | retrieval restricted to jubileeverse.com | 55 | 55 | `EVAL_SITE=jubileeverse.com` |
+| `network-chunkrerank-2026-09-14` | whole network | **55** | 51 | reranker reads the best chunk + heading, not the snippet |
+| `network-ro-lexicon-2026-09-14` | whole network | 54 | 51 | migration 037: 153 Romanian terms (was 36); cross-language 53% (was 60%: L05 lost to a broader `porunci` expansion), kept because the terms are what readers type |
 
 The restricted run matches the 600-page baseline (57.6 on 85 pairs), so the
 drop on the whole network is mostly competition: the gold targets are one
@@ -768,9 +770,10 @@ retrieval regression, and it is why `EVAL_SITE` exists. Cross-language: 3 of
 `pocăință`/`Duhul Sfânt` are in it -- the Romanian lexicon terms are the next
 lever, D9). Conversational remains the weakest type at every corpus size.
 
-Criteria 7 (85%), 8 and 10 still fail. What moves them, in order: Romanian and
-Hindi lexicon terms (D9); reranking on chunk text rather than title+snippet;
-`bge-reranker-v2-m3`; and gold targets that accept any of several relevant
+Criteria 7 (85%), 8 and 10 still fail. Reranking on chunk text was the big
+lever (38 -> 55 on the whole network; semantic 17 -> 51). What is left, in
+order: site-level boilerplate removal in the extractor; `bge-reranker-v2-m3`;
+Hindi terms and content; and gold targets that accept any of several relevant
 pages once the corpus has several.
 
 ## 16. Every job is scheduled; the content-gap report exists
