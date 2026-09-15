@@ -17,6 +17,12 @@ export const env = {
   rerankUrl: process.env.RERANK_API_URL || process.env.INFERENCE_API_URL || '',
   inferenceKey: process.env.INFERENCE_API_KEY ?? '',
   embeddingModel: process.env.EMBEDDING_MODEL ?? 'bge-m3@v1',
+  // How much of the best chunk the cross-encoder reads per candidate
+  // (retrieval.js rerank_text). Rerank cost is linear in this: measured on the
+  // RTX PRO 6000 with bge-reranker-v2-m3 fp32, 50 candidates at 2,300 chars
+  // took 2,750 ms, at 600 chars 376 ms. The title and heading come first and
+  // are never cut.
+  rerankTextChars: Number(process.env.RERANK_TEXT_CHARS ?? 700),
   rerankModel: process.env.RERANK_MODEL ?? 'bge-reranker-v2-m3@v1',
   safetyModel: process.env.SAFETY_MODEL ?? '',
   jsvApiUrl: process.env.JSV_API_URL ?? '',

@@ -12,6 +12,7 @@
 // where they occur.
 
 import { groupToTsquery } from './lexicon.js';
+import { env } from '../config.js';
 
 const ZONE_VIEW = { A: 'zone_a_pages', B: 'zone_b_pages' };
 
@@ -277,7 +278,7 @@ function shape(row, zone, ctx) {
     rerank_text: [
       row.title,
       row.heading_path,
-      row.chunk_text ?? pickSnippet(row),
+      truncateAtSentence(row.chunk_text ?? pickSnippet(row) ?? '', env.rerankTextChars),
     ].filter(Boolean).join('\n'),
   };
 
