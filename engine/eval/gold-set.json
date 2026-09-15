@@ -1,5 +1,5 @@
 {
-  "version": "1.0+xlang",
+  "version": "1.1+also-accept",
   "created": "2026-09-09",
   "corpus": {
     "source": "https://cdn.jubileeverse.com/articles",
@@ -171,7 +171,11 @@
       "id": "T25",
       "type": "topical",
       "query": "a grandmother setting places for guests who are not there",
-      "target": "celebration-mishpakhah__a-feast-is-a-circle"
+      "target": "celebration-mishpakhah__a-feast-is-a-circle",
+      "also_accept": [
+        "celebration-mishpakhah__your-seat-was-never-spare",
+        "celebration-mishpakhah__the-feast-is-what-you-send"
+      ]
     },
     {
       "id": "T26",
@@ -201,13 +205,25 @@
       "id": "T30",
       "type": "topical",
       "query": "answered prayer that felt like nothing",
-      "target": "shalom-salvation__the-rescue-went-ahead-anyway"
+      "target": "shalom-salvation__the-rescue-went-ahead-anyway",
+      "also_accept": [
+        "url:https://impossibleharvest.com/message/six-years-and-he-walked-in",
+        "url:https://impossibleharvest.com/message/the-first-month-in-the-job",
+        "url:https://impossibleharvest.com/message/eleven-years-and-then-a-title",
+        "url:https://jubileesermons.com/message/you-cannot-feel-anything-and-you-think-that-settles-it"
+      ]
     },
     {
       "id": "C01",
       "type": "conversational",
       "query": "Why do I feel nothing after God answered my prayer?",
-      "target": "shalom-salvation__the-rescue-went-ahead-anyway"
+      "target": "shalom-salvation__the-rescue-went-ahead-anyway",
+      "also_accept": [
+        "url:https://impossibleharvest.com/message/six-years-and-he-walked-in",
+        "url:https://impossibleharvest.com/message/the-first-month-in-the-job",
+        "url:https://impossibleharvest.com/message/eleven-years-and-then-a-title",
+        "url:https://jubileesermons.com/message/you-cannot-feel-anything-and-you-think-that-settles-it"
+      ]
     },
     {
       "id": "C02",
@@ -225,19 +241,34 @@
       "id": "C04",
       "type": "conversational",
       "query": "What happens to my place in church if I walk away for years?",
-      "target": "teshuvah-restoration__your-name-stayed-on-the-list"
+      "target": "teshuvah-restoration__your-name-stayed-on-the-list",
+      "also_accept": [
+        "teshuvah-restoration__the-packing-list-was-the-pardon",
+        "url:https://yeshuamashiach.com/message/the-name-still-on-the-deed"
+      ]
     },
     {
       "id": "C05",
       "type": "conversational",
       "query": "How do I keep going when nothing is growing?",
-      "target": "torah-hebraic-insights__your-closed-years-are-making-fruit"
+      "target": "torah-hebraic-insights__your-closed-years-are-making-fruit",
+      "also_accept": [
+        "covenant-identity__the-dirt-never-reached-the-water",
+        "teshuvah-restoration__she-ate-before-anything-changed",
+        "url:https://impossibleharvest.com/message/under-the-unchanged-ground",
+        "url:https://jubileesermons.com/message/you-decided-to-stop-and-then-you-did-not"
+      ]
     },
     {
       "id": "C06",
       "type": "conversational",
       "query": "Does God notice work that nobody ever sees?",
-      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw"
+      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+      "also_accept": [
+        "covenant-identity__the-dark-is-a-storeroom",
+        "celebration-mishpakhah__the-marker-that-kept-growing",
+        "covenant-identity__your-loud-years-were-the-quarry"
+      ]
     },
     {
       "id": "C07",
@@ -255,7 +286,11 @@
       "id": "C09",
       "type": "conversational",
       "query": "Why does nobody say my name anymore?",
-      "target": "covenant-identity__nobody-was-blessed-as-a-crowd"
+      "target": "covenant-identity__nobody-was-blessed-as-a-crowd",
+      "also_accept": [
+        "url:https://jubileecircles.com/message/nobody-has-said-my-name-since-tuesday",
+        "url:https://fatherelohim.com/message/he-said-my-name-first"
+      ]
     },
     {
       "id": "C10",
@@ -279,7 +314,11 @@
       "id": "C13",
       "type": "conversational",
       "query": "Why do people stop showing up after the crisis passes?",
-      "target": "celebration-mishpakhah__comfort-was-never-a-sentence"
+      "target": "celebration-mishpakhah__comfort-was-never-a-sentence",
+      "also_accept": [
+        "url:https://celestialpaths.com/topic/the-road-after-the-funeral",
+        "url:https://celestialpaths.com/message/the-last-card-came-down-from-the-mantel"
+      ]
     },
     {
       "id": "C14",
@@ -303,25 +342,40 @@
       "id": "C17",
       "type": "conversational",
       "query": "What does it mean that my identity cannot be taken away?",
-      "target": "covenant-identity__the-seal-you-cannot-misplace"
+      "target": "covenant-identity__the-seal-you-cannot-misplace",
+      "also_accept": [
+        "covenant-identity__the-name-was-never-the-battle",
+        "url:https://jubileecircles.com/message/the-lord-knows-them-that-are-his"
+      ]
     },
     {
       "id": "C18",
       "type": "conversational",
       "query": "Why was I passed over again and again?",
-      "target": "covenant-identity__forward-looked-like-standing-still"
+      "target": "covenant-identity__forward-looked-like-standing-still",
+      "also_accept": [
+        "url:https://impossibleharvest.com/message/eleven-years-and-then-a-title",
+        "url:https://fatherelohim.com/message/it-would-be-reassigned-before-it-reached-me"
+      ]
     },
     {
       "id": "C19",
       "type": "conversational",
       "query": "How do I include people who keep getting left out?",
-      "target": "celebration-mishpakhah__the-overlooked-got-the-ledger"
+      "target": "celebration-mishpakhah__the-overlooked-got-the-ledger",
+      "also_accept": [
+        "celebration-mishpakhah__the-guest-list-was-written-down",
+        "celebration-mishpakhah__bring-the-ones-who-bring-nothing"
+      ]
     },
     {
       "id": "C20",
       "type": "conversational",
       "query": "Why can I not bring myself to sign up for baptism?",
-      "target": "celebration-mishpakhah__hope-is-a-body-of-water"
+      "target": "celebration-mishpakhah__hope-is-a-body-of-water",
+      "also_accept": [
+        "teshuvah-restoration__water-you-did-not-carry"
+      ]
     },
     {
       "id": "P01",
@@ -340,7 +394,11 @@
       "id": "P03",
       "type": "paraphrase",
       "query": "the empty seat nobody is allowed to take",
-      "target": "celebration-mishpakhah__nobody-moves-that-chair"
+      "target": "celebration-mishpakhah__nobody-moves-that-chair",
+      "also_accept": [
+        "celebration-mishpakhah__a-feast-is-a-circle",
+        "url:https://yeshuamashiach.com/message/the-empty-chair-at-the-long-table"
+      ]
     },
     {
       "id": "P04",
@@ -352,7 +410,12 @@
       "id": "P05",
       "type": "paraphrase",
       "query": "labour with no monument to point at",
-      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw"
+      "target": "torah-hebraic-insights__a-kindness-nobody-ever-saw",
+      "also_accept": [
+        "covenant-identity__the-dark-is-a-storeroom",
+        "celebration-mishpakhah__the-marker-that-kept-growing",
+        "covenant-identity__your-loud-years-were-the-quarry"
+      ]
     },
     {
       "id": "P06",
@@ -406,7 +469,11 @@
       "register": "en->he",
       "query": "steadfast love toward someone passed over for years",
       "target": "covenant-identity__forward-looked-like-standing-still",
-      "note": "article uses chesed"
+      "note": "article uses chesed",
+      "also_accept": [
+        "url:https://impossibleharvest.com/message/eleven-years-and-then-a-title",
+        "url:https://fatherelohim.com/message/it-would-be-reassigned-before-it-reached-me"
+      ]
     },
     {
       "id": "X04",
@@ -421,7 +488,10 @@
       "type": "cross-register",
       "register": "he->en",
       "query": "chesed shown to a boy in his third foster placement",
-      "target": "celebration-mishpakhah__nobody-moves-that-chair"
+      "target": "celebration-mishpakhah__nobody-moves-that-chair",
+      "also_accept": [
+        "url:https://yeshuamashiach.com/message/the-empty-chair-at-the-long-table"
+      ]
     },
     {
       "id": "X06",
@@ -436,7 +506,11 @@
       "register": "en->he",
       "query": "repentance and a name still on the roll",
       "target": "teshuvah-restoration__your-name-stayed-on-the-list",
-      "note": "article uses teshuvah"
+      "note": "article uses teshuvah",
+      "also_accept": [
+        "url:https://yeshuamashiach.com/message/the-name-still-on-the-deed",
+        "teshuvah-restoration__the-packing-list-was-the-pardon"
+      ]
     },
     {
       "id": "X08",
@@ -466,7 +540,13 @@
       "register": "en->he",
       "query": "family that sets a place for you anyway",
       "target": "celebration-mishpakhah__comfort-was-never-a-sentence",
-      "note": "article uses mishpakhah"
+      "note": "article uses mishpakhah",
+      "also_accept": [
+        "url:https://jubileecircles.com/message/god-setteth-the-solitary-in-families",
+        "celebration-mishpakhah__nobody-moves-that-chair",
+        "celebration-mishpakhah__your-seat-was-never-spare",
+        "celebration-mishpakhah__a-feast-is-a-circle"
+      ]
     },
     {
       "id": "X12",
@@ -617,7 +697,10 @@
       "lang": "ro->en",
       "query": "bunătate statornică față de cineva trecut cu vederea ani de zile",
       "target": "covenant-identity__forward-looked-like-standing-still",
-      "note": "Romanian query, English article (X03's target); the article uses chesed"
+      "note": "Romanian query, English article (X03's target); the article uses chesed",
+      "also_accept": [
+        "url:https://pocaieste.com/message/oala-de-cincizeci-de-litri-din-beci"
+      ]
     },
     {
       "id": "L08",
@@ -625,7 +708,10 @@
       "lang": "en->ro",
       "query": "afraid I will change my mind and be publicly bound by a vow",
       "target": "url:https://pocaintasibotez.com/message/si-daca-ma-razgandesc",
-      "note": "English query, Romanian article 'Și dacă mă răzgândesc' (2 Timotei 1:12)"
+      "note": "English query, Romanian article 'Și dacă mă răzgândesc' (2 Timotei 1:12)",
+      "also_accept": [
+        "url:https://pocaintasibotez.com/topic/marturisirea"
+      ]
     },
     {
       "id": "L09",
@@ -673,7 +759,12 @@
       "lang": "en->ro",
       "query": "repentance sounds like punishment, but the Hebrew word means turning back",
       "target": "url:https://pocaintasibotez.com/message/pocainta-imi-suna-a-pedeapsa",
-      "note": "English query, Romanian article 'Pocăința îmi sună a pedeapsă' (Ezechiel 18:31-32)"
+      "note": "English query, Romanian article 'Pocăința îmi sună a pedeapsă' (Ezechiel 18:31-32)",
+      "also_accept": [
+        "teshuvah-restoration__the-word-turned-around-first",
+        "teshuvah-restoration__the-turn-you-never-regret",
+        "url:https://pocaintasibotez.com/topic/pocainta"
+      ]
     },
     {
       "id": "L15",
@@ -726,5 +817,6 @@
       "water",
       "road"
     ]
-  }
+  },
+  "also_accept": "Optional per pair. Other pages in the network corpus that answer the query as well as the primary target. Added 2026-09-15 for 21 pairs after the T1 network was crawled: the gold set was authored against one site, and the sibling sites publish on the same themes, so a query now has several correct answers. Chosen by reading the pages table (title, description) for the query's topic words, and, for the pages that had displaced the target, by reading their description and asking whether a reader with this question would be well served -- most were not, and were not added. A pair scores at the best rank of the primary target or any accepted page; the strict figure (primary only) is still reported alongside. Paraphrase pairs stay strict unless another page is literally the same scenario (P03, P05)."
 }

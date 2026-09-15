@@ -782,6 +782,7 @@ Three runs on production (bge-m3 fp16, cross-encoder rerank on, hybrid recall@10
 | `network-v2m3-2026-09-15` | same | **61** | 58 | `bge-reranker-v2-m3` exported to ONNX (fp32, DirectML, 50 pairs in 75 ms); R@1 40, cross-language 67%, cross-register 60%, conversational 45% |
 | `network-v2m3-cap700-2026-09-15` | same | 60 | 57 | reranker reads title + heading + the first 700 chars of the best chunk (`RERANK_TEXT_CHARS`): cache-miss search 0.8-0.95 s instead of 1.2-2.1 s for one point of recall; migration 040 adds 88 Devanagari Hindi terms |
 | `network-v2m3-fp16-2026-09-15` | same | 59 | 57 | reranker served in fp16 (§7); R@1 39; the one-pair difference is float noise at the rerank boundary; cross-language 67%, conversational 40% |
+| `network-also-accept-2026-09-15` | same | **68** (strict 64) | 65 | gold set 1.1: 21 pairs accept more than one page (see below); R@1 45, conversational 60%, cross-register 65%, cross-language 73% |
 
 The restricted run matches the 600-page baseline (57.6 on 85 pairs), so the
 drop on the whole network is mostly competition: the gold targets are one
@@ -791,6 +792,23 @@ retrieval regression, and it is why `EVAL_SITE` exists. Cross-language: 3 of
 15 (the ro->en pairs L01-L07 resolve only through the lexicon, and only
 `pocăință`/`Duhul Sfânt` are in it -- the Romanian lexicon terms are the next
 lever, D9). Conversational remains the weakest type at every corpus size.
+
+**Several right answers (gold set 1.1, 2026-09-15).** The set was authored
+against one site, one target per query. On the network the sibling sites
+publish on the same themes, so "why does nobody say my name anymore" has a
+JubileeCircles message titled almost exactly that, and grading it wrong for
+ranking above the JubileeVerse article was grading the corpus, not the engine.
+21 pairs now carry `also_accept`: pages found by reading the pages table for
+the query's topic, plus a few of the pages that had displaced a target, each
+judged on its description. Most displacers were NOT accepted (an article on
+"the only one awake in a full house" does not answer "what should I say first
+to someone who is lonely"), and the paraphrase pairs stay strict except where
+another page is literally the same scenario. `run.mjs` scores the best rank
+across the accepted set and prints the strict figure beside it, and every
+result file records both. The strict figure moved 59 -> 64 between two runs
+of the same configuration an hour apart; the harness shares the GPU with the
+scheduled embed job, and a rerank call that misses its 2 s timeout falls back
+to fusion order, so runs should be read to within about five pairs.
 
 Criteria 7 (85%), 8 and 10 still fail. Reranking on chunk text was the big
 lever (38 -> 55 on the whole network; semantic 17 -> 51). What is left, in

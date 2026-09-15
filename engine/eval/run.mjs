@@ -56,11 +56,20 @@ for (const pair of gold.pairs) {
       continue;
     }
 
-    const rank = r.ranked.findIndex((x) => byId.get(x.page_id) === pair.target);
-    const displayed = r.displayed.results.findIndex((x) => byId.get(x.page_id) === pair.target);
+    // A pair may accept several pages (gold-set.json `also_accept`): the
+    // network corpus has more than one article on most themes, and the query
+    // is answered by any of them. `rank` is the best of the accepted set;
+    // `primary_rank` is the original single-target figure, kept so the two
+    // can always be compared.
+    const accepted = new Set([pair.target, ...(pair.also_accept ?? [])]);
+    const primaryRank = r.ranked.findIndex((x) => byId.get(x.page_id) === pair.target);
+    const rank = r.ranked.findIndex((x) => accepted.has(byId.get(x.page_id)));
+    const displayed = r.displayed.results.findIndex((x) => accepted.has(byId.get(x.page_id)));
     const hit = rank >= 0 ? r.ranked[rank] : null;
     row.modes[mode] = {
       rank: rank >= 0 ? rank + 1 : null,
+      primary_rank: primaryRank >= 0 ? primaryRank + 1 : null,
+      matched: hit ? byId.get(hit.page_id) : null,
       displayed_rank: displayed >= 0 ? displayed + 1 : null,
       candidates: r.ranked.length,
       coverage: r.displayed.coverage,
@@ -116,6 +125,11 @@ function summarise(mode) {
 }
 
 const summary = Object.fromEntries(MODES.map((m) => [m, summarise(m)]));
+// The single-target figure, for comparison with runs before `also_accept`.
+const strict = (() => {
+  const rs = rows.map((r) => ({ rank: r.modes.hybrid.primary_rank ?? r.modes.hybrid.rank }));
+  return { 'recall@10': +pct(at(10, rs), rs.length).toFixed(1), 'recall@5': +pct(at(5, rs), rs.length).toFixed(1) };
+})();
 
 // Negatives: how many force a Zone A result. Measured on the SAME run so the
 // gate can never be tuned against recall on one index and precision on another.
@@ -167,6 +181,8 @@ const out = {
       return { got: `${ok}/${sub.length}`, pass: ok === sub.length };
     })(),
   },
+  strict_hybrid: strict,
+  pairs_with_also_accept: gold.pairs.filter((p) => p.also_accept?.length).length,
   negatives_summary: {
     false_positives_shown: negatives.false_positive_expected.filter((n) => n.shown > 0).length,
     false_positives_total: negatives.false_positive_expected.length,
@@ -209,6 +225,8 @@ for (const m of MODES) {
   console.log(`  ${w(m, 12)}${w(s.n, 5)}${w(s['recall@1'], 7)}${w(s['recall@3'], 7)}${w(s['recall@5'], 7)}`
     + `${w(s['recall@10'], 8)}${w(s.mrr, 9)}${s.n - at(10, rows.map((r) => r.modes[m]))}`);
 }
+console.log(`  strict (primary target only): hybrid R@5 ${strict['recall@5']}  R@10 ${strict['recall@10']}  `
+  + `(${out.pairs_with_also_accept} pairs accept more than one page)`);
 console.log(`\n  hybrid by type:`);
 console.log(`    ${w('', 16)}${w('n', 5)}${w('R@3', 12)}${w('R@5', 12)}${w('R@10', 12)}miss`);
 for (const [t, s] of Object.entries(summary.hybrid.by_type)) {
