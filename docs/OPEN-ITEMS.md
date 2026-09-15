@@ -20,8 +20,8 @@ Ordered by what they cost.
 Inference API (`engine/InferenceAPI`) now runs on the RTX PRO 6000 workstation
 (DirectML adapter 0, fp16) and production reaches it over a reverse SSH tunnel
 on its own loopback (`127.0.0.1:4033`), authenticated by `INFERENCE_API_KEY`.
-Roles served: `bge-m3@onnx-fp16` (embed), `bge-reranker-base@onnx-fp16`
-(cross-encoder), `toxic-bert + nli-deberta-v3-base` (family safety, see
+Roles served: `bge-m3@onnx-fp16` (embed), `bge-reranker-v2-m3@onnx-fp16`
+(cross-encoder, §7), `toxic-bert + nli-deberta-v3-base` (family safety, see
 `InferenceAPI/src/safety.js`). Measured on the GPU: 4.8 ms per chunk in batch,
 8 ms per warm query, 14 ms to rerank 20 pairs. The corpus (5,561 chunks) was
 re-embedded in 313 s. Still a deviation from §16 in one respect: the service
@@ -1051,4 +1051,39 @@ storage, a second machine, anything -- turns `backup.sh`'s last step into an
 rsync; without one, a disk failure loses the database and its backups
 together. Point-in-time recovery has a written procedure but has not been
 exercised.
+
+## 23. Where inference should live: the decision the search now waits on (D8)
+
+**Status 2026-09-15: written up for a decision, not decided.** Every model
+the search uses -- embeddings, the cross-encoder, the safety classifier --
+runs on the RTX PRO 6000 workstation (HPC-FLYWHEEL) and reaches the Contabo
+box through a reverse SSH tunnel that exists only while that workstation is
+logged on. It has worked for two days. It is not a production arrangement,
+and three measured facts now hang on it:
+
+1. **Availability.** If the workstation sleeps, reboots or logs off, search
+   degrades to lexical-only within one request (no query embedding, no
+   rerank) and the embed and safety jobs stall. Nothing pages anyone. The
+   launcher restarts the service and the tunnel, but only inside a session.
+2. **Latency at load (§19).** At 50 concurrent cache-miss searches the p95 is
+   3.9 s against a 500 ms budget, and the bottleneck is one GPU behind one
+   tunnel serving one batch at a time. A single search is 0.8-0.95 s.
+3. **Recall depends on it.** The cross-encoder is what makes cross-language
+   and paraphrase queries work (§20: fusion order alone drops cross-language
+   R@5 from 67 to 13). Losing the service is not a slower search, it is a
+   different search.
+
+Three ways to settle it, in the order I would take them:
+
+| option | what it takes | what it buys |
+| --- | --- | --- |
+| **A. Move the service to the Contabo box on CPU** | `InferenceAPI` already runs on CPU (int8); 64 GB RAM, 2 vCPU | always on, no tunnel; but bge-m3 embeds at ~3 s a chunk and the v2-m3 reranker would add seconds per search -- acceptable only with rerank off, which gives up point 3 |
+| **B. A GPU host with a fixed address** | one small GPU VM (any 16 GB card is enough: the three models are 1.1 + 1.1 + 0.6 GB in fp16) running `InferenceAPI` as a systemd service; production points `INFERENCE_API_URL` at it over a private network or WireGuard | availability solved, tunnel gone, and two of these behind a round-robin would double throughput for §19 |
+| **C. Keep the workstation, make it a service** | Task Scheduler or NSSM (needs an elevated session once), a static route, alerting on `/health` from the Contabo box | cheapest; still one machine that someone also uses, and still the tunnel |
+
+Whichever is chosen, the code does not change: `InferenceAPI` speaks the
+contract §16 describes, the engine finds it by URL and key, and
+`eval/run.mjs`, `eval/load.mjs` and `eval/unsafe.mjs` are the three checks to
+run afterwards. The same decision covers where the backups are copied to
+(§22): a second machine answers both.
 
