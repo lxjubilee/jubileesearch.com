@@ -33,11 +33,6 @@ const rerankProvider = process.env.RERANK_API_URL || process.env.INFERENCE_API_U
 // targets compete with sibling sites' articles on the same themes, and this
 // is how to tell that competition apart from a retrieval loss.
 const siteFilter = process.env.EVAL_SITE ? { site: process.env.EVAL_SITE } : {};
-// EVAL_SITE=jubileeverse.com restricts retrieval to one host. The gold set was
-// authored against the 600-article CDN corpus; on the whole network its
-// targets compete with sibling sites' articles on the same themes, and this
-// is how to tell that competition apart from a retrieval loss.
-const siteFilter = process.env.EVAL_SITE ? { site: process.env.EVAL_SITE } : {};
 const MODES = ['hybrid', 'lexical', 'semantic'];
 const rows = [];
 
