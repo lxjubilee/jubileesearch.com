@@ -28,8 +28,13 @@ import { pathToFileURL } from 'node:url';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pool } from '../db.js';
+import { send as sendMail } from '../mail.js';
 
 const REPORTS_DIR = process.env.REPORTS_DIR || 'reports';
+// Where the report goes (§16 "exported weekly"): a comma-separated list of
+// editors. Empty means the files under REPORTS_DIR and the console screen are
+// the delivery, which is where it stood until 2026-09-15.
+const RECIPIENTS = (process.env.CONTENT_GAP_RECIPIENTS || '').split(',').map((s) => s.trim()).filter(Boolean);
 
 /** @returns {Promise<object>} the report, ready to serialise */
 export async function buildContentGapReport(db, { days = 7, minTimes = 2, minImpressions = 20, limit = 100 } = {}) {
@@ -102,7 +107,43 @@ export function reportToCsv(report) {
   return rows.map((row) => row.map(csvCell).join(',')).join('\n') + '\n';
 }
 
-export async function run(db = pool, { days = 7, dir = REPORTS_DIR, stdout = false } = {}) {
+/** The e-mail body: the top of each list, readable without opening the CSV. */
+export function reportToText(report, { top = 10 } = {}) {
+  const n = (xs) => xs.length;
+  const line = (r) => `  ${r.query}${r.lang ? ` (${r.lang})` : ''}` + (r.times ? `  x${r.times}` : '') + (r.ctr !== undefined ? `  ${r.impressions} shown, ${r.clicks} clicks` : '');
+  const section = (title, xs, why) => [
+    `${title} (${n(xs)})`, `  ${why}`, ...(xs.length ? xs.slice(0, top).map(line) : ['  none']),
+    xs.length > top ? `  ... ${xs.length - top} more in the CSV` : '', ''];
+  return [
+    `Content-gap report, ${report.window_days} days to ${report.generated_at.slice(0, 10)}.`,
+    `${report.totals.queries} searches; a writing assignment is anything below that recurs.`, '',
+    ...section('Nothing came back', report.zero_result, 'no page in the network and the wider web not admitted: pure demand'),
+    ...section('The wider web answered, Jubilee did not', report.zone_a_empty, 'the reader left the network for it'),
+    ...section('Shown and not clicked', report.low_ctr, 'Zone A had pages and readers passed: wrong pages or wrong titles'),
+    'The full lists are attached as CSV and on the console under Search analytics.',
+  ].join('\n');
+}
+
+/**
+ * Send the report to CONTENT_GAP_RECIPIENTS with the CSV attached. No
+ * recipients, no send; a failed send is logged and does not fail the job --
+ * the files are already written and the console shows the same report.
+ */
+export async function deliver(report, { recipients = RECIPIENTS, send = sendMail } = {}) {
+  if (recipients.length === 0) return { sent: false, reason: 'no recipients' };
+  const stamp = report.generated_at.slice(0, 10);
+  const result = await send({
+    to: recipients,
+    subject: `JubileeSearch content-gap report, week to ${stamp}`,
+    text: reportToText(report),
+    attachments: [{ filename: `content-gap-${stamp}.csv`, content: reportToCsv(report), type: 'text/csv' }],
+  });
+  console.log(JSON.stringify({ level: result.success ? 'info' : 'error', at: 'job.content-gap.deliver',
+    recipients: recipients.length, ...result }));
+  return { sent: result.success, ...result };
+}
+
+export async function run(db = pool, { days = 7, dir = REPORTS_DIR, stdout = false, mail = true } = {}) {
   const report = await buildContentGapReport(db, { days });
   if (stdout) return { report, written: [] };
   await mkdir(dir, { recursive: true });
@@ -118,20 +159,21 @@ export async function run(db = pool, { days = 7, dir = REPORTS_DIR, stdout = fal
     await writeFile(path, body, 'utf8');
     written.push(path);
   }
-  return { report, written };
+  const delivery = mail ? await deliver(report) : { sent: false, reason: 'disabled' };
+  return { report, written, delivery };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const daysArg = process.argv.find((a) => a.startsWith('--days='));
   const days = daysArg ? Number(daysArg.slice(7)) : 7;
   const stdout = process.argv.includes('--stdout');
-  const { report, written } = await run(pool, { days, stdout });
+  const { report, written, delivery } = await run(pool, { days, stdout, mail: !process.argv.includes('--no-mail') });
   if (stdout) console.log(JSON.stringify(report, null, 2));
   else {
     console.log(JSON.stringify({
       level: 'info', at: 'job.content-gap', days,
       zero_result: report.zero_result.length, zone_a_empty: report.zone_a_empty.length,
-      low_ctr: report.low_ctr.length, written,
+      low_ctr: report.low_ctr.length, written, delivery,
     }));
   }
   await pool.end();

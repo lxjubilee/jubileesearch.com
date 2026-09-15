@@ -12,13 +12,13 @@ delete process.env.PGLITE_DIR;
 const here = dirname(fileURLToPath(import.meta.url));
 const migrationsDir = join(here, '..', 'db', 'migrations');
 
-let pool; let buildContentGapReport; let reportToCsv;
+let pool; let buildContentGapReport; let reportToCsv; let reportToText; let deliver;
 
 before(async () => {
   ({ pool } = await import('../src/db.js'));
   const files = (await readdir(migrationsDir)).filter((f) => f.endsWith('.sql')).sort();
   for (const file of files) await pool.query(await readFile(join(migrationsDir, file), 'utf8'));
-  ({ buildContentGapReport, reportToCsv } = await import('../src/jobs/content-gap.js'));
+  ({ buildContentGapReport, reportToCsv, reportToText, deliver } = await import('../src/jobs/content-gap.js'));
 
   // Demand with no answer at all (3x), demand the network missed (2x), one-off noise (1x).
   await pool.query(
@@ -57,6 +57,27 @@ describe('content-gap report', () => {
     assert.equal(r.low_ctr.length, 1);
     assert.equal(r.low_ctr[0].query, 'grace');
     assert.equal(Number(r.low_ctr[0].impressions), 20);
+  });
+
+  test('the e-mail carries the top of each list and the CSV as an attachment', async () => {
+    const report = await buildContentGapReport(pool, { days: 7 });
+    const text = reportToText(report);
+    assert.match(text, /Nothing came back \(1\)/);
+    assert.match(text, /tithing \(en\)  x3/);
+    assert.match(text, /The wider web answered, Jubilee did not \(1\)/);
+    const sent = [];
+    const r = await deliver(report, { recipients: ['editor@example.org'], send: async (m) => { sent.push(m); return { success: true, provider: 'test', id: 'x' }; } });
+    assert.equal(r.sent, true);
+    assert.equal(sent[0].to[0], 'editor@example.org');
+    assert.match(sent[0].subject, /content-gap report/);
+    assert.equal(sent[0].attachments[0].type, 'text/csv');
+    assert.match(sent[0].attachments[0].content, /^kind,query/);
+  });
+
+  test('no recipients means no send, and the job still succeeds', async () => {
+    const report = await buildContentGapReport(pool, { days: 7 });
+    const r = await deliver(report, { recipients: [], send: async () => { throw new Error('must not be called'); } });
+    assert.equal(r.sent, false);
   });
 
   test('totals and thresholds travel with the report, and the CSV is one file', async () => {

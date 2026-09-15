@@ -834,6 +834,15 @@ pages once the corpus has several.
 | discover | Sun 05:00 | trust-graph nominations for T2 review |
 | content-gap | Mon 06:00 | `jobs/content-gap.js` |
 
+**Delivered by e-mail since 2026-09-15.** The Monday job now mails the report
+to `CONTENT_GAP_RECIPIENTS` (the two search admins) with the top ten of each
+list in the body and the CSV attached, through Mailgun (`src/mail.js`, the
+same transport the web tier uses for password resets; the engine `.env`
+carries the same keys). Verified with Mailgun's test mode: accepted, message
+id returned, delivered to nobody. The first real delivery is Monday
+2026-09-21 06:00. No recipients configured means files and console only, as
+before; a failed send is logged and the job still succeeds.
+
 The content-gap report (§16, §10.3) is three lists -- nothing came back, the
 wider web answered but Jubilee did not, Zone A shown but not clicked -- as
 date-stamped JSON and CSV under `REPORTS_DIR` (`/var/lib/jubileesearch/reports`)
