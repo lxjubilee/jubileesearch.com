@@ -772,6 +772,7 @@ Three runs on production (bge-m3 fp16, cross-encoder rerank on, hybrid recall@10
 | `network-efsearch-2026-09-15` | same | 50 | 49 | migration 039: HNSW search width set per query; no change here because the planner scans this corpus exactly, but it removes a 40-candidate cap that bites at scale (§18) |
 | `network-titles-2026-09-15` | same, titles kept | **54** | **54** | a page's own title and H1 are never stripped; cross-language 53% |
 | `network-v2m3-2026-09-15` | same | **61** | 58 | `bge-reranker-v2-m3` exported to ONNX (fp32, DirectML, 50 pairs in 75 ms); R@1 40, cross-language 67%, cross-register 60%, conversational 45% |
+| `network-v2m3-cap700-2026-09-15` | same | 60 | 57 | reranker reads title + heading + the first 700 chars of the best chunk (`RERANK_TEXT_CHARS`): cache-miss search 0.8-0.95 s instead of 1.2-2.1 s for one point of recall; migration 040 adds 88 Devanagari Hindi terms |
 
 The restricted run matches the 600-page baseline (57.6 on 85 pairs), so the
 drop on the whole network is mostly competition: the gold targets are one
