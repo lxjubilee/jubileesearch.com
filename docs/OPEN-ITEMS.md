@@ -783,6 +783,8 @@ Three runs on production (bge-m3 fp16, cross-encoder rerank on, hybrid recall@10
 | `network-v2m3-cap700-2026-09-15` | same | 60 | 57 | reranker reads title + heading + the first 700 chars of the best chunk (`RERANK_TEXT_CHARS`): cache-miss search 0.8-0.95 s instead of 1.2-2.1 s for one point of recall; migration 040 adds 88 Devanagari Hindi terms |
 | `network-v2m3-fp16-2026-09-15` | same | 59 | 57 | reranker served in fp16 (§7); R@1 39; the one-pair difference is float noise at the rerank boundary; cross-language 67%, conversational 40% |
 | `network-also-accept-2026-09-15` | same | **68** (strict 64) | 65 | gold set 1.1: 21 pairs accept more than one page (see below); R@1 45, conversational 60%, cross-register 65%, cross-language 73% |
+| `network-lexany-2026-09-15` | same | 69 (strict 65) | 65 | migration 041: the lexical arm also runs the query's lexemes OR'd at 0.3 weight; lexical-only R@10 39 -> 49, paraphrase 40 -> 50, conversational 60 -> 65 (§20) |
+| `network-rerank-desc-2026-09-15` | same | **80** (strict 77) | 77 | the reranker reads the page description as well as title, heading and best chunk; R@5 76, R@3 74; paraphrase 90 (top-5 8/10), conversational 75, topical 93, cross-register 70, cross-language 73 (§20) |
 
 The restricted run matches the 600-page baseline (57.6 on 85 pairs), so the
 drop on the whole network is mostly competition: the gold targets are one
@@ -907,4 +909,48 @@ To meet 500 ms at 50 concurrent the reranker would need to be either nearer
 fewer candidates per query; to meet 100 ms on hits the box needs more CPU or
 the result cache moved in front of the parser. Both are hosting decisions
 (§14, D8), not code.
+
+## 20. Conversational and paraphrase queries: two fixes, one experiment
+
+**Status 2026-09-15.** The intent router already does what §13.2 asks
+(interrogative + length -> semantic 1.4, lexical 0.6). What was actually wrong
+sat on either side of it.
+
+**The lexical arm returned nothing for most questions.** `websearch_to_tsquery`
+ANDs every term; "why do people stop showing up after the crisis passes" needs
+one page with all of stop, show, crisis and pass. On the gold set the lexical
+arm had no rank at all for 14 of 20 conversational pairs, so a question was
+carried by the vectors alone and a page the vectors put 20th had nothing to
+lift it. Migration 041 adds a third tsquery -- the same lexemes OR'd, built
+from `plainto_tsquery` so the config's stopwords are already gone -- at
+`lexical_any_weight` 0.30. `ts_rank_cd` on an OR query rewards the page with
+the most of the terms, so it is a soft AND: the strict match still wins (it
+matches both queries) and a page with most of the words is now a candidate.
+Lexical-only R@10 39 -> 49; hybrid moved one pair, because fusion still
+handed the order to the reranker, which brings us to:
+
+**The reranker read the wrong 700 characters.** Debug output showed pairs the
+vectors ranked first sent to 27th by the cross-encoder ("humming where you are
+told to be quiet": fusion 9, reranked 27). The best chunk of a narrative
+article is a scene; the sentence that says what the article is about is its
+description, which is also what the gold set was authored from. `rerank_text`
+is now title + description + heading + best chunk. Hybrid R@10 69 -> 80
+(strict 77), R@5 60 -> 76, paraphrase top-5 4/10 -> 8/10, conversational R@10
+65 -> 75, topical 83 -> 93. No type lost. Cost: ~150 more characters per pair,
+inside the same rerank call.
+
+**Blending fusion order back in does not help.** `eval/rerank-blend.mjs` runs
+every gold query once, keeps each candidate's fusion position and cross-encoder
+position, and scores rank blends offline. With the description in place, any
+weight on fusion position above 0.1 lowers R@3 and empties cross-language
+(0.3: cross-language R@5 67 -> 40), because the reranker is what bridges
+Romanian queries to English pages. The reranker keeps sole control of order;
+the script stays so the question can be re-asked after a model change.
+
+What still misses (hybrid, 20 pairs): T01 T10, C06 C08 C13 C16 C18, P05, X01
+X03 X05 X08 X12 X13, N04 N05, L01 L02 L07 L12. Most are pairs whose target page
+never enters the 50-candidate set from either arm (C13 "why do people stop
+showing up after the crisis passes" -> "Comfort Was Never a Sentence"): a
+retrieval gap, not an ordering one, and the next lever is the lexicon (D9), not
+the ranker.
 

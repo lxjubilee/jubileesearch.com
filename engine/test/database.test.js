@@ -262,6 +262,16 @@ describe('the query pipeline, executed', () => {
     assert.equal(result.zone_a.empty_state, true);
   });
 
+  test('a question that contains one word no page has still finds the page (041)', async () => {
+    // The strict websearch query ANDs every term, so "why is shabbat rest
+    // kept on a zorblax" matched nothing before migration 041. The OR form
+    // finds the page that has most of the words.
+    const result = await search({ q: 'why is shabbat rest kept on a zorblax', debug: true });
+    assert.ok(result.zone_a.results.length > 0, 'the OR-form lexical query should still find shabbat');
+    assert.ok(result.zone_a.results.some((r) => r.debug?.rrf?.lexical_rank !== null),
+      'the page should have come through the lexical arm, not only the vectors');
+  });
+
   test('impressions are logged for every rendered result', async () => {
     const result = await search({ q: 'shabbat' });
     const { rows } = await pool.query(

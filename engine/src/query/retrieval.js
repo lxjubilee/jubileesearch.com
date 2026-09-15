@@ -86,17 +86,29 @@ function buildQuery(zone, ctx) {
     if (text) groups.push({ weight: group.weight, param: p(text) });
   }
 
+  // A third query, the same lexemes OR'd (migration 041). websearch_to_tsquery
+  // ANDs everything, which is right for "grace mercy" and wrong for "why do
+  // people stop showing up after the crisis passes": no page has all of those,
+  // and the lexical arm returned nothing for most questions. ts_rank_cd on the
+  // OR form rewards the page with the most of the terms, so it acts as a soft
+  // AND at a fraction of the strict query's weight. Built from plainto_tsquery
+  // so the ts config's stopwords are already gone before the operators flip.
+  const anyWeight = Number(cfg.lexical_any_weight ?? 0);
+  const useAny = anyWeight > 0;
+
   const tsqSelect = [
     `websearch_to_tsquery(c.reg, ${queryParam}) AS q0`,
+    ...(useAny ? [`to_tsquery(c.reg, replace(plainto_tsquery(c.reg, ${queryParam})::text, '&', '|')) AS qany`] : []),
     ...groups.map((g, i) => `to_tsquery(c.reg, ${g.param}) AS q${i + 1}`),
   ].join(', ');
 
   const lexScore = [
     `ts_rank_cd(p.body_tsv, t.q0)`,
+    ...(useAny ? [`${p(anyWeight)}::float * ts_rank_cd(p.body_tsv, t.qany)`] : []),
     ...groups.map((g, i) => `${g.weight} * ts_rank_cd(p.body_tsv, t.q${i + 1})`),
   ].join(' + ');
 
-  const anyMatch = ['t.q0', ...groups.map((_, i) => `t.q${i + 1}`)].join(' || ');
+  const anyMatch = ['t.q0', ...(useAny ? ['t.qany'] : []), ...groups.map((_, i) => `t.q${i + 1}`)].join(' || ');
 
   const view = ZONE_VIEW[zone];
   const where = ['TRUE'];
@@ -275,8 +287,16 @@ function shape(row, zone, ctx) {
     // because the snippet did not carry the words. A lexical-only hit has no
     // chunk, so it falls back to the headline and then the description.
     // Internal: stripped by assembly, never in the payload.
+    //
+    // The description goes in too. It is the editor's one-sentence statement
+    // of what the page is about, and for a paraphrased or conversational query
+    // it is often the only text on the page that says so plainly: "humming
+    // where you are told to be quiet" is answered by the description of a page
+    // whose best chunk is about a night cleaner. Without it the reranker sent
+    // pages the vectors ranked first to 27th (OPEN-ITEMS §20).
     rerank_text: [
       row.title,
+      row.description,
       row.heading_path,
       truncateAtSentence(row.chunk_text ?? pickSnippet(row) ?? '', env.rerankTextChars),
     ].filter(Boolean).join('\n'),
