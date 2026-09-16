@@ -1,0 +1,93 @@
+/* Confirm dialog, on the console's tokens (app/(admin)/admin.css). Centred
+   explicitly: a global margin reset elsewhere on the site cancels the
+   browser's own centring of modal dialogs. */
+
+.dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  max-width: min(440px, calc(100vw - 32px));
+  height: fit-content;
+  max-height: calc(100vh - 32px);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--a-ink, #e7eaee);
+  overflow: visible;
+}
+
+.dialog::backdrop {
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(2px);
+}
+
+.panel {
+  background: var(--a-panel, #16181b);
+  border: 1px solid var(--a-line, #2a2e34);
+  border-top: 3px solid var(--a-accent, #3DA5FF);
+  border-radius: 10px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+  padding: 18px 20px 16px;
+}
+
+.panel[data-tone="danger"] { border-top-color: var(--a-bad, #f2756a); }
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mark {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  color: var(--a-accent, #3DA5FF);
+}
+
+.panel[data-tone="danger"] .mark { color: var(--a-bad, #f2756a); }
+
+.mark svg { width: 22px; height: 22px; fill: currentColor; }
+
+.title {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--a-ink, #e7eaee);
+  word-break: break-word;
+}
+
+.body {
+  margin: 12px 0 0 34px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--a-ink-dim, #a4acb7);
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+/* The confirming button in a danger dialog is solid, not outlined: it is the
+   one thing on the screen that deletes, and it should read that way. */
+.panel[data-tone="danger"] .actions .btn[data-tone="danger"] {
+  background: var(--a-bad, #f2756a);
+  border-color: var(--a-bad, #f2756a);
+  color: #2b0c09;
+}
+.panel[data-tone="danger"] .actions .btn[data-tone="danger"]:hover { background: #f58f86; }
+
+@media (max-width: 480px) {
+  .panel { padding: 16px 14px 14px; }
+  .body { margin-left: 0; }
+  .actions { flex-direction: column-reverse; }
+  .actions .btn { width: 100%; padding: 10px; }
+}

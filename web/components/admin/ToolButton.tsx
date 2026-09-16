@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import type { ActionResult } from '@/lib/admin-actions';
+import { useConfirm } from './ConfirmDialog';
 
 // A maintenance action with no form fields.
 //
@@ -15,6 +16,7 @@ export function ToolButton(
 ) {
   const [pending, start] = useTransition();
   const [result, setResult] = useState<ActionResult | null>(null);
+  const [ask, dialog] = useConfirm();
 
   return (
     <span style={{ display: 'inline-flex', flexDirection: 'column', gap: 6 }}>
@@ -22,8 +24,8 @@ export function ToolButton(
         type="button"
         className="btn"
         disabled={pending}
-        onClick={() => {
-          if (confirm && !window.confirm(confirm)) return;
+        onClick={async () => {
+          if (confirm && !(await ask(confirm))) return;
           start(async () => setResult(await action()));
         }}
       >
@@ -41,6 +43,7 @@ export function ToolButton(
           {result.message}
         </span>
       )}
+      {dialog}
     </span>
   );
 }

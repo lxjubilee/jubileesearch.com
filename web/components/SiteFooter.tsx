@@ -8,9 +8,10 @@ export default function SiteFooter() {
     <footer className="results-footer">
       <LocationRow />
       <div className="footer-links-row">
-        <a href="https://jubileeenterprise.com/help" className="footer-link">Help</a>
-        <span className="footer-separator">|</span>
-        <a href="https://jubileeenterprise.com/feedback" className="footer-link">Send feedback</a>
+        {/* Local: the Help page that used to be linked on another Jubilee
+            property never existed there. Send feedback went with it -- the
+            report control on each result and /suggest are the feedback paths. */}
+        <Link href="/help" className="footer-link">Help</Link>
         <span className="footer-separator">|</span>
         {/* Local now: §17 Legal requires a search-specific privacy notice, and the
             terms describe this service rather than the network. */}

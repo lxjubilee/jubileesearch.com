@@ -1,8 +1,9 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import type { ActionResult } from '@/lib/admin-actions';
+import { useConfirm } from './ConfirmDialog';
 
 // Form plumbing for the console's writes.
 //
@@ -46,23 +47,36 @@ export function SubmitButton(
   },
 ) {
   const { pending } = useFormStatus();
+  const button = useRef<HTMLButtonElement>(null);
+  const [ask, dialog] = useConfirm();
 
   return (
-    <button
-      type="submit"
-      className="btn"
-      data-tone={tone}
-      name={name}
-      value={value}
-      disabled={pending}
-      onClick={(e) => {
-        // Progressive: with JavaScript off there is no prompt and the form still
-        // submits. The prompt is a guard against a slip, not a permission check
-        // -- the engine is what actually decides.
-        if (confirm && !window.confirm(confirm)) e.preventDefault();
-      }}
-    >
-      {pending ? 'Working…' : children}
-    </button>
+    <>
+      <button
+        ref={button}
+        type="submit"
+        className="btn"
+        data-tone={tone}
+        name={name}
+        value={value}
+        disabled={pending}
+        onClick={async (e) => {
+          // Progressive: with JavaScript off there is no prompt and the form
+          // still submits. The prompt is a guard against a slip, not a
+          // permission check -- the engine is what actually decides.
+          if (!confirm) return;
+          e.preventDefault();
+          const ok = await ask(confirm, { tone: tone === 'danger' ? 'danger' : 'primary' });
+          if (!ok) return;
+          // requestSubmit with the button as submitter keeps its name/value in
+          // the form data, exactly as the original click would have. It fires
+          // submit, not click, so this handler does not run again.
+          button.current?.form?.requestSubmit(button.current);
+        }}
+      >
+        {pending ? 'Working…' : children}
+      </button>
+      {dialog}
+    </>
   );
 }
