@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getDashboard, getZoneCtr, getAnalyticsOverview, num, AdminRequestFailed } from '@/lib/admin';
+import { health } from '@/lib/api';
 import { PageHead, Panel, Tile, Notice, LoadFailed, pct } from '@/components/admin/ui';
 
 // Screen 1: dashboard (§15).
@@ -44,6 +45,9 @@ export default async function DashboardPage() {
   const tiers = data.pages_by_tier ?? {};
   const indexed = Object.values(tiers).reduce<number>((a, b) => a + num(b), 0);
   const backlog = num(data.embedding_backlog);
+  const engine = await health();
+  const inference = engine?.inference ?? null;
+  const embeddedChunks = num(engine?.index?.embedded_chunks);
   const safety = num(data.safety_queue);
   const failing = num(data.failing_domains);
   const webhooks = num(data.webhooks_24h);
@@ -67,12 +71,23 @@ export default async function DashboardPage() {
         </Notice>
       )}
 
-      {backlog > 0 && (
+      {/* Two different situations share one number. No inference provider at
+          all means the whole index is keyword-only and someone must act.
+          A provider that is configured and a queue of new pages means the
+          nightly job is working and the notice is informational. */}
+      {backlog > 0 && !inference?.configured && (
         <Notice tone="warn">
           <strong>{backlog.toLocaleString()} chunks are waiting to be embedded.</strong>{' '}
           Until they are, searches run on word overlap alone: a query that shares no words
           with a page returns nothing. Check <code>INFERENCE_API_URL</code> is set and run{' '}
           <code>npm run inference:check</code>.
+        </Notice>
+      )}
+      {backlog > 0 && inference?.configured && (
+        <Notice tone="neutral">
+          <strong>{backlog.toLocaleString()} newly indexed chunks are queued for embedding</strong>{' '}
+          ({embeddedChunks.toLocaleString()} already embedded). The embed job works through the
+          queue nightly; until a page is embedded it is found by its words only, not by meaning.
         </Notice>
       )}
 

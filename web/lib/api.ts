@@ -108,7 +108,7 @@ export async function search(params: SearchParams): Promise<SearchResponse> {
 
 export interface HealthResponse {
   status: string;
-  index: { indexed_pages: number; embedding_backlog: number; index_version: number };
+  index: { indexed_pages: number; embedded_chunks?: number; embedding_backlog: number; index_version: number };
   // Why `embedding_backlog` may never move. With no Inference API configured,
   // nothing is embedded and search runs on word overlap alone -- a query that
   // shares no words with a page returns nothing, which reads as a broken engine
