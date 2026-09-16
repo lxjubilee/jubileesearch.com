@@ -86,14 +86,27 @@ export const routes = [
       const byZone = Object.fromEntries(rows.map((r) => [r.zone, r]));
       const a = Number(byZone.A?.ctr ?? 0);
       const b = Number(byZone.B?.ctr ?? 0);
+      // The tripwire needs a sample before it means anything. On 2026-09-16
+      // it fired on one Zone B click out of 69 impressions, the day after
+      // Zone B first existed, against a Zone A rate buried under 76,000
+      // load-test impressions. Below this many impressions in either zone
+      // the comparison is reported but not raised.
+      const MIN_IMPRESSIONS = 500;
+      const enough = Number(byZone.A?.impressions ?? 0) >= MIN_IMPRESSIONS
+        && Number(byZone.B?.impressions ?? 0) >= MIN_IMPRESSIONS;
+      const tripped = rows.length === 2 && enough && a < b;
       return {
         status: 200,
         body: {
           zones: rows,
-          zone_a_below_zone_b: rows.length === 2 && a < b,
-          note: rows.length === 2 && a < b
+          min_impressions: MIN_IMPRESSIONS,
+          enough_data: enough,
+          zone_a_below_zone_b: tripped,
+          note: tripped
             ? 'Zone A CTR is below Zone B CTR. Per the risk register, the relevance floor is too low and must be raised.'
-            : null,
+            : (rows.length === 2 && a < b
+              ? `Zone A CTR is below Zone B CTR on fewer than ${MIN_IMPRESSIONS} impressions in a zone; not enough data to act on.`
+              : null),
         },
       };
     },
