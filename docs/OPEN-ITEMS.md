@@ -789,6 +789,7 @@ Three runs on production (bge-m3 fp16, cross-encoder rerank on, hybrid recall@10
 | `network-rerank-desc-2026-09-15` | same | **80** (strict 77) | 77 | the reranker reads the page description as well as title, heading and best chunk; R@5 76, R@3 74; paraphrase 90 (top-5 8/10), conversational 75, topical 93, cross-register 70, cross-language 73 (§20) |
 | `network-armguard-2026-09-15` | same | 81 (strict 78) | 78 | migration 044: lexical scores normalised with a strict-match bonus, top 10 of each arm always reach the reranker, concepts dry_bones / seal_of_spirit / chiasm; lexical-only R@10 49 -> 64; cross-register 75, cross-language 80 |
 | `network-langfix-2026-09-15` | same | **82** (strict 79) | 79 | "in" no longer marks a query as Romanian (it sent "chiasm in Hebrew writing" and "faith in God" to the Romanian dictionary); topical 97 |
+| `network-cpu-norerank-2026-09-16` | same, re-embedded fp32 on CPU | 65 (strict 65) | 59 | **reranker off** (§23, option A): topical 100, conversational 55, paraphrase 70 (top-5 4/10), cross-register 65, **cross-language 0/15**; the vector gate (migration 045) now empties 12 of 17 off-topic queries |
 
 The restricted run matches the 600-page baseline (57.6 on 85 pairs), so the
 drop on the whole network is mostly competition: the gold targets are one
@@ -1128,6 +1129,23 @@ off-topic queries empty, none of 95 positives lost; the five that survive do
 so on a literal match ("translation", "office hours"). Zone B has no gate,
 per the spec's "always rendered", so those queries still show two thin
 wider-web results.
+
+**Measured 2026-09-16, reranker off** (`network-cpu-norerank-2026-09-16`):
+hybrid R@10 65, topical 100, conversational 55, paraphrase 70, cross-register
+65, cross-language **0 of 15**. Every Romanian and Hindi pair is lost: without
+the cross-encoder nothing bridges a Romanian question to an English page.
+That is the price of option A in one number, and it is why option B (a GPU
+host) stays on the table.
+
+**Domains 2026-09-16.** The user pointed at the Inspire Network site index
+(inspiremanna.com/analytics/start.html); its 168 unregistered hosts were
+added as T1 and activated on the user's instruction. The registry is now 226
+T1 (3 paused) + 8 T2 = 234, which meets the Phase 1 exit criterion (130+).
+Their first crawl started the same afternoon; the T2 crawl had by then
+indexed ~12,000 wider-web pages, so the embed backlog stands at ~41,000
+chunks, about four nights at the CPU rate. T1 and T2 pages are searchable by
+keyword from the moment they are indexed and join the vector arm as the
+backlog drains.
 
 What this costs, from the blend table in §20 (fusion order alone = w 1.0):
 hybrid R@10 64 instead of 82, cross-language 13 instead of 80, paraphrase
