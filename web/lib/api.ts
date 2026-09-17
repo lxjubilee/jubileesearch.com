@@ -17,7 +17,11 @@ import { headers } from 'next/headers';
 
 const ENGINE = (process.env.ENGINE_API_URL ?? 'http://127.0.0.1:4038').replace(/\/$/, '');
 
-const TIMEOUT_MS = Number(process.env.ENGINE_TIMEOUT_MS ?? 5000);
+// 15 s, not the 5 s the design budget implies: on the CPU-only box a cache
+// miss embeds the query on the CPU and takes 4-6 s, so at 5 s about half of
+// first-time searches were shown as "unavailable" while the engine was still
+// working. The skeleton is already on screen, so waiting costs nothing.
+const TIMEOUT_MS = Number(process.env.ENGINE_TIMEOUT_MS ?? 15000);
 
 /** The visitor's address as nginx presented it, for the engine's rate limiter. */
 async function visitorIpHeader(): Promise<Record<string, string>> {

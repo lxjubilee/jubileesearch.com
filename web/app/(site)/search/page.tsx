@@ -68,7 +68,11 @@ export default async function SearchPage({ searchParams }: Props) {
   return (
     <div className="results-container">
       <ResultsHeader query={query} />
-      <Suspense fallback={<ResultsSkeleton />}>
+      {/* Keyed on the query: a search typed on THIS page navigates to the same
+          route, and without the key React would keep the old results on screen
+          until the new ones arrived. A new key remounts the boundary, so the
+          skeleton shows at once and the results stream into it. */}
+      <Suspense key={`${scope}:${query}`} fallback={<ResultsSkeleton />}>
         <Results query={query} scope={scope} />
       </Suspense>
       <SiteFooter />
