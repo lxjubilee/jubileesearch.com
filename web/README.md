@@ -55,7 +55,7 @@ Then <http://localhost:3038>.
 | Variable | Default | What it is |
 |---|---|---|
 | `ENGINE_API_URL` | `http://127.0.0.1:4038` | Where the engine answers. In production, `api.jubileesearch.com`. |
-| `ENGINE_TIMEOUT_MS` | `5000` | §13.10 budgets 460 ms on a cache miss; this is the point past which something is wrong rather than slow. |
+| `ENGINE_TIMEOUT_MS` | `15000` | §13.10 budgets 460 ms on a cache miss, but CPU-only inference takes 4-6 s on a miss; this is the point past which something is wrong rather than slow. |
 | `SITE_URL` | `https://www.jubileesearch.com` | Canonical origin, for `metadataBase`. |
 | `BOT_CONTACT_EMAIL` | *(unset)* | Decision **D7**. Until it is set, `/bot` says so instead of showing a fake address. |
 
