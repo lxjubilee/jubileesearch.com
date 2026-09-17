@@ -82,6 +82,19 @@ export const routes = [
         FROM result_impressions ri
         JOIN search_queries sq ON sq.id = ri.query_id
         WHERE sq.created_at > now() - interval '30 days'
+          -- Readers only. A load test on 2026-09-15 ran ~1,200 phrases a
+          -- thousand times each in one hour, all anonymous and unclicked,
+          -- which pinned Zone A's rate near zero for the whole window. No
+          -- reader types the same query twenty times in an hour without a
+          -- session, so an anonymous phrase at that rate is synthetic and
+          -- the tripwire ignores it rather than reporting the floor wrong.
+          AND NOT EXISTS (
+            SELECT 1 FROM search_queries b
+            WHERE b.normalized = sq.normalized
+              AND b.session_id IS NULL AND b.jubilee_id IS NULL
+              AND sq.session_id IS NULL AND sq.jubilee_id IS NULL
+              AND date_trunc('hour', b.created_at) = date_trunc('hour', sq.created_at)
+            GROUP BY b.normalized HAVING count(*) >= 20)
         GROUP BY zone ORDER BY zone`);
       const byZone = Object.fromEntries(rows.map((r) => [r.zone, r]));
       const a = Number(byZone.A?.ctr ?? 0);
@@ -92,20 +105,28 @@ export const routes = [
       // load-test impressions. Below this many impressions in either zone
       // the comparison is reported but not raised.
       const MIN_IMPRESSIONS = 500;
+      // And clicks, not only impressions: on 2026-09-17 it fired on 16 clicks
+      // against 2 -- a rate of 0.32% versus 0.34% -- which is one reader's
+      // afternoon, not a verdict on the floor. Below this many clicks in
+      // either zone the rates are still reported but not raised.
+      const MIN_CLICKS = 20;
       const enough = Number(byZone.A?.impressions ?? 0) >= MIN_IMPRESSIONS
-        && Number(byZone.B?.impressions ?? 0) >= MIN_IMPRESSIONS;
+        && Number(byZone.B?.impressions ?? 0) >= MIN_IMPRESSIONS
+        && Number(byZone.A?.clicks ?? 0) >= MIN_CLICKS
+        && Number(byZone.B?.clicks ?? 0) >= MIN_CLICKS;
       const tripped = rows.length === 2 && enough && a < b;
       return {
         status: 200,
         body: {
           zones: rows,
           min_impressions: MIN_IMPRESSIONS,
+          min_clicks: MIN_CLICKS,
           enough_data: enough,
           zone_a_below_zone_b: tripped,
           note: tripped
             ? 'Zone A CTR is below Zone B CTR. Per the risk register, the relevance floor is too low and must be raised.'
             : (rows.length === 2 && a < b
-              ? `Zone A CTR is below Zone B CTR on fewer than ${MIN_IMPRESSIONS} impressions in a zone; not enough data to act on.`
+              ? `Zone A CTR is below Zone B CTR on fewer than ${MIN_IMPRESSIONS} impressions or ${MIN_CLICKS} clicks in a zone; not enough data to act on.`
               : null),
         },
       };
