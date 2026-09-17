@@ -160,15 +160,15 @@ export default async function DomainsPage(
             <table>
               <thead>
                 <tr>
-                  <th>Host</th><th>Tier</th><th>Status</th><th>Zone A</th>
+                  <th className="numCell">#</th><th>Host</th><th>Tier</th><th>Status</th><th>Zone A</th>
                   <th className="numCell">Pages</th><th>Ingest</th>
                   <th className="numCell">Fails</th><th>Last crawl</th>
                   {admin && <th>Actions</th>}
                 </tr>
               </thead>
               <tbody>
-                {domains.map((d) => (
-                  <DomainRow key={d.id} d={d} admin={admin} />
+                {domains.map((d, i) => (
+                  <DomainRow key={d.id} d={d} n={i + 1} admin={admin} />
                 ))}
               </tbody>
             </table>
@@ -181,12 +181,16 @@ export default async function DomainsPage(
 
 type DomainT = Awaited<ReturnType<typeof getDomains>>['domains'][number];
 
-function DomainRow({ d, admin }: { d: DomainT; admin: boolean }) {
+function DomainRow({ d, n, admin }: { d: DomainT; n: number; admin: boolean }) {
   const paused = d.status === 'paused';
   const inert = d.status === 'blocked' || d.status === 'purged';
   return (
     <>
       <tr>
+        {/* Position in the list as filtered and sorted, not the row id: the
+            reader wants to count and refer to rows, and the id is not a
+            small number. */}
+        <td className="numCell" style={{ color: 'var(--a-ink-faint)' }}>{n}</td>
         <td className="mono">
           <strong>{d.host}</strong>
           {d.display_name && (
@@ -257,7 +261,7 @@ function DomainRow({ d, admin }: { d: DomainT; admin: boolean }) {
 
       {admin && (
         <tr>
-          <td colSpan={9} style={{ padding: 0, borderTop: 0 }}>
+          <td colSpan={10} style={{ padding: 0, borderTop: 0 }}>
             <details className="rowDetails">
               <summary>Edit {d.host}{d.tier === 'T1' && !d.zone_a_eligible ? ' · verify ownership' : ''}</summary>
               <div className="panelBody" style={{ display: 'grid', gap: 18 }}>
