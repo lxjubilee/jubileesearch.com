@@ -12,13 +12,13 @@ delete process.env.PGLITE_DIR;
 const here = dirname(fileURLToPath(import.meta.url));
 const migrationsDir = join(here, '..', 'db', 'migrations');
 
-let pool; let buildContentGapReport; let reportToCsv; let reportToText; let deliver;
+let pool; let buildContentGapReport; let reportToCsv; let reportToCsvFiles; let reportToText; let reportToHtml; let deliver;
 
 before(async () => {
   ({ pool } = await import('../src/db.js'));
   const files = (await readdir(migrationsDir)).filter((f) => f.endsWith('.sql')).sort();
   for (const file of files) await pool.query(await readFile(join(migrationsDir, file), 'utf8'));
-  ({ buildContentGapReport, reportToCsv, reportToText, deliver } = await import('../src/jobs/content-gap.js'));
+  ({ buildContentGapReport, reportToCsv, reportToCsvFiles, reportToText, reportToHtml, deliver } = await import('../src/jobs/content-gap.js'));
 
   // Demand with no answer at all (3x), demand the network missed (2x), one-off noise (1x).
   await pool.query(
@@ -70,8 +70,59 @@ describe('content-gap report', () => {
     assert.equal(r.sent, true);
     assert.equal(sent[0].to[0], 'editor@example.org');
     assert.match(sent[0].subject, /content-gap report/);
-    assert.equal(sent[0].attachments[0].type, 'text/csv');
-    assert.match(sent[0].attachments[0].content, /^kind,query/);
+    assert.deepEqual(sent[0].attachments.map((a) => a.filename),
+      ['all-searches.csv', 'nothing-came-back.csv', 'wider-web-answered.csv', 'shown-not-clicked.csv']);
+    assert.ok(sent[0].attachments.every((a) => a.type === 'text/csv'));
+    assert.match(sent[0].html, /<html/);
+    assert.match(sent[0].html, /Nothing came back/);
+  });
+
+  test('all-searches.csv carries every search in the period, not only the ones past a threshold', async () => {
+    const report = await buildContentGapReport(pool, { days: 7 });
+    const files = reportToCsvFiles(report);
+    const rows = files['all-searches.csv'].trim().split('\n');
+    assert.equal(rows[0], 'query,lang,intent,times,outcome,zone_a_results,zone_b_results,cache_hits,avg_latency_ms,first_seen,last_seen');
+    // One row per distinct (query, lang, intent); the `times` column sums to the total.
+    assert.equal(rows.length - 1, Number(report.totals.distinct_queries));
+    const times = rows.slice(1).reduce((n, r) => n + Number(r.split(',')[3]), 0);
+    assert.equal(times, Number(report.totals.searches));
+    assert.match(files['all-searches.csv'], /^once only,en,topical,1,nothing came back,/m);
+    assert.match(files['all-searches.csv'], /^sabbath candles,en,topical,2,wider web only,/m);
+    assert.match(files['all-searches.csv'], /^grace,en,topical,21,answered,/m);
+  });
+
+  test('each category CSV has exactly the rows the mail counts, and an empty one keeps its header', async () => {
+    const report = await buildContentGapReport(pool, { days: 7 });
+    const files = reportToCsvFiles(report);
+    const dataRows = (name) => files[name].trim().split('\n').length - 1;
+    assert.equal(dataRows('nothing-came-back.csv'), report.zero_result.length);
+    assert.equal(dataRows('wider-web-answered.csv'), report.zone_a_empty.length);
+    assert.equal(dataRows('shown-not-clicked.csv'), report.low_ctr.length);
+    assert.match(files['nothing-came-back.csv'], /^query,lang,intent,times,last_seen\ntithing,en,topical,3,/);
+    assert.match(files['shown-not-clicked.csv'], /^query,impressions,clicks,ctr\ngrace,20,0,0/);
+
+    const empty = { ...report, zero_result: [], zone_a_empty: [], low_ctr: [] };
+    const emptyFiles = reportToCsvFiles(empty);
+    assert.equal(emptyFiles['nothing-came-back.csv'], 'query,lang,intent,times,last_seen\n');
+    assert.equal(emptyFiles['shown-not-clicked.csv'], 'query,impressions,clicks,ctr\n');
+    assert.match(reportToText(empty), /Nothing came back \(0\)\n  .*\n  No searches crossed this threshold/);
+    assert.match(reportToHtml(empty), /attached with headers only/);
+    // The total still counts every search even when no category has rows.
+    assert.match(reportToText(empty), new RegExp(`Total searches: ${report.totals.searches}$`, 'm'));
+  });
+
+  test('the HTML body shows the same numbers as the text body and the CSVs', async () => {
+    const report = await buildContentGapReport(pool, { days: 7 });
+    const html = reportToHtml(report);
+    const text = reportToText(report);
+    assert.match(text, new RegExp(`Total searches: ${report.totals.searches}$`, 'm'));
+    assert.match(html, new RegExp(`>${report.totals.searches}<`));
+    assert.match(html, /Nothing came back<\/td>[\s\S]*?>1 term</);
+    assert.match(html, />tithing</);
+    assert.match(html, /href="https:\/\/jubileesearch\.com\/admin\/analytics"/);
+    assert.match(html, /<meta name="viewport"/);
+    assert.doesNotMatch(html, /undefined|NaN/);
+    assert.doesNotMatch(text, /undefined|NaN/);
   });
 
   test('no recipients means no send, and the job still succeeds', async () => {
@@ -86,7 +137,7 @@ describe('content-gap report', () => {
     assert.equal(r.thresholds.low_ctr_below, 0.05);
     // The e-mail's headline count reads totals.searches; a renamed column
     // once rendered as "undefined searches".
-    assert.match(reportToText(r), new RegExp(`^${r.totals.searches} searches;`, 'm'));
+    assert.match(reportToText(r), new RegExp(`Total searches: ${r.totals.searches}$`, 'm'));
     const csv = reportToCsv(r);
     assert.match(csv.split('\n')[0], /^kind,query,lang/);
     assert.match(csv, /zero_result,tithing/);

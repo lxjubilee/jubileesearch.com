@@ -25,7 +25,7 @@ export function provider() {
 }
 
 /**
- * @param {{to: string|string[], subject: string, text: string,
+ * @param {{to: string|string[], subject: string, text: string, html?: string,
  *          attachments?: {filename: string, content: string|Buffer, type?: string}[]}} msg
  * @param {{fetch?: typeof fetch}} [deps]  injectable for tests
  * @returns {Promise<{success: boolean, provider: string, id?: string|null, status?: number}>}
@@ -45,6 +45,7 @@ export async function send(msg, deps = {}) {
   form.set('to', to);
   form.set('subject', msg.subject);
   form.set('text', msg.text);
+  if (msg.html) form.set('html', msg.html);
   form.set('o:tracking', 'no');
   form.set('o:tracking-clicks', 'no');
   form.set('o:tracking-opens', 'no');
