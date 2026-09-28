@@ -116,7 +116,7 @@ export function reportToText(report, { top = 10 } = {}) {
     xs.length > top ? `  ... ${xs.length - top} more in the CSV` : '', ''];
   return [
     `Content-gap report, ${report.window_days} days to ${report.generated_at.slice(0, 10)}.`,
-    `${report.totals.queries} searches; a writing assignment is anything below that recurs.`, '',
+    `${report.totals.searches} searches; a writing assignment is anything below that recurs.`, '',
     ...section('Nothing came back', report.zero_result, 'no page in the network and the wider web not admitted: pure demand'),
     ...section('The wider web answered, Jubilee did not', report.zone_a_empty, 'the reader left the network for it'),
     ...section('Shown and not clicked', report.low_ctr, 'Zone A had pages and readers passed: wrong pages or wrong titles'),

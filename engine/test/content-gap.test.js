@@ -84,6 +84,9 @@ describe('content-gap report', () => {
     const r = await buildContentGapReport(pool, { days: 7 });
     assert.ok(Number(r.totals.searches) >= 26);
     assert.equal(r.thresholds.low_ctr_below, 0.05);
+    // The e-mail's headline count reads totals.searches; a renamed column
+    // once rendered as "undefined searches".
+    assert.match(reportToText(r), new RegExp(`^${r.totals.searches} searches;`, 'm'));
     const csv = reportToCsv(r);
     assert.match(csv.split('\n')[0], /^kind,query,lang/);
     assert.match(csv, /zero_result,tithing/);
