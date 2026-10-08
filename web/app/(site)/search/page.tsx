@@ -7,7 +7,6 @@ import ScopeChips from '@/components/ScopeChips';
 import ResultTelemetry from '@/components/ResultTelemetry';
 import { ZoneA, ZoneB } from '@/components/Zones';
 import { BestBets, ScriptureCard, EntityPanel, Navigational } from '@/components/Panels';
-import SiteFooter from '@/components/SiteFooter';
 import ResultsSkeleton from '@/components/ResultsSkeleton';
 import AccountMenu from '@/components/AccountMenu';
 
@@ -56,7 +55,6 @@ export default async function SearchPage({ searchParams }: Props) {
             <p><Link href="/">Back to JubileeSearch</Link></p>
           </div>
         </main>
-        <SiteFooter />
       </div>
     );
   }
@@ -75,7 +73,6 @@ export default async function SearchPage({ searchParams }: Props) {
       <Suspense key={`${scope}:${query}`} fallback={<ResultsSkeleton />}>
         <Results query={query} scope={scope} />
       </Suspense>
-      <SiteFooter />
     </div>
   );
 }

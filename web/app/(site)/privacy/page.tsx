@@ -183,10 +183,6 @@ export default function PrivacyPage() {
             collapsed, whether you chose &ldquo;Jubilee only&rdquo;, whether the
             navigation rail is open. These stay in your browser and are never sent to us.
           </li>
-          <li>
-            <strong>A place name, only if you ask for one.</strong> The footer&rsquo;s
-            location control does nothing until you press it.
-          </li>
         </ul>
       </Section>
 
@@ -207,10 +203,6 @@ export default function PrivacyPage() {
             which means Google receives your IP address when a page loads. This is the
             one third party that sees anything without you choosing it, and it is
             avoidable — see the note below.
-          </li>
-          <li>
-            <strong>OpenStreetMap&rsquo;s Nominatim</strong> receives your coordinates
-            only if you press &ldquo;Use my location&rdquo;. Nothing is sent otherwise.
           </li>
           <li>
             <strong>Sites you click through to</strong> see that you arrived, as they
