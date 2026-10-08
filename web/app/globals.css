@@ -176,12 +176,12 @@ html, body {
   border: 1px solid #3f3f3f;
 }
 
-/* Gold ring, and NO lightening of the fill — JubileeInspire's :focus-within
+/* Azure ring, and NO lightening of the fill — JubileeInspire's :focus-within
    sets background to --surface-hover, which is #3f3f3f in the dark theme,
    i.e. the same shade the box already is. */
 .search-box:focus-within {
-  border-color: #ffbd59;
-  box-shadow: 0 0 0 1px #ffbd59;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
   background-color: #3f3f3f;
 }
 
@@ -378,8 +378,8 @@ html, body {
 
 .results-search-box .search-box:focus-within {
   background-color: #616161;
-  border-color: #ffbd59;
-  box-shadow: 0 0 0 1px #ffbd59;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
 }
 
 /* Results Stats - Google style */
