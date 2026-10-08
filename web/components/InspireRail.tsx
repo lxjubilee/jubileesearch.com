@@ -2,6 +2,10 @@
 
 // The JubileeInspire rail, ported from js/inspire-rail.js.
 //
+// Rows: New Chat, then the shared family block JubileeInspire serves to every
+// property (useCommonRail.ts), then Jubilee Search — the same order as the rail
+// on jubileeinspire.com. Only the first and last are this site's to change.
+//
 // Desktop (>1024px): the NAVIGATION row and the collapse arrow toggle between
 // 52px of icons and 280px of icons plus labels, remembered per browser.
 // Mobile (<=1024px): an off-canvas drawer, opened by the fixed hamburger and
@@ -12,12 +16,42 @@
 // make the server's HTML and the client's first render disagree.
 
 import { useCallback, useEffect, useState } from 'react';
-import { RAIL_ITEMS, RAIL_VIEWBOX } from './rail-items';
+import { NEW_CHAT, RAIL_VIEWBOX, THIS_HOST, THIS_SITE, type RailItem } from './rail-items';
+import { resolveRailIcon } from './rail-icons';
+import { useCommonRailItems } from './useCommonRail';
 
 const STORAGE_KEY = 'jir-open';
 const MOBILE = '(max-width: 1024px)';
 
+/** Bare registrable host: no scheme, no `www.`, no port, no path. */
+function railHost(href: string): string {
+  try {
+    return new URL(href, 'https://x.invalid').hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
+function RailRow({ item }: { item: RailItem }) {
+  return (
+    <a
+      className={`jir-item${item.active ? ' is-active' : ''}`}
+      href={item.href}
+      data-tip={item.label}
+      title={item.label}
+      rel={item.href.startsWith('http') ? 'noopener' : undefined}
+      aria-current={item.active ? 'page' : undefined}
+    >
+      <svg viewBox={RAIL_VIEWBOX} aria-hidden="true">
+        <path d={item.path} />
+      </svg>
+      <span className="jir-label">{item.label}</span>
+    </a>
+  );
+}
+
 export default function InspireRail() {
+  const shared = useCommonRailItems();
   const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -96,22 +130,36 @@ export default function InspireRail() {
           <span className="jir-label">NAVIGATION</span>
         </button>
 
-        {RAIL_ITEMS.map((item) => (
-          <a
-            key={item.label}
-            className={`jir-item${item.active ? ' is-active' : ''}`}
-            href={item.href}
-            data-tip={item.label}
-            title={item.label}
-            rel={item.href.startsWith('http') ? 'noopener' : undefined}
-            aria-current={item.active ? 'page' : undefined}
-          >
-            <svg viewBox={item.viewBox ?? RAIL_VIEWBOX} aria-hidden="true">
-              <path d={item.path} />
-            </svg>
-            <span className="jir-label">{item.label}</span>
-          </a>
-        ))}
+        <RailRow item={NEW_CHAT} />
+
+        {/* The shared block, from jubileeinspire.com/admin/rail. Renders
+            nothing until it arrives, and nothing if it never does. */}
+        {shared.map((item) => {
+          const { viewBox, path } = resolveRailIcon(item.icon, item.iconViewBox);
+          const here = railHost(item.href) === THIS_HOST;
+          return (
+            <a
+              key={item.id}
+              className={`jir-item${here ? ' is-active' : ''}`}
+              href={here ? '/' : item.href}
+              data-tip={item.label}
+              title={item.label}
+              aria-current={here ? 'page' : undefined}
+              {...(item.openInNewTab && !here
+                ? { target: '_blank', rel: 'noopener noreferrer' }
+                : { rel: 'noopener' })}
+            >
+              <svg viewBox={viewBox} aria-hidden="true">
+                <path d={path} />
+              </svg>
+              <span className="jir-label">{item.label}</span>
+            </a>
+          );
+        })}
+
+        {/* If the shared list ever carries this site, that row is the one
+            marked; a second Jubilee Search row below it would be a duplicate. */}
+        {!shared.some((item) => railHost(item.href) === THIS_HOST) && <RailRow item={THIS_SITE} />}
 
         <div className="jir-spacer" />
 
