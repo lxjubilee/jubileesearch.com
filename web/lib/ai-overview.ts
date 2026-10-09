@@ -27,7 +27,9 @@ import type { SearchResult } from './types';
 // caller gets null and shows the quoted overview instead — the results page
 // never waits on, or breaks because of, this call.
 
-const MODEL = 'claude-opus-5-5';
+// Haiku: a short cited summary of five short texts doesn't need Opus, and
+// Haiku is faster and a fraction of the cost.
+const MODEL = 'claude-haiku-4-5';
 const MAX_SOURCES = 5;
 const TIMEOUT_MS = 20_000;
 
@@ -119,12 +121,9 @@ export async function aiOverview(query: string, results: SearchResult[]): Promis
       model: MODEL,
       max_tokens: 4000,
       system: SYSTEM,
-      // A short summary of five short texts: low effort keeps it quick enough
-      // to land a few seconds after the results.
-      output_config: { effort: 'low', format: betaZodOutputFormat(OverviewSchema) },
-      // On a safety decline, the API retries on a fallback model itself.
-      betas: ['server-side-fallback-2026-07-01'],
-      fallbacks: 'default',
+      // Haiku takes no effort setting and no server-side fallback; a decline
+      // shows the quoted overview instead (see the refusal check below).
+      output_config: { format: betaZodOutputFormat(OverviewSchema) },
       messages: [{ role: 'user', content: `Search: ${query}\n\nPages:\n\n${material || '(no Jubilee pages matched this search)'}` }],
     });
 
