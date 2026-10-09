@@ -1,0 +1,78 @@
+/* JubileePraise's .jvh-header, its measurements carried across: a 48px bar on
+ * #242424 with a #323232 rule, 20px side padding, a 32px avatar and a 24px
+ * Orbitron wordmark at weight 600.
+ *
+ * Fixed rather than sticky. The home page centres its avatar, wordmark and
+ * search box on the viewport (globals.css .home-container), and an in-flow bar
+ * would push that stack down by its own height. Below the rail (z 200) and its
+ * mobile drawer (1000), so the rail still draws over it.
+ */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  background: #242424;
+  border-bottom: 1px solid #323232;
+}
+
+.inner {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  /* Clear of the 52px rail on the left, as JubileePraise's body.jir-on rule. */
+  padding: 0 20px 0 calc(var(--jir-w, 52px) + 14px);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.logoIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.logoText {
+  font-family: var(--font-orbitron), "Orbitron", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logoAccent { color: var(--accent, #3DA5FF); }
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* At 1024px the rail becomes a drawer opened by a fixed hamburger at the
+   top-left; the bar leaves room for it instead of for the rail. */
+@media (max-width: 1024px) {
+  .inner { padding-left: 60px; }
+}
+
+@media (max-width: 768px) {
+  .inner { padding: 0 12px 0 54px; gap: 8px; }
+  .logoText { font-size: 16px; }
+  .logoIcon { width: 26px; height: 26px; }
+  .actions { gap: 8px; }
+}

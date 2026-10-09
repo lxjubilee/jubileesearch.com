@@ -1,30 +1,40 @@
-/* The results placeholder. Same gutter and indent as .results-stats and
-   .results-list in globals.css, so the real results land exactly on top. */
+/* The results placeholder, in the results page's navy theme (app/results.css).
+   Same gutters as .rs-toolbar and .rs-layout, so the real results land on top. */
 .wrap {
-  max-width: 1000px;
-  padding: 8px var(--results-gutter, 24px) 40px var(--results-indent, 24px);
-  box-sizing: content-box;
+  padding: 18px 28px 40px;
+  max-width: 1600px;
+  box-sizing: border-box;
 }
 
 .bar {
   height: 12px;
   border-radius: 6px;
-  background: #3a3b3e;
+  background: #1a2b55;
   animation: pulse 1.4s ease-in-out infinite;
 }
 
-.stats   { width: 180px; height: 14px; margin: 6px 0 24px; }
-.chips   { display: flex; gap: 10px; margin-bottom: 28px; }
-.chip    { width: 96px; height: 34px; border-radius: 17px; background: #303134; animation: pulse 1.4s ease-in-out infinite; }
-.heading { width: 120px; height: 14px; margin-bottom: 26px; }
+.toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 26px; }
+.chip    { width: 96px; height: 36px; border-radius: 10px; background: #14244a; animation: pulse 1.4s ease-in-out infinite; }
+.stats   { width: 180px; height: 14px; margin-left: auto; }
+.heading { width: 200px; height: 20px; margin-bottom: 20px; }
 
-.card { margin-bottom: 40px; }
-.titleRow { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
-.disc  { width: 40px; height: 40px; border-radius: 50%; background: #303134; animation: pulse 1.4s ease-in-out infinite; flex-shrink: 0; }
-.title { width: 46%; height: 20px; }
-.url   { width: 38%; height: 12px; margin-bottom: 14px; }
-.line  { width: 78%; margin-bottom: 10px; }
-.lineShort { width: 52%; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  max-width: calc(100% - 366px);
+}
+.card {
+  padding: 10px 10px 18px;
+  border-radius: 14px;
+  border: 1px solid #1b2f5e;
+  background: rgba(12, 23, 51, 0.82);
+}
+.banner { height: 112px; border-radius: 10px; background: #14244a; margin-bottom: 14px; animation: pulse 1.4s ease-in-out infinite; }
+.title { width: 70%; height: 16px; margin: 0 4px 10px; }
+.url   { width: 45%; margin: 0 4px 14px; }
+.line  { width: 88%; margin: 0 4px 10px; }
+.lineShort { width: 60%; margin: 0 4px; }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
@@ -32,7 +42,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bar, .chip, .disc { animation: none; }
+  .bar, .chip, .banner { animation: none; }
+}
+
+@media (max-width: 1180px) {
+  .grid { max-width: none; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 768px) {
+  .wrap { padding: 14px 16px 40px; }
+  .grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 .srOnly {

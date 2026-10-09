@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Icon, { type IconName } from './ResultsIcons';
 import styles from './ScopeChips.module.css';
 
 // The "All results" / "Jubilee only" filter chips (§13.5, user controls).
@@ -17,7 +18,7 @@ export default function ScopeChips({ query, zones }: { query: string; zones: 'al
     return `/search?${params}`;
   };
 
-  const chip = (scope: 'all' | 'jubilee', label: string) => (
+  const chip = (scope: 'all' | 'jubilee', label: string, icon: IconName) => (
     <Link
       href={href(scope)}
       className={`zone-chip ${styles.chip}${zones === scope ? ' is-active' : ''}`}
@@ -29,14 +30,14 @@ export default function ScopeChips({ query, zones }: { query: string; zones: 'al
       // they tried.
       replace
     >
-      {label}
+      <Icon name={icon} />{label}
     </Link>
   );
 
   return (
     <div className="zone-chips" role="group" aria-label="Result scope">
-      {chip('all', 'All results')}
-      {chip('jubilee', 'Jubilee only')}
+      {chip('all', 'All', 'grid')}
+      {chip('jubilee', 'Jubilee only', 'star')}
     </div>
   );
 }

@@ -15,7 +15,7 @@
 // mount rather than during render — reading localStorage while rendering would
 // make the server's HTML and the client's first render disagree.
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { NEW_CHAT, RAIL_VIEWBOX, THIS_HOST, THIS_SITE, type RailItem } from './rail-items';
 import { resolveRailIcon } from './rail-icons';
 import { useCommonRailItems } from './useCommonRail';
@@ -52,6 +52,28 @@ function RailRow({ item }: { item: RailItem }) {
 
 export default function InspireRail() {
   const shared = useCommonRailItems();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // The row for this site is the last one, so in a short or zoomed-in window it
+  // is the first to fall below the fold of the scrolling rows. Bring it into
+  // view — and again when the shared block arrives, because that pushes it
+  // further down. The box is scrolled directly rather than with scrollIntoView,
+  // which would scroll the page as well.
+  // Zooming is a resize, so the same check runs when the window changes size.
+  useEffect(() => {
+    const reveal = () => {
+      const box = scrollRef.current;
+      const row = box?.querySelector<HTMLElement>('.jir-item.is-active');
+      if (!box || !row) return;
+      const top = row.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;
+      if (top < box.scrollTop || top + row.offsetHeight > box.scrollTop + box.clientHeight) {
+        box.scrollTop = top + row.offsetHeight - box.clientHeight;
+      }
+    };
+    reveal();
+    window.addEventListener('resize', reveal);
+    return () => window.removeEventListener('resize', reveal);
+  }, [shared]);
   const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -130,6 +152,10 @@ export default function InspireRail() {
           <span className="jir-label">NAVIGATION</span>
         </button>
 
+        {/* The rows scroll; the head above and the foot below do not. Like
+            JubileeInspire's .menuScroll: when the window is short — or zoomed
+            far in — the list scrolls instead of running under the wordmark. */}
+        <div className="jir-scroll" ref={scrollRef}>
         <RailRow item={NEW_CHAT} />
 
         {/* The shared block, from jubileeinspire.com/admin/rail. Renders
@@ -161,8 +187,9 @@ export default function InspireRail() {
             marked; a second Jubilee Search row below it would be a duplicate. */}
         {!shared.some((item) => railHost(item.href) === THIS_HOST) && <RailRow item={THIS_SITE} />}
 
-        <div className="jir-spacer" />
+        </div>
 
+        <div className="jir-foot">
         <a className="jir-brand" href="https://www.jubileeinspire.com/" tabIndex={-1} rel="noopener">
           <div className="jir-brand-text">
             Jubilee<span className="jir-brand-accent">Inspire</span>
@@ -176,6 +203,7 @@ export default function InspireRail() {
               mark that is already in the page's critical path. */}
           <img src="/images/personas/jubilee.png" alt="JubileeInspire" width={36} height={36} />
         </a>
+        </div>
       </nav>
     </>
   );

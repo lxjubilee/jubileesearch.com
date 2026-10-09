@@ -13,14 +13,18 @@ import styles from './AccountMenu.module.css';
 // missing out by ignoring — a quiet link is the right weight for something that
 // changes almost nothing for almost everyone.
 
-export default async function AccountMenu({ next = '/' }: { next?: string }) {
+export default async function AccountMenu({ next = '/', variant = 'pill' }: {
+  next?: string;
+  /** `bar`: the square-cornered Sign In of the home page's top bar (SiteHeader). */
+  variant?: 'pill' | 'bar';
+}) {
   const session = await getSession();
 
   if (!session) {
     return (
       <Link
         href={`/signin?next=${encodeURIComponent(next)}`}
-        className={styles.signin}
+        className={variant === 'bar' ? styles.signinBar : styles.signin}
         rel="nofollow"
       >
         Sign in

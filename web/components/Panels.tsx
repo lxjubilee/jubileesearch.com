@@ -1,4 +1,5 @@
 import type { BestBet, EntityPanel as EntityPanelData, NavigationalResult, ScriptureCard as ScriptureCardData } from '@/lib/types';
+import Icon from './ResultsIcons';
 
 // Everything that renders around the two zones: editorial pins, the scripture
 // card, the entity panel, and the navigational match.
@@ -39,20 +40,31 @@ export function BestBets({ bets }: { bets: BestBet[] }) {
 export function ScriptureCard({ card }: { card: ScriptureCardData }) {
   return (
     <section className="scripture-card" aria-label="Scripture passage">
-      <h2 className="scripture-reference">{card.reference}</h2>
-      <div className="scripture-text">
-        {card.verses.map((verse) => (
-          <p className="scripture-verse" key={verse.verse}>
-            <sup>{verse.verse}</sup> {verse.text}
-          </p>
-        ))}
+      <div className="rs-hero-text">
+        <div className="rs-hero-head">
+          <Icon name="sparkle" className="rs-hero-icon" />
+          <div>
+            <span className="rs-hero-kicker">Scripture</span>
+            <span className="rs-hero-sub">Quoted from the {card.citation}</span>
+          </div>
+        </div>
+        <h2 className="scripture-reference">{card.reference}</h2>
+        <div className="scripture-text">
+          {card.verses.map((verse) => (
+            <p className="scripture-verse" key={verse.verse}>
+              <sup>{verse.verse}</sup> {verse.text}
+            </p>
+          ))}
+        </div>
+        <p className="scripture-citation">
+          {card.citation}
+          {card.chapter_url && (
+            <> · <a href={card.chapter_url}>Read the full chapter</a></>
+          )}
+        </p>
       </div>
-      <p className="scripture-citation">
-        {card.citation}
-        {card.chapter_url && (
-          <> · <a href={card.chapter_url}>Read the full chapter</a></>
-        )}
-      </p>
+      {/* The sunrise side of the panel: a CSS gradient, not a photograph (P10). */}
+      <div className="rs-hero-art" aria-hidden="true" />
     </section>
   );
 }

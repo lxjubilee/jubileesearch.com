@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import SearchBox from '@/components/SearchBox';
-import AccountCorner from '@/components/AccountCorner';
+import SiteHeader from '@/components/SiteHeader';
 
 // The home page. A server component: the only interactive part is the search
 // box, which is a client component of its own.
 //
-// It holds no state itself, but AccountCorner reads the session cookie, so the
+// It holds no state itself, but SiteHeader reads the session cookie, so the
 // route renders per request rather than once at build. See that component for
 // why that trade is worth making.
 //
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <div className="home-container">
-      {/* Out of flow, so the centred stack below is untouched by it. */}
-      <AccountCorner />
+      {/* Fixed, so the centred stack below is untouched by it. */}
+      <SiteHeader />
 
       <div className="welcome-state">
         <div className="avatar-container">

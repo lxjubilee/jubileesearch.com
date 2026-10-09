@@ -20,6 +20,10 @@
 
 :root {
   --accent: #3DA5FF; /* Jubilee azure — kjubilee.com's --accent; the rail reads it too */
+  /* Defined, not left to fall through: an unset var() with no fallback makes the
+     whole font-family declaration invalid, so "Orbitron" after it would never
+     be reached. The face itself is the Google Fonts one the layout loads. */
+  --font-orbitron: "Orbitron";
 }
 
 * {
@@ -72,6 +76,15 @@ html, body {
   overflow: visible;
 }
 
+/* The rail's mobile hamburger, centred in the home page's 48px top bar
+   (SiteHeader) rather than hanging off its bottom edge. */
+@media (max-width: 1024px) {
+  body:has(.home-container) .jir-burger { top: 6px; }
+}
+@media (max-width: 768px) {
+  body:has(.home-container) .jir-burger { top: 8px; }
+}
+
 /* ========== Avatar ========== */
 /* display:flex, not block: .avatar-wrapper is an inline-block, so in a block
    container it sits on a LINE BOX and the font's descender adds ~5px of dead
@@ -112,8 +125,11 @@ html, body {
 }
 
 .main-logo {
-  font-family: 'Agency FB', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-size: 88px;
+  /* JubileeInspire's wordmark face (--font-orbitron is set in :root above). */
+  font-family: var(--font-orbitron), "Orbitron", sans-serif;
+  /* Orbitron runs about 10.8em for "JubileeSearch.com", against Agency FB's
+     narrow cut, so the size follows the window rather than holding at 62px. */
+  font-size: min(62px, 6.6vw);
   color: #fff;
   font-weight: bold;
   line-height: 1.0;
@@ -330,7 +346,7 @@ html, body {
 }
 
 .results-logo {
-  font-family: 'Agency FB', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-family: var(--font-orbitron), "Orbitron", sans-serif;
   font-size: 26px;
   font-weight: bold;
   cursor: pointer;
@@ -608,7 +624,8 @@ html, body {
 /* ========== Responsive ========== */
 @media (max-width: 900px) {
   .main-logo {
-    font-size: 64px;
+    /* The same cap as above; a fixed 64px here would outgrow the desktop size. */
+    font-size: min(62px, 6.6vw);
   }
 
   .avatar-image {
@@ -627,6 +644,10 @@ html, body {
      wordmark that scales with the viewport. At a fixed 48px "JubileeSearch.com"
      is wider than a phone, and an over-wide item in a centre-aligned flex
      column drags the whole stack off-screen. */
+  /* The fixed top bar (SiteHeader, 48px) covers the top of a top-aligned
+     stack, so the column starts below it. */
+  .home-container { padding-top: 48px; }
+
   .welcome-state {
     justify-content: flex-start;
     padding: 20px 16px 10px;
@@ -636,7 +657,7 @@ html, body {
   }
 
   .main-logo {
-    font-size: clamp(28px, 10vw, 44px);
+    font-size: clamp(22px, 8.2vw, 44px);
     letter-spacing: 0.5px;
     line-height: 1.1;
     max-width: 100%;

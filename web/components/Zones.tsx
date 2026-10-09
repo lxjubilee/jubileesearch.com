@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ZoneABlock, ZoneBBlock } from '@/lib/types';
+import Icon from './ResultsIcons';
 import ResultCard from './ResultCard';
 import ZoneBCollapse from './ZoneBCollapse';
 
@@ -15,7 +16,13 @@ import ZoneBCollapse from './ZoneBCollapse';
 // Server components: the results are already in the HTML when it reaches the
 // browser, so the guarantee holds before any JavaScript runs.
 
-export function ZoneA({ block, query, lang }: { block: ZoneABlock; query?: string; lang?: string }) {
+export function ZoneA({ block, query, lang, moreHref }: {
+  block: ZoneABlock;
+  query?: string;
+  lang?: string;
+  /** "View all Jubilee results": the Jubilee-only scope, offered from All. */
+  moreHref?: string;
+}) {
   if (block.results.length === 0) {
     // The honest empty state (§13.5). "When the network has no good answer, say
     // so plainly and give the space to Zone B." Padding this block with five
@@ -32,7 +39,7 @@ export function ZoneA({ block, query, lang }: { block: ZoneABlock; query?: strin
 
     return (
       <section className="zone zone-a zone-a-empty" aria-labelledby="zone-a-heading">
-        <h2 id="zone-a-heading" className="zone-heading">{block.label}</h2>
+        <ZoneAHeading label={block.label} />
         <p className="zone-empty-copy">
           The Jubilee network has not covered this one yet.{' '}
           <Link href={suggestHref} className="zone-empty-link">
@@ -46,8 +53,8 @@ export function ZoneA({ block, query, lang }: { block: ZoneABlock; query?: strin
 
   return (
     <section className="zone zone-a" aria-labelledby="zone-a-heading" data-coverage={block.coverage}>
-      <h2 id="zone-a-heading" className="zone-heading">{block.label}</h2>
-      <div className="zone-results">
+      <ZoneAHeading label={block.label} moreHref={moreHref} />
+      <div className="zone-results rs-grid">
         {block.results.map((result) => (
           <ResultCard key={result.page_id} result={result} zone="A" />
         ))}
@@ -59,7 +66,7 @@ export function ZoneA({ block, query, lang }: { block: ZoneABlock; query?: strin
 export function ZoneB({ block }: { block: ZoneBBlock }) {
   return (
     <ZoneBCollapse label={block.label}>
-      <div className="zone-results" id="zone-b-results">
+      <div className="zone-results rs-grid" id="zone-b-results">
         {block.results.length > 0 ? (
           block.results.map((result) => (
             <ResultCard key={result.page_id} result={result} zone="B" />
@@ -71,5 +78,22 @@ export function ZoneB({ block }: { block: ZoneBBlock }) {
         )}
       </div>
     </ZoneBCollapse>
+  );
+}
+
+function ZoneAHeading({ label, moreHref }: { label: string; moreHref?: string }) {
+  return (
+    <div className="zone-heading-row">
+      <Icon name="star" className="rs-zone-icon rs-zone-icon-a" />
+      <div className="rs-zone-titles">
+        <h2 id="zone-a-heading" className="zone-heading">{label}</h2>
+        <p className="rs-zone-sub">Trusted. Faithful. Christ-centered.</p>
+      </div>
+      {moreHref && (
+        <Link href={moreHref} className="rs-more" replace>
+          View all Jubilee results <Icon name="arrow" />
+        </Link>
+      )}
+    </div>
   );
 }

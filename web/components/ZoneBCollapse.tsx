@@ -13,6 +13,7 @@
 // the block one click from coming back.
 
 import { useEffect, useState } from 'react';
+import Icon from './ResultsIcons';
 
 const KEY = 'jubilee.zoneB.collapsed';
 
@@ -44,7 +45,17 @@ export default function ZoneBCollapse({
       aria-labelledby="zone-b-heading"
     >
       <div className="zone-heading-row">
-        <h2 id="zone-b-heading" className="zone-heading">{label}</h2>
+        <Icon name="globe" className="rs-zone-icon rs-zone-icon-b" />
+        <div className="rs-zone-titles">
+          <h2 id="zone-b-heading" className="zone-heading">{label}</h2>
+          {/* Acceptance criterion 14. §11.4 makes this label the mechanism by which
+              doctrinal judgement stays a human editorial decision rather than an
+              automated classifier: the boundary between "ours" and "not ours" is
+              visible to the reader instead of buried in a ranking function. */}
+          <p className="zone-note rs-zone-sub">
+            Additional perspectives from outside the Jubilee network. Not Jubilee-endorsed.
+          </p>
+        </div>
         <button
           type="button"
           className="zone-toggle"
@@ -57,13 +68,6 @@ export default function ZoneBCollapse({
         </button>
       </div>
 
-      {/* Acceptance criterion 14. §11.4 makes this label the mechanism by which
-          doctrinal judgement stays a human editorial decision rather than an
-          automated classifier: the boundary between "ours" and "not ours" is
-          visible to the reader instead of buried in a ranking function. */}
-      <p className="zone-note">
-        These come from outside the Jubilee network and are not Jubilee-endorsed.
-      </p>
 
       <div hidden={collapsed}>{children}</div>
     </section>

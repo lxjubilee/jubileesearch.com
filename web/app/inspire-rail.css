@@ -284,3 +284,41 @@ body.jir-on { padding-left: var(--jir-w); }
   .jir-rail { transition: none; }
   .jir-label { transition: none; }
 }
+
+/* ---------- scrolling rows, fixed head and foot -------------------------- */
+
+/* JubileeInspire's Sidebar.module.css .menuScroll, carried across. The brand
+   and avatar used to be absolutely positioned over the bottom of the rail, so
+   a short or zoomed-in window ran the rows underneath the wordmark and the
+   last ones could not be reached. Now the rows sit in a box that takes the
+   height between the NAVIGATION row and the foot, and scrolls when they do
+   not fit. min-height: 0 is load-bearing: a flex child will not shrink below
+   its content without it, and overflow-y would have nothing to do. */
+.jir-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--jir-border) transparent;
+}
+.jir-scroll::-webkit-scrollbar { width: 4px; }
+.jir-scroll::-webkit-scrollbar-track { background: transparent; }
+.jir-scroll::-webkit-scrollbar-thumb { background: var(--jir-border); border-radius: 3px; }
+.jir-scroll::-webkit-scrollbar-thumb:hover { background: #5a5a5a; }
+
+/* A scroller clips on both axes, so the collapsed rail's CSS tooltips could
+   not show beside it. The rows keep their native `title`, as Inspire's do. */
+.jir-scroll .jir-item[data-tip]:hover::after { content: none; }
+
+/* The foot: in flow now, at the offsets the absolute version used (brand 10px
+   from the left and 9px above the avatar; avatar 8px in, 10px off the floor with the rail's 4px padding). */
+.jir-foot {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 12px;
+}
+.jir-foot .jir-brand { position: static; margin-left: 10px; }
+.jir-foot .jir-avatar { position: relative; bottom: auto; left: auto; margin: 9px 0 6px 8px; }

@@ -11,23 +11,23 @@ import styles from './ResultsSkeleton.module.css';
 export default function ResultsSkeleton() {
   return (
     <div className={styles.wrap} role="status" aria-live="polite" aria-label="Searching">
-      <div className={`${styles.bar} ${styles.stats}`} />
-      <div className={styles.chips}>
+      <div className={styles.toolbar}>
         <div className={styles.chip} />
         <div className={styles.chip} />
+        <div className={`${styles.bar} ${styles.stats}`} />
       </div>
       <div className={`${styles.bar} ${styles.heading}`} />
-      {[0, 1, 2].map((i) => (
-        <div className={styles.card} key={i}>
-          <div className={styles.titleRow}>
-            <div className={styles.disc} />
+      <div className={styles.grid}>
+        {[0, 1, 2].map((i) => (
+          <div className={styles.card} key={i}>
+            <div className={styles.banner} />
             <div className={`${styles.bar} ${styles.title}`} />
+            <div className={`${styles.bar} ${styles.url}`} />
+            <div className={`${styles.bar} ${styles.line}`} />
+            <div className={`${styles.bar} ${styles.lineShort}`} />
           </div>
-          <div className={`${styles.bar} ${styles.url}`} />
-          <div className={`${styles.bar} ${styles.line}`} />
-          <div className={`${styles.bar} ${styles.lineShort}`} />
-        </div>
-      ))}
+        ))}
+      </div>
       <span className={styles.srOnly}>Searching…</span>
     </div>
   );

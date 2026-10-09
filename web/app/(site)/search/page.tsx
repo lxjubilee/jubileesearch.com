@@ -9,6 +9,10 @@ import { ZoneA, ZoneB } from '@/components/Zones';
 import { BestBets, ScriptureCard, EntityPanel, Navigational } from '@/components/Panels';
 import ResultsSkeleton from '@/components/ResultsSkeleton';
 import AccountMenu from '@/components/AccountMenu';
+import ResultsAside from '@/components/ResultsAside';
+import Overview from '@/components/Overview';
+import AIOverview, { AIOverviewLoading } from '@/components/AIOverview';
+import { aiOverviewEnabled } from '@/lib/ai-overview';
 
 // The results page.
 //
@@ -107,27 +111,42 @@ async function Results({ query, scope }: { query: string; scope: 'jubilee' | 'al
   const total = (zoneA?.results.length ?? 0) + (zoneB?.results.length ?? 0);
   const seconds = (response.took_ms / 1000).toFixed(2);
 
+  // Offered from All only: from Jubilee-only it would be a link to this page.
+  const jubileeOnly = scope === 'all' ? `/search?${new URLSearchParams({ q: query, zones: 'A' })}` : undefined;
+
   return (
     <>
-      <div id="stats" className="results-stats">
-        {total === 0
-          ? `No results (${seconds} seconds)`
-          : `${total} result${total === 1 ? '' : 's'} (${seconds} seconds)`}
-        {response.cache_hit && ' · cached'}
+      <div className="rs-toolbar">
+        <ScopeChips query={query} zones={scope} />
+        <div id="stats" className="results-stats">
+          {total === 0
+            ? `No results (${seconds} seconds)`
+            : `${total} result${total === 1 ? '' : 's'} (${seconds} seconds)`}
+          {response.cache_hit && ' · cached'}
+        </div>
       </div>
 
+      <div className="rs-layout">
       <main id="results" className="results-list">
         {/* Order is the guarantee. Cards and panels above, then Zone A, then
-            Zone B — in the document, not in a stylesheet. */}
+            Zone B — in the document, not in a stylesheet. The side column is
+            a sibling AFTER this element, so it can never come between them. */}
         {response.scripture_card && <ScriptureCard card={response.scripture_card} />}
         {response.navigational && <Navigational nav={response.navigational} />}
-        {response.entity_panel && <EntityPanel entity={response.entity_panel} />}
         <BestBets bets={response.best_bets} />
-
-        <ScopeChips query={query} zones={scope} />
+        {/* Above both zones, so it moves neither. With a Claude key it is the AI
+            Overview, streamed in its own boundary so the results never wait for
+            it; without one, the quoted overview. */}
+        {aiOverviewEnabled() ? (
+          <Suspense fallback={<AIOverviewLoading />}>
+            <AIOverview query={query} response={response} />
+          </Suspense>
+        ) : (
+          <Overview response={response} />
+        )}
 
         <ResultTelemetry queryId={response.query_id}>
-          {zoneA && <ZoneA block={zoneA} query={query} lang={response.lang} />}
+          {zoneA && <ZoneA block={zoneA} query={query} lang={response.lang} moreHref={jubileeOnly} />}
           {zoneB && <ZoneB block={zoneB} />}
         </ResultTelemetry>
 
@@ -138,6 +157,12 @@ async function Results({ query, scope }: { query: string; scope: 'jubilee' | 'al
           </div>
         )}
       </main>
+
+      <aside className="rs-aside" aria-label="About this search">
+        {response.entity_panel && <EntityPanel entity={response.entity_panel} />}
+        <ResultsAside response={response} />
+      </aside>
+      </div>
     </>
   );
 }
@@ -151,9 +176,16 @@ function ResultsHeader({ query }: { query: string }) {
           {/* The Jubilee mark, the same disc the home page and the rail carry. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/personas/jubilee.png" alt="" className="results-logo-mark" />
-          <span>Jubilee<span className="highlight">Search</span></span>
+          <span className="rs-logo-words">
+            <span>Jubilee<span className="highlight">Search</span></span>
+            <span className="rs-tagline">Faith · Truth · A Brighter Tomorrow</span>
+          </span>
         </Link>
         <SearchBox initialQuery={query} variant="results" />
+        <p className="rs-motto">
+          Faith seeks. <span>JubileeSearch finds.</span>
+          <small>Powered by AI. Grounded in Truth.</small>
+        </p>
         {/* Signing in returns the reader to the search they were doing. Pinned
             to the right edge of the bar, where an account control is expected. */}
         <div className="results-account">
